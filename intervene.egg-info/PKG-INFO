@@ -1,0 +1,16 @@
+Metadata-Version: 1.1
+Name: intervene
+Version: 1.0
+Summary: A tool for intersection and visualization of multiple genomic region sets
+Home-page: https://github.com/asntech/intervene
+Author: Aziz Khan
+Author-email: azez.khan@gmail.com
+License: BSD
+Description: UNKNOWN
+Platform: UNKNOWN
+Classifier: Intended Audience :: Developers
+Classifier: Intended Audience :: Science/Research
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python :: 2.7
+Classifier: Topic :: Scientific/Engineering :: Bio-Informatics
