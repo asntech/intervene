@@ -318,7 +318,6 @@ def main():
     
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s 1.0')
 
-
     options = parser.parse_args()
 
     if options.test:

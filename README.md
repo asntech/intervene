@@ -108,4 +108,4 @@ If you have questions, or found any bug in the program, please write to us at ``
 
 Cite Us
 =========
-If you use Intervene please cite us: Khan A. and Mathelier A., ``InterVene: a tool for intersection and visualization of multiple genomic region sets``
+If you use Intervene please cite us: ``Khan A. and Mathelier A., InterVene: a tool for intersection and visualization of multiple genomic region sets``
