@@ -37,11 +37,10 @@ Install from PyPi::
 
 	pip install intervene
 
-Install from `GitHub`
---------------------
+Install Intervene from `GitHub`
+------------------------------
 
-1. `git` is installed
-2. Cython is installed (`conda install cython` or `pip install cython`)
+If you have `git` is installed, use this:
 
 .. code-block:: bash
 
@@ -49,8 +48,8 @@ Install from `GitHub`
     cd intervene
     python setup.py install
 
-Install from the source
------------------------
+Install from Intervene source
+-----------------------------
 
 .. code-block:: bash
 	

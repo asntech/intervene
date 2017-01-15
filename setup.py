@@ -45,7 +45,7 @@ setup(
     #long_description=read('README.md'),
     package_dir={'intervene': 'intervene'},
     packages=['intervene'],
-    scripts=['intervene/intervene','intervene/intervene_upset_plot.R',
+    scripts=['intervene/intervene','intervene/intervene_upset_plot.R','intervene/intervene_heatmap.R',
                    ],
     package_data={'intervene': ['intervene/example_data/*.*']},
     include_package_data=True,
