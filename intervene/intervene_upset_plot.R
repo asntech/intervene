@@ -61,10 +61,16 @@ if(args[1] == 'list'){
 
 		print('Something went wrong!')
 	}
+}
 
-	print(paste0('You are done! Please check your plot', output_name))
+if(args[1] == 'genomic'){
 
+expressionInput <- source(args[3])
 
+pdf(output_name, width=8, height=5)
+upset(fromExpression(expressionInput), nsets=args[2], main.bar.color='brown',sets.bar.color='blue',
+			order.by = "freq", mainbar.y.label = "No of Intersections", sets.x.label = "Set Size")
+		dev.off()
 
 }
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env Rscript
-#Plot intersection diagrams using UpSetR package
+#Pairwise intersection heatmap using corrplot package
 #Author: Aziz Khan
 #Email: aziz.khan@ncmm.uio.no
 
@@ -40,7 +40,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 	col <- colorRampPalette(brewer.pal(10, "RdYlBu"))(256)
 
 	heatmap.2(intersection_matrix, scale = "none", col = col, key.title = NULL, main = "Pairewise Intersection",
-		dendrogram = c('row'),
+		dendrogram = c('none'),
 		Colv="Rowv",
         key.xlab = x_label,
         key.ylab = NULL,
@@ -48,7 +48,6 @@ if(args[2] == 'heatmap2' || args[2] ==''){
         margins = c(8, 8),
         trace = "none", density.info = "none")
 	invisible(dev.off())
-
 
 	#Create D3 Heatmap
 	if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools"))
@@ -63,7 +62,6 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 	#print(paste0('You are done! Please check the plot @ ', output_name))
 
-
 }else if(args[2] == 'corrplot'){
 	
 	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot"))
@@ -71,7 +69,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 	#diag(intersection_matrix) = 0
 
-	corrplot(intersection_matrix, method = 'color', order = 'hclust', cl.lim=c(0, 1))
+	corrplot(intersection_matrix, method = 'color', title = "", is.corr = FALSE, cl.lim=c(min(intersection_matrix), max(intersection_matrix)))
 	
 	#print(paste0('You are done! Please check your plot', output_name))
 
@@ -85,7 +83,14 @@ if(args[2] == 'heatmap2' || args[2] ==''){
      #     trace = "none", density.info = "none")
 }else{
 
-		print('Something went wrong!')
+	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot"))
+	suppressPackageStartupMessages(library('corrplot'))
+
+	#diag(intersection_matrix) = 0
+
+	#corrplot(intersection_matrix, method = args[2], title = "", is.corr = FALSE, cl.lim=c(min(intersection_matrix), max(intersection_matrix)))
+	#print('Something went wrong!')
+	corrplot(intersection_matrix, method = args[2], title = " ", tl.col='black', tl.cex=0.8, is.corr = FALSE, diag = FALSE, addrect = 1, rect.col = "black")
 }
 
 
