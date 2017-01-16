@@ -168,7 +168,7 @@ def main():
     upset_parser.add_argument('--figsize', default=(8,10),
                    help='Figure size for the output plot. '
                        'e.g. --figsize=8,10 Default is "%(default)s"')    
-    upset_parser.add_argument('--dpi', type=int, default=300,
+    upset_parser.add_argument('--dpi', type=int, dest='dpi', default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')
     
@@ -202,7 +202,6 @@ def main():
     else:
         options.output = create_dir(os.getcwd()+"/InterVene_results")
 
-    
     if options.command =='pairwise':
         print("\nPerforming a pairwise intersection/overlap analysis.\n")
         pairwise.pairwise_intersection(options)
@@ -229,7 +228,12 @@ def main():
             else:
                 upset_parser.print_help()
             sys.stderr.write('Missing required arg --type {genomic,list}')
-            sys.exit(0) 
+            sys.exit(0)
+    
+    if options.command == 'upset':
+        plot_type = 'upset'
+    else:
+        plot_type = 'venn'
 
     if venn_ways(options) == 2:
         print('\nGenerating a 2-way "%s" diagram.\n' %options.command)
@@ -249,7 +253,7 @@ def main():
             
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn2(a=options.a, b=options.b, names=label_names)
+            fig, ax = genomic_venn.venn2(a=options.a, b=options.b, names=label_names, plot_type=plot_type)
      
     elif venn_ways(options) == 3:
         print('\nGenerating a 3-way "%s" diagram.\n' %options.command)
@@ -267,7 +271,7 @@ def main():
             
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn3(a=options.a, b=options.b, c=options.c, names=label_names)
+            fig, ax = genomic_venn.venn3(a=options.a, b=options.b, c=options.c, names=label_names, plot_type=plot_type)
 
     elif venn_ways(options) == 4:
         print('\nGenerating a 4-way "%s" diagram.\n' %options.command)
@@ -294,7 +298,7 @@ def main():
         #else input considered as bed file
         else:
              fig, ax = genomic_venn.venn4(a=options.a, b=options.b, c=options.c, d=options.d, 
-                names=label_names, dpi=options.dpi)
+                names=label_names, plot_type=plot_type, dpi=options.dpi)
             
                    
     elif venn_ways(options) == 5:
@@ -305,18 +309,25 @@ def main():
             label_names = ['A','B','C','D','E']
         #If the input is a gene list
         if options.type == 'list':
-            a = open(options.a, 'r').readlines()
-            b = open(options.b, 'r').readlines()
-            c = open(options.c, 'r').readlines()
-            d = open(options.d, 'r').readlines()
-            e = open(options.e, 'r').readlines()
 
-            labels = list_venn.get_labels([a, b, c, d, e], fill=[str(options.fill)])
-            fig, ax = list_venn.venn5(labels, names=label_names)
+            if options.command == 'upset':
+                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s %s %s %s' % ('list',4,options.a,options.b,options.c,options.d, options.e,options.o, options.labels)
+                os.system(cmd)
+                sys.exit(1)
+            else: 
+                a = open(options.a, 'r').readlines()
+                b = open(options.b, 'r').readlines()
+                c = open(options.c, 'r').readlines()
+                d = open(options.d, 'r').readlines()
+                e = open(options.e, 'r').readlines()
+
+                labels = list_venn.get_labels([a, b, c, d, e], fill=[str(options.fill)])
+                fig, ax = list_venn.venn5(labels, names=label_names)
             
-        #else input considered as bed file
+        #else input considered as genomic regions file
         else:
-            fig, ax = genomic_venn.venn5(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e,names=label_names)
+            fig, ax = genomic_venn.venn5(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e, 
+                names=label_names, plot_type=plot_type, dpi=options.dpi)
         
     elif venn_ways(options) == 6:
         print('\nGenerating a 6-way "%s" diagram.\n' %options.command)
@@ -344,7 +355,8 @@ def main():
                 
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn6(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e, f=options.f, names=label_names)
+            fig, ax = genomic_venn.venn6(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e, f=options.f, 
+                names=label_names, plot_type=plot_type)
     else:
         parser.print_help()
         sys.stderr.write('Please make sure your arguments are correct.')

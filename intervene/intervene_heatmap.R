@@ -12,13 +12,15 @@ if (length(args) < 4) {
 
 intersection_matrix <- as.matrix(read.table(args[1]))
 
-output_name <- args[3]
+output_name <- paste0(args[4],'_',args[3])
 
-if(args[4] =='pdf') pdf(file=output_name, dpi=300)
+print(output_name)
 
-if(args[4] =='svg') svg(file=output_name, dpi=300)
+if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]))
 
-if(args[4] =='png') png(file=output_name,dpi=300)
+if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]))
+
+if(args[5] =='png') png(file=paste0(output_name,'.',args[5]))
 
 x_label = 'Value'
 test_type <- args[3]
@@ -45,6 +47,8 @@ if(args[2] == 'heatmap2' || args[2] ==''){
         keysize = 1.5,
         margins = c(8, 8),
         trace = "none", density.info = "none")
+	invisible(dev.off())
+
 
 	#Create D3 Heatmap
 	if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools"))
@@ -55,7 +59,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 	suppressPackageStartupMessages(library("htmlwidgets"))
 	
 	map <- d3heatmap(scale(intersection_matrix), k_row = 4, k_col = 4)
-	saveWidget(map, "intervene_d3heatmap.html")
+	saveWidget(map, paste0(output_name,"_D3Heatmap.html"))
 
 	#print(paste0('You are done! Please check the plot @ ', output_name))
 
@@ -84,7 +88,6 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 		print('Something went wrong!')
 }
 
-invisible(dev.off())
 
 
 

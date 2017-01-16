@@ -13,19 +13,28 @@ from pybedtools import BedTool, example_bedtool
 from intervene import list_venn
 import sys
 import os
+import tempfile
 
 
-def venn2(a,b):
+def venn2(a,b,names=['A','B'],plot_type=None, **options):
 
     a = BedTool(a)
     b = BedTool(b)
+
+    dpi = options.get('dpi', 300)
 
     labels = {'10': (a - b).count(), #Only A
      '01': (b - a).count(), #Only B
      '11': (a + b).count()
      } #Common in A and B
 
-    return labels
+    if plot_type == 'upset':
+        expressionInput = ''
+    
+    else:
+        fig, ax = list_venn.venn2(labels, names=names, dpi=dpi)
+
+        return fig, ax
 
 def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
 
@@ -52,7 +61,7 @@ def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
 
         return fig, ax
 
-def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None):
+def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
 
     a = BedTool(a)
     b = BedTool(b)
@@ -78,6 +87,8 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None):
     '1110': str((a + b + c - d).count()),
     '1111': str((a + b + c + d).count())
     }
+    
+    #expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4, `two&three` = 1, `one&two&three` = 2)
 
     if plot_type == 'upset':
         for key, value in labels.iteritems():
@@ -86,14 +97,14 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None):
                 if x != 0:
                     print(names[i])
                     i = i + 1
-                    print (value)
+                print (value)
             expressionInput = ''
     else:
         fig, ax = list_venn.venn4(labels, names=names, dpi=dpi)
 
         return fig, ax
 
-def venn5(a,b,c,d,e,names=['A','B','C','D','E'],plot_type=None, **options):
+def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **options):
 
     a = BedTool(a)
     b = BedTool(b)
@@ -136,26 +147,41 @@ def venn5(a,b,c,d,e,names=['A','B','C','D','E'],plot_type=None, **options):
     '11110': str((a + b + c + d - e).count()),
     '11111': str((a + b + c + d + e).count())
     }
-
+    
+    
     if plot_type == 'upset':
+        #temp_f = tempfile.NamedTemporaryFile(delete=False)
+        temp_f = open(tempfile.mktemp(), "w")
+
+        #expressionInput <- c(one = 2, two = 1, three = 2, `one&two` = 1, `one&three` = 4, `two&three` = 1, `one&two&three` = 2)
+        temp_f.write("expressionInput <- c(")
+    
+        print('UpSEt........')
         for key, value in labels.iteritems():
             i = 0
             for x in key:
-                if x != 0:
-                    print(names[i])
-                    i = i + 1
-                    print (value)
-            expressionInput = ''
+                if x == '1':
+                    if i == 0:
+                        temp_f.write("'"+str(names[i]))
+                    elif i == len(key)-1:
+                        temp_f.write(str(names[i])+"'")
+                    else:
+                        temp_f.write('&'+str(names[i])+'&')
+                i += 1
+                #print (value)
+            temp_f.write("'="+str(value)+',')
+        #print temp_f.read()
+        print temp_f.name
+        temp_f.close()
+        sys.exit(1)
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
-
         return fig, ax
 
 
 def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options):
     """
     6-way Venn diagram from a list of six genomic region sets in <BED/GTF/GFF/VCF> format.
-
 
     """
 
@@ -234,5 +260,3 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
     '111111': str((- a - b - c - d - e - f).count())
     }
     return labels
-
-

@@ -111,7 +111,7 @@ def pairwise_intersection(options):
 
     nfiles = len(options.input)
 
-    output_name =  options.output+'/InterVene_'+options.command+'_'+str(nfiles)+'_files.'+options.figtype
+    output_name =  options.output+'/InterVene_'+options.command+'_'+str(nfiles)+'_files_'
 
     #if options.verbose:
     #    sys.stderr.write('Time to construct %s x %s matrix: %.1fs' \
@@ -134,9 +134,9 @@ def pairwise_intersection(options):
         f.write('\n')
     f.close()
     #print("Please check the matrix file "+matrix_file)
+    cmd = 'intervene_heatmap.R %s %s %s %s %s' % (matrix_file,'heatmap2',options.type, output_name,options.figtype)
+    os.system(cmd)
+
     print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')
 
-    
-    cmd = 'intervene_heatmap.R %s %s %s %s %s' % (matrix_file,'heatmap2',options.type, output_name, options.figtype)
-    os.system(cmd)
 
