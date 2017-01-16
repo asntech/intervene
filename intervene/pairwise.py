@@ -46,7 +46,9 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
     nfiles = len(beds)
     total = nfiles ** 2
     i = 0
-    bed_sizes = {}
+    bed_sizes = []
+    bed_names = []
+
     matrix = collections.defaultdict(dict)
     for fa in beds:
         a = BedTool(fa)
@@ -61,8 +63,9 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
 
             matrix[get_name(fa)][get_name(fb)] = func(a, b, **kwoptions)
 
-        bed_sizes[get_name(fa)] = len(a)
-    return matrix, bed_sizes
+        bed_names.append(get_name(fa))
+        bed_sizes.append(len(a))
+    return matrix, bed_names,bed_sizes
 
 def pairwise_intersection(options):
     if options.test:
@@ -107,9 +110,9 @@ def pairwise_intersection(options):
 
     t0 = time.time()
     #matrix = create_matrix(beds=options.input, func=FUNC, verbose=options.verbose, **kwoptions)
-    matrix, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, **kwoptions)
+    matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, **kwoptions)
 
-    print(bed_sizes)
+    #print(bed_sizes)
 
     t1 = time.time()
 
