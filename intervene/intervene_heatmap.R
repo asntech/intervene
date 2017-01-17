@@ -14,7 +14,7 @@ intersection_matrix <- as.matrix(read.table(args[1]))
 
 output_name <- paste0(args[4],'_',args[3])
 
-print(output_name)
+#print(output_name)
 
 if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]))
 
@@ -50,8 +50,15 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 	invisible(dev.off())
 
 	#Create D3 Heatmap
-	if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools"))
-	if (suppressMessages(!require("d3heatmap"))) suppressMessages(devtools::install_github("rstudio/d3heatmap"))
+	if (suppressMessages(!require("d3heatmap"))){
+			if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools"))
+
+			suppressPackageStartupMessages(library("devtools"))
+
+			suppressMessages(devtools::install_github("rstudio/d3heatmap"))
+
+		}
+
 	if (suppressMessages(!require("htmlwidgets"))) suppressMessages(install.packages("htmlwidgets"))
 
 	suppressPackageStartupMessages(library("d3heatmap"))
@@ -91,6 +98,8 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 	#corrplot(intersection_matrix, method = args[2], title = "", is.corr = FALSE, cl.lim=c(min(intersection_matrix), max(intersection_matrix)))
 	#print('Something went wrong!')
 	corrplot(intersection_matrix, method = args[2], title = " ", tl.col='black', tl.cex=0.8, is.corr = FALSE, diag = FALSE, addrect = 1, rect.col = "black")
+
+	invisible(dev.off())
 }
 
 

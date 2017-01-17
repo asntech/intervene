@@ -15,7 +15,7 @@ import sys
 import os
 import tempfile
 
-def draw_genomic_upset(labels, names, output):
+def draw_genomic_upset_script(labels, names, output, fig_type):
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     #temp_f = open(tempfile.mktemp(), "w")
     script_file = output+'/'+'intervene_upset_plot.R'
@@ -56,31 +56,23 @@ def draw_genomic_upset(labels, names, output):
         #temp_f.write("'="+str(value)+',')
     temp_f.write(")\n")
 
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+len(x)+', main.bar.color="brown",sets.bar.color="#56B4E9", order.by = "freq", mainbar.y.label = "No of Intersections", sets.x.label = "Set Size")\n')
-    temp_f.write('dev.off()\n')
-    temp_f.write('dev.off()\n')
+    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', main.bar.color="brown",sets.bar.color="#56B4E9", order.by = "freq", number.angles = 90,mainbar.y.label = "No of Intersections", sets.x.label = "Number of ChIP0seq Size")\n')
+    temp_f.write('invisible(dev.off())\n')
 
     #print temp_f.read()
-    print temp_f.name
-    
+    #print temp_f.name
     #cmd = 'intervene_upset_plot.R %s %s %s' % ('genomic',5,temp_f.name)
     cmd = temp_f.name
-    os.system('chmod +x '+temp_f.name)
-    os.system(cmd)
     temp_f.close()
+    os.system('chmod +x '+cmd)
+    os.system(cmd)
     sys.exit(1)
 
-def draw_genomic_upset2(labels, names, output):
+def draw_genomic_upset(labels, names, output, fig_type):
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
-    #temp_f = open(tempfile.mktemp(), "w")
-    script_file = output+'/'+'intervene_upset_plot.R'
-    temp_f = open(script_file, 'w')
-    output_name = output+'/'+'intervene_upset_plot.pdf'
-
-    temp_f.write('library(UpSetR)\n')
-    temp_f.write('pdf("'+output_name+'", width=8, height=5)\n')
+    temp_f = open(tempfile.mktemp(), "w")
+    
     temp_f.write("expressionInput <- c(")
-
     last = 1
     for key, value in labels.iteritems():
         i = 0
@@ -109,17 +101,11 @@ def draw_genomic_upset2(labels, names, output):
         #print("'="+str(value)+',')
         #temp_f.write("'="+str(value)+',')
     temp_f.write(")\n")
-
-    temp_f.write('upset(fromExpression(expressionInput), nsets=5, main.bar.color="brown",sets.bar.color="blue", order.by = "freq", mainbar.y.label = "No of Intersections", sets.x.label = "Set Size")\n')
-    temp_f.write('dev.off()\n')
-  
     #print temp_f.read()
-    print temp_f.name
-    
-    #cmd = 'intervene_upset_plot.R %s %s %s' % ('genomic',5,temp_f.name)
-    cmd = 'Rscript '+temp_f.name
-    os.system(cmd)
+    #print temp_f.name
     temp_f.close()
+    cmd = 'intervene_upset_plot.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
+    os.system(cmd)
     sys.exit(1)
 
 
@@ -129,6 +115,8 @@ def venn2(a,b,names=['A','B'],plot_type=None, **options):
     b = BedTool(b)
 
     dpi = options.get('dpi', 300)
+    output = options.get('output')
+    fig_type = options.get('fig_type', 'pdf')
 
     labels = {'10': (a - b).count(), #Only A
      '01': (b - a).count(), #Only B
@@ -136,7 +124,7 @@ def venn2(a,b,names=['A','B'],plot_type=None, **options):
      } #Common in A and B
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output)
+        draw_genomic_upset(labels, names, output, fig_type)
     
     else:
         fig, ax = list_venn.venn2(labels, names=names, dpi=dpi)
@@ -152,6 +140,8 @@ def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
 
     dpi = options.get('dpi', 300)
     output = options.get('output')
+    fig_type = options.get('fig_type', 'pdf')
+
 
     labels = {'001': (c - a - b).count(),
     '010': (b - a - c).count(),
@@ -162,7 +152,7 @@ def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
     '111': (a + b + c).count()}
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output)
+        draw_genomic_upset(labels, names, output, fig_type)
         
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
@@ -177,6 +167,8 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
     d = BedTool(d)
 
     dpi = options.get('dpi', 300)
+    output = options.get('output')
+    fig_type = options.get('fig_type', 'pdf')
 
     #ABCD
     labels = {'0001': str((d - a - b - c).count()),
@@ -197,7 +189,7 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
     }
     
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output)
+        draw_genomic_upset(labels, names, output, fig_type)
  
     else:
         fig, ax = list_venn.venn4(labels, names=names, dpi=dpi)
@@ -214,6 +206,7 @@ def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **option
 
     dpi = options.get('dpi', 300)
     output = options.get('output')
+    fig_type = options.get('fig_type', 'pdf')
 
     #ABCDE
     labels = {'00001': (e - a - b - c - d).count(),
@@ -250,7 +243,9 @@ def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **option
     }
     
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output)
+        #draw_genomic_upset(labels, names, output, fig_type)
+        draw_genomic_upset_script(labels, names, output, fig_type)
+
 
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
@@ -272,19 +267,20 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
 
     dpi = options.get('dpi', 300)
     output = options.get('output')
+    fig_type = options.get('fig_type', 'pdf')
 
     #ABCDEF
-    labels = {'000001': str((- a - b - c - d - e + f).count()),
-    '000010': str((- a - b - c - d + e - f).count()),
-    '000011': str((- a - b - c + d + e + f).count()),
-    '000100': str((- a - b - c - d - e - f).count()),
-    '000101': str((- a - b - c - d - e - f).count()),
-    '000110': str((- a - b - c - d - e - f).count()),
-    '000111': str((- a - b - c - d - e - f).count()),
-    '001000': str((- a - b - c - d - e - f).count()),
-    '001001': str((- a - b - c - d - e - f).count()),
-    '001010': str((- a - b - c - d - e - f).count()),
-    '001011': str((- a - b - c - d - e - f).count()),
+    labels = {'000001': str((f - a - b - c - d - e).count()),
+    '000010': str((e - a - b - c - d - f).count()),
+    '000011': str((e + f - a - b - c - d).count()),
+    '000100': str((d - a - b - c - e - f).count()),
+    '000101': str((d + f - a - b - c - e).count()),
+    '000110': str((d + e - a - b - c - f).count()),
+    '000111': str((d - e - f - a - b - c).count()),
+    '001000': str((c - a - b - d - e - f).count()),
+    '001001': str((c + f - a - b - d - e).count()),
+    '001010': str((c + e - a - b - d - f).count()),
+    '001011': str((c + e + f - a - b - d).count()),
     '001100': str((- a - b - c - d - e - f).count()),
     '001101': str((- a - b - c - d - e - f).count()),
     '001110': str((- a - b - c - d - e - f).count()),
@@ -320,27 +316,27 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
     '101100': str((- a - b - c - d - e - f).count()),
     '101101': str((- a - b - c - d - e - f).count()),
     '101110': str((- a - b - c - d - e - f).count()),
-    '101111': str((- a - b - c - d - e - f).count()),
+    '101111': str((a + c + d + e + f - b).count()),
     '110000': str((- a - b - c - d - e - f).count()),
     '110001': str((- a - b - c - d - e - f).count()),
     '110010': str((- a - b - c - d - e - f).count()),
     '110011': str((- a - b - c - d - e - f).count()),
-    '110100': str((- a - b - c - d - e - f).count()),
-    '110101': str((- a - b - c - d - e - f).count()),
-    '110110': str((- a - b - c - d - e - f).count()),
-    '110111': str((- a - b - c - d - e - f).count()),
-    '111000': str((- a - b - c - d - e - f).count()),
-    '111001': str((- a - b - c - d - e - f).count()),
-    '111010': str((- a - b - c - d - e - f).count()),
-    '111011': str((- a - b - c - d - e - f).count()),
-    '111100': str((- a - b - c - d - e - f).count()),
-    '111101': str((- a - b - c - d - e - f).count()),
-    '111110': str((- a - b - c - d - e - f).count()),
-    '111111': str((- a - b - c - d - e - f).count())
+    '110100': str((a + b + d - c - e - f).count()),
+    '110101': str((a + b + d + f + e - c).count()),
+    '110110': str((a + b + d + e - f - c).count()),
+    '110111': str((a + b + d + e + f - c).count()),
+    '111000': str((a + b + c - d - e - f).count()),
+    '111001': str((a + b + c + f - d - e).count()),
+    '111010': str((a + b + c + e - d - f).count()),
+    '111011': str((a + b + c + e + f - d).count()),
+    '111100': str((a + b + c + d - e - f).count()),
+    '111101': str((a + b + c + d + f - e).count()),
+    '111110': str((a + b + c + d + e - f).count()),
+    '111111': str((a + b + c + d + e + f).count())
     }
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output)
+        draw_genomic_upset(labels, names, output,fig_type)
 
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)

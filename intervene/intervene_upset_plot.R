@@ -10,9 +10,21 @@ if (length(args) < 3) {
   stop("At least 3 arguments must be supplied", call.=FALSE)
 }
 
-library(UpSetR)
+if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpSetR"))
 
-output_name <- 'intervene_upset_plot.pdf'
+suppressMessages(library("UpSetR"))
+
+output_name <- paste0(args[4],'/Intervene_upset_plot_',args[1])
+
+#print(output_name)
+
+
+if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
+if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
+if(args[5] =='png') png(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
 
 #listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 
  #   10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
@@ -67,10 +79,11 @@ if(args[1] == 'genomic'){
 
 expressionInput <- source(args[3])
 
-pdf(output_name, width=8, height=5)
+#pdf(output_name, width=8, height=5)
 upset(fromExpression(expressionInput), nsets=args[2], main.bar.color='brown',sets.bar.color='blue',
 			order.by = "freq", mainbar.y.label = "No of Intersections", sets.x.label = "Set Size")
-		dev.off()
+
+invisible(dev.off())
 
 }
 

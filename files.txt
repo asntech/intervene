@@ -1,0 +1,5 @@
+/Users/azizkhan/anaconda/lib/python2.7/site-packages/intervene-1.1-py2.7.egg
+/Users/azizkhan/anaconda/bin/intervene.py
+/Users/azizkhan/anaconda/bin/intervene
+/Users/azizkhan/anaconda/bin/intervene_upset_plot.R
+/Users/azizkhan/anaconda/bin/intervene_heatmap.R

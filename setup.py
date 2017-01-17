@@ -14,7 +14,7 @@ import os
 from distutils.core import setup
 from setuptools import find_packages
 
-VERSION = '1.0'
+VERSION = '0.1'
 
 CLASSIFIERS = [
     'Intended Audience :: Developers',
