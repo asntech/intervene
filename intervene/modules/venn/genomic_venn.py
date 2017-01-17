@@ -1,112 +1,16 @@
-#!/usr/bin/env python
+# coding: utf-8
+
 """
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
 Version: 1.0
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 """
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
-from pybedtools import BedTool, example_bedtool
-#from intervene import venn, helper
-from intervene import list_venn
 import sys
 import os
-import tempfile
-
-def draw_genomic_upset_script(labels, names, output, fig_type):
-    #temp_f = tempfile.NamedTemporaryFile(delete=False)
-    #temp_f = open(tempfile.mktemp(), "w")
-    script_file = output+'/'+'intervene_upset_plot.R'
-    temp_f = open(script_file, 'w')
-    output_name = output+'/'+'intervene_upset_plot.pdf'
-
-    temp_f.write('#!/usr/bin/env Rscript'+"\n")
-    temp_f.write('library("UpSetR")\n')
-    temp_f.write('pdf("'+output_name+'", width=8, height=5)\n')
-    temp_f.write("expressionInput <- c(")
-
-    last = 1
-    for key, value in labels.iteritems():
-        i = 0
-        first = 1
-        for x in key:
-            if i == 0:
-                #print("'")
-                temp_f.write("'")      
-            if x == '1':
-                if first == 1:
-                    temp_f.write(str(names[i]))
-                    #print(str(names[i]))
-                    first = 0
-                else:
-                    temp_f.write('&'+str(names[i]))
-                    #print('&'+str(names[i]))
-
-            if i == len(key)-1:
-                if last == len(labels):
-                    temp_f.write("'="+str(value))
-                else:
-                    temp_f.write("'="+str(value)+',')
-                #print("'="+str(value)+',')
-            i += 1
-        last +=1
-        #print("'="+str(value)+',')
-        #temp_f.write("'="+str(value)+',')
-    temp_f.write(")\n")
-
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', main.bar.color="brown",sets.bar.color="#56B4E9", order.by = "freq", number.angles = 90,mainbar.y.label = "No of Intersections", sets.x.label = "Number of ChIP0seq Size")\n')
-    temp_f.write('invisible(dev.off())\n')
-
-    #print temp_f.read()
-    #print temp_f.name
-    #cmd = 'intervene_upset_plot.R %s %s %s' % ('genomic',5,temp_f.name)
-    cmd = temp_f.name
-    temp_f.close()
-    os.system('chmod +x '+cmd)
-    os.system(cmd)
-    sys.exit(1)
-
-def draw_genomic_upset(labels, names, output, fig_type):
-    #temp_f = tempfile.NamedTemporaryFile(delete=False)
-    temp_f = open(tempfile.mktemp(), "w")
-    
-    temp_f.write("expressionInput <- c(")
-    last = 1
-    for key, value in labels.iteritems():
-        i = 0
-        first = 1
-        for x in key:
-            if i == 0:
-                #print("'")
-                temp_f.write("'")      
-            if x == '1':
-                if first == 1:
-                    temp_f.write(str(names[i]))
-                    #print(str(names[i]))
-                    first = 0
-                else:
-                    temp_f.write('&'+str(names[i]))
-                    #print('&'+str(names[i]))
-
-            if i == len(key)-1:
-                if last == len(labels):
-                    temp_f.write("'="+str(value))
-                else:
-                    temp_f.write("'="+str(value)+',')
-                #print("'="+str(value)+',')
-            i += 1
-        last +=1
-        #print("'="+str(value)+',')
-        #temp_f.write("'="+str(value)+',')
-    temp_f.write(")\n")
-    #print temp_f.read()
-    #print temp_f.name
-    temp_f.close()
-    cmd = 'intervene_upset_plot.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
-    os.system(cmd)
-    sys.exit(1)
+from pybedtools import BedTool, example_bedtool
+from intervene.modules.venn import list_venn
+from intervene.modules.upset import upset
 
 
 def venn2(a,b,names=['A','B'],plot_type=None, **options):
@@ -124,7 +28,7 @@ def venn2(a,b,names=['A','B'],plot_type=None, **options):
      } #Common in A and B
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output, fig_type)
+        upset.draw_genomic(labels, names, output, fig_type)
     
     else:
         fig, ax = list_venn.venn2(labels, names=names, dpi=dpi)
@@ -152,7 +56,7 @@ def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
     '111': (a + b + c).count()}
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output, fig_type)
+        upset.draw_genomic(labels, names, output, fig_type)
         
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
@@ -189,7 +93,7 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
     }
     
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output, fig_type)
+        upset.draw_genomic(labels, names, output, fig_type)
  
     else:
         fig, ax = list_venn.venn4(labels, names=names, dpi=dpi)
@@ -243,8 +147,8 @@ def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **option
     }
     
     if plot_type == 'upset':
-        #draw_genomic_upset(labels, names, output, fig_type)
-        draw_genomic_upset_script(labels, names, output, fig_type)
+        #upset.draw_genomic(labels, names, output, fig_type)
+        upset.create_r_script(labels, names, output, fig_type)
 
 
     else:
@@ -336,7 +240,7 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
     }
 
     if plot_type == 'upset':
-        draw_genomic_upset(labels, names, output,fig_type)
+        upset.write_r_script(labels, names, output,fig_type)
 
     else:
         fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)

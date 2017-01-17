@@ -6,7 +6,7 @@ This is a setup script for InterVene: a toolfor intersection and visualization o
 This code is free software; you can redistribute it and/or modify it under the terms of the 
 BSD License (see the file LICENSE.md included with the distribution).
 
-@version: 1.0
+@version: 0.1
 @author: Aziz Khan
 @email: aziz.khan@ncmm.uio.no
 """
@@ -14,7 +14,8 @@ import os
 from distutils.core import setup
 from setuptools import find_packages
 
-VERSION = '0.1'
+from intervene import __version__ as VERSION
+
 
 CLASSIFIERS = [
     'Intended Audience :: Developers',
@@ -38,14 +39,18 @@ setup(
     description="A tool for intersection and visualization of multiple genomic region sets",
     version=VERSION,
     author="Aziz Khan",
-    license='BSD',
+    license='MIT',
+    platforms='linux/unix',
     Keywords= "bioinformatics genomics",
     author_email="azez.khan@gmail.com",
     url="https://github.com/asntech/intervene",
     #long_description=read('README.md'),
     package_dir={'intervene': 'intervene'},
-    packages=['intervene'],
-    scripts=['intervene/intervene','intervene/intervene_upset_plot.R','intervene/intervene_heatmap.R',
+
+    packages=['intervene', 'intervene.modules','intervene.modules.pairwise',
+    'intervene.modules.venn','intervene.modules.upset'],
+
+    scripts=['intervene/intervene','intervene/scripts/intervene_upset_plot.R','intervene/scripts/intervene_heatmap.R',
                    ],
     package_data={'intervene': ['intervene/example_data/*.*']},
     include_package_data=True,

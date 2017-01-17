@@ -1,4 +1,5 @@
-#!/usr/bin/env python
+# coding: utf-8
+
 """
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017

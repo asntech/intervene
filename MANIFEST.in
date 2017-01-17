@@ -1,2 +1,4 @@
 include README.rst
+exclude .gitignore
+exclude .coverage
 include intervene/example_data/*.*
