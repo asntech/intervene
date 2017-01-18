@@ -31,8 +31,13 @@ install_requires = [
     'argparse'
 ]
 
-def read(fname):
+#def readme():
+#    with open('README.rst') as f:
+#        return f.read()
+
+def readme(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
+
 
 setup(
     name="intervene",
@@ -44,7 +49,7 @@ setup(
     Keywords= "bioinformatics genomics",
     author_email="azez.khan@gmail.com",
     url="https://github.com/asntech/intervene",
-    #long_description=read('README.md'),
+    long_description=readme("README.md"),
     package_dir={'intervene': 'intervene'},
 
     packages=['intervene', 'intervene.modules','intervene.modules.pairwise',

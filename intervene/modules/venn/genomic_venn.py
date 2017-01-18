@@ -35,7 +35,6 @@ def venn2(a,b,names=['A','B'],plot_type=None, **options):
 
         return fig, ax
 
-
 def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
 
     a = BedTool(a)
