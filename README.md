@@ -2,7 +2,7 @@ Introduction
 ============
 InterVene is a tool for intersection and visualization of multiple genomic region sets.
 
-![Intervene overview](docs/img/Intervene_plots.png =800x "Intervene overview")
+![Intervene overview](docs/img/Intervene_plots.png "Intervene overview")
 
 Installation
 ============
