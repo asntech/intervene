@@ -77,11 +77,10 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
     return matrix, bed_names, bed_sizes
 
 
-def barplot(series, matrix, outfile, figsize=(8, 6), fontsize=10, title=None, max_size=1, label=''):
+def barplot(series, matrix, outfile, options, max_size=1):
     """Create a bar plot and place the lower triangle of a heatmap directly
     adjacent so that the bases of the bars line up with the diagonal of the
     heatmap. Thanks to Kamil Slowikowski for this code https://gist.github.com/slowkow/5797728
-
 
     Parameters
     ----------
@@ -96,20 +95,23 @@ def barplot(series, matrix, outfile, figsize=(8, 6), fontsize=10, title=None, ma
     title : str
     """
     # Create a figure.
-    fig = pl.figure(figsize=figsize)
-    gs = gridspec.GridSpec(1, 2, width_ratios=[7, 1]) 
-
+    fig = pl.figure(figsize=options.figsize)
+    gs = gridspec.GridSpec(1, 2, width_ratios=[6, 1]) 
 
     # Axes for the heatmap triangle.
     ax = fig.add_subplot(gs[0], frame_on=False, aspect=2.0)
-
+    #ax = fig.add_subplot(121, frame_on=False, aspect=2.0)
+    
     # Get the heatmap triangle's axes and the order of the clustered samples.
-    cax, order = heatmap_triangle(matrix, ax, label)
+    cax, order = heatmap_triangle(matrix, ax, options.hlabel)
 
     # Adjust spacing between the heatmap triangle and the barplot.
-    fig.subplots_adjust(wspace=-0.25, hspace=0, left=0, right=1)
+    #fig.subplots_adjust(wspace=-0.25, hspace=0, left=0, right=1)
+    #right=1.1 
+    fig.subplots_adjust(wspace=0, hspace=0, left=0, right=options.space)
 
     # Axes for the barplot.
+    #ax = fig.add_subplot(122, frame_on=False)
     ax = fig.add_subplot(gs[1], frame_on=False)
 
     # Put gridlines beneath the bars.
@@ -118,40 +120,46 @@ def barplot(series, matrix, outfile, figsize=(8, 6), fontsize=10, title=None, ma
     # Order the bars by the clustering.
     series = series.ix[order]
 
-    ax = series.plot(ax=ax, kind='barh', title=title, linewidth=0,
-                     grid=False, color='#56B4E9')
+    namelen = 15
+    # Shorten lengthy names.
+    series.index = [shorten(x, namelen) for x in series.index]
+
+    ax = series.plot(ax=ax, kind='barh', title=options.title, linewidth=0,
+                     grid=False, color=options.barcolor)
 
     # Set the font size for the y-axis labels.
-    ax.tick_params(axis='y', which='major', labelsize=fontsize)
+    ax.tick_params(axis='y', which='major', labelsize=options.fontsize)
 
     # Grid lines.
-    ax.grid(b=True, which='major', axis='both', alpha=0.5)
+    ax.grid(b=False, which='major', axis='both', alpha=0.1)
 
     # Tick marks for the x-axis. max(list_size)
     ax.set_xticks((max_size,1))
-
 
     # Put the y-axis marks on the right.
     ax.yaxis.tick_right()
     ax.yaxis.set_label_position('right')
 
     # Adjust tick length.
-    ax.tick_params(length=0, axis='x')
+    ax.tick_params(length=0, axis='x', labelsize=7)
     ax.tick_params(length=0, axis='y')
 
     # Labels.
-    ax.set_xlabel('Set Size')
+    ax.set_xlabel(options.blabel, size=8)
     ax.set_ylabel('')
 
     fig.tight_layout()
 
     #fig.show()
-
     # Save.
-    fig.savefig(outfile, bbox_inches='tight', dpi=300)
+    fig.savefig(outfile, bbox_inches='tight', dpi=options.dpi)
 
+def shorten(x, n=48):
+    if len(x) > n:
+        return x[:n/2] + '..' + x[-n/2:]
+    return x
 
-def heatmap_triangle(dataframe, axes, label='Fraction of overlap'):
+def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     """Create a heatmap of the lower triangle of a pairwise correlation
     matrix of all pairs of columns in the given dataframe. The heatmap
     triangle is rotated 45 degrees clockwise and drawn on the given axes.
@@ -206,7 +214,7 @@ def heatmap_triangle(dataframe, axes, label='Fraction of overlap'):
     cb = pl.colorbar(caxes, ax=axes, orientation='horizontal', shrink=0.5825,
                      fraction=0.02, pad=0, ticks=np.linspace(-1, 1, 5),
                      use_gridspec=True)
-    cb.set_label(label)
+    cb.set_label(hlabel)
 
     return caxes, D.index
 
@@ -292,20 +300,26 @@ def pairwise_intersection(options):
         labels = list(matrix.columns.values)
 
         series = pd.Series(bed_sizes, index=labels)
+        #Set heatmap label
+        if options.type == 'count':
+            options.hlabel = 'Number of overlap'
         if options.type == 'frac':
-            label = 'Fraction of overlap'
+            options.hlabel = 'Fraction of overlap'
         if options.type == 'jaccard':
-            label = 'Jaccard statistic'
+            options.hlabel = 'Jaccard statistic'
         if options.type == 'reldist':
-            label = 'Dist of distances'
+            options.hlabel = 'Dist of distances'
         if options.type == 'fisher':
-            label = 'Fisher statistic'
+            options.hlabel = 'Fisher statistic'
+
+        options.title = "Pairwise intersection"
+        #options.figsize=(8, 6)
 
         #series = pd.Series(np.random.random(ncols) * 2.0, index=labels)
         #df = pd.read_csv('data.csv',index_col=0, delim_whitespace=True)
         #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
         outfile = options.output+'/'+str(options.type)+'_barplot_heatmap.'+options.figtype
-        barplot(series, matrix, outfile, max_size=max(bed_sizes), label=label)  
+        barplot(series, matrix, outfile, options, max_size=max(bed_sizes))  
         
     else:
         #print("Please check the matrix file "+matrix_file)

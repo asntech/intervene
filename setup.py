@@ -48,7 +48,6 @@ setup(
     author="Aziz Khan",
     license='MIT',
     platforms='linux/unix',
-    Keywords= "bioinformatics genomics",
     author_email="azez.khan@gmail.com",
     url="https://github.com/asntech/intervene",
     long_description=readme("README.md"),
