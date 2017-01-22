@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 """
-
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
-Version: 1.0
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 
 """
@@ -72,11 +70,16 @@ def main():
     
     pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
         default='frac', help='Report count/fraction of overlaps or statistical relationships. \n'
-                       '{frac}-> calculates the fraction of overlap. \n'
+                       'frac - Calculates the fraction of overlap. \n'
                        'jaccard - Calculate the Jaccard statistic. '
                        'reldist - Calculate the distribution of relative distances. '
                        'fisher - Calculate Fisher statistic. '
                        'Default is "%(default)s"')
+
+    pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
+                   default='tribar',help='Heatmap plot type. '
+                           'Default is "%(default)s"')    
+    
    
     pairwise_parser.add_argument('--enrichment', action='store_true',
                     help='Run randomizations (default 1000, specify otherwise '
@@ -90,17 +93,14 @@ def main():
                     help='Number of randomizations to perform for enrichement '
                     'scores')
     pairwise_parser.add_argument('-o', '--output', dest='output', 
-                  help='Output folder path where plots will store.'
+                  help='Output folder path where plots will store. '
                        'Default is current working directory.')
-    pairwise_parser.add_argument('--htype', dest="htype",choices=("color", "pie","circle", "square", "ellipse", "number", "shade"), 
-                   default='circle',help='Heatmap plot type. '
-                           'Default is "%(default)s"')    
     pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
-    pairwise_parser.add_argument('--figsize', default=(8,10),
+    pairwise_parser.add_argument('--figsize', default=(8,6),
                    help='Figure size for the output plot. '
-                       'e.g. --figsize=8,10 Default is "%(default)s"')    
+                       'e.g. --figsize=8,10. Default is "%(default)s"')    
     pairwise_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')  

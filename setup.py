@@ -6,14 +6,12 @@ This is a setup script for InterVene: a toolfor intersection and visualization o
 This code is free software; you can redistribute it and/or modify it under the terms of the 
 BSD License (see the file LICENSE.md included with the distribution).
 
-@version: 0.1
 @author: Aziz Khan
 @email: aziz.khan@ncmm.uio.no
 """
 import os
 from distutils.core import setup
 from setuptools import find_packages
-
 from intervene import __version__ as VERSION
 
 
@@ -28,6 +26,10 @@ CLASSIFIERS = [
 
 install_requires = [
     'pybedtools',
+    'matplotlib',
+    'pandas',
+    'numpy',
+    'scipy',
     'argparse'
 ]
 

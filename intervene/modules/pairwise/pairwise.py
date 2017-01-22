@@ -11,8 +11,16 @@ import sys
 import collections
 import time
 import os.path as op
-import pybedtools
-from pybedtools import BedTool, example_filename
+from pybedtools import BedTool #, example_filename
+
+import matplotlib as mp
+import numpy as np
+import pandas as pd
+import pylab as pl
+import scipy.cluster.hierarchy as sch
+import string
+from matplotlib import gridspec
+
 
 
 def get_name(fname):
@@ -66,7 +74,141 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
 
         bed_names.append(get_name(fa))
         bed_sizes.append(len(a))
-    return matrix, bed_names,bed_sizes
+    return matrix, bed_names, bed_sizes
+
+
+def barplot(series, matrix, outfile, figsize=(8, 6), fontsize=10, title=None, max_size=1, label=''):
+    """Create a bar plot and place the lower triangle of a heatmap directly
+    adjacent so that the bases of the bars line up with the diagonal of the
+    heatmap. Thanks to Kamil Slowikowski for this code https://gist.github.com/slowkow/5797728
+
+
+    Parameters
+    ----------
+    series : pandas.Series
+        The bar heights and labels.
+    matrix : pandas.DataFrame
+        A matrix where each column corresponds to a bar in the bar plot.
+    outfile : str
+        Full path to the output file.
+    figsize : (width, height)
+    fontsize : float
+    title : str
+    """
+    # Create a figure.
+    fig = pl.figure(figsize=figsize)
+    gs = gridspec.GridSpec(1, 2, width_ratios=[7, 1]) 
+
+
+    # Axes for the heatmap triangle.
+    ax = fig.add_subplot(gs[0], frame_on=False, aspect=2.0)
+
+    # Get the heatmap triangle's axes and the order of the clustered samples.
+    cax, order = heatmap_triangle(matrix, ax, label)
+
+    # Adjust spacing between the heatmap triangle and the barplot.
+    fig.subplots_adjust(wspace=-0.25, hspace=0, left=0, right=1)
+
+    # Axes for the barplot.
+    ax = fig.add_subplot(gs[1], frame_on=False)
+
+    # Put gridlines beneath the bars.
+    ax.set_axisbelow(True)
+
+    # Order the bars by the clustering.
+    series = series.ix[order]
+
+    ax = series.plot(ax=ax, kind='barh', title=title, linewidth=0,
+                     grid=False, color='#56B4E9')
+
+    # Set the font size for the y-axis labels.
+    ax.tick_params(axis='y', which='major', labelsize=fontsize)
+
+    # Grid lines.
+    ax.grid(b=True, which='major', axis='both', alpha=0.5)
+
+    # Tick marks for the x-axis. max(list_size)
+    ax.set_xticks((max_size,1))
+
+
+    # Put the y-axis marks on the right.
+    ax.yaxis.tick_right()
+    ax.yaxis.set_label_position('right')
+
+    # Adjust tick length.
+    ax.tick_params(length=0, axis='x')
+    ax.tick_params(length=0, axis='y')
+
+    # Labels.
+    ax.set_xlabel('Set Size')
+    ax.set_ylabel('')
+
+    fig.tight_layout()
+
+    #fig.show()
+
+    # Save.
+    fig.savefig(outfile, bbox_inches='tight', dpi=300)
+
+
+def heatmap_triangle(dataframe, axes, label='Fraction of overlap'):
+    """Create a heatmap of the lower triangle of a pairwise correlation
+    matrix of all pairs of columns in the given dataframe. The heatmap
+    triangle is rotated 45 degrees clockwise and drawn on the given axes.
+    Thanks to Kamil Slowikowski for this code https://gist.github.com/slowkow/5797728
+
+    Parameters
+    ----------
+    dataframe : pandas.DataFrame
+    axes : matplotlib.axes.Axes
+    """
+    N = dataframe.shape[1]
+    D = dataframe
+    #D = dataframe.corr(method='pearson')
+
+    # UPGMA clustering, but other methods are also available.
+    Z = sch.linkage(D, method='average')
+    R = sch.dendrogram(Z, no_plot=True)
+    cluster_order = R['leaves']
+    D = D.ix[cluster_order, cluster_order]
+
+    # Get the lower triangle of the matrix. 
+    C = np.tril(D)
+    # Mask the upper triangle.
+    C = np.ma.masked_array(C, C == 0)
+    # Set the diagonal to zero.
+    for i in range(N):
+        C[i, i] = 0
+
+    # Transformation matrix for rotating the heatmap.
+    A = np.array([(y, x) for x in range(N, -1, -1) for y in range(N + 1)])
+    t = np.array([[0.5, 1], [0.5, -1]])
+    A = np.dot(A, t)
+
+    # -1.0 correlation is blue, 0.0 is white, 1.0 is red.
+    # 1.0 correlation is blue, 0.0 is white, 1.0 is red.
+    cmap = pl.cm.RdBu_r
+    norm = mp.colors.BoundaryNorm(np.linspace(0, 1, 10), cmap.N)
+
+    # This MUST be before the call to pl.pcolormesh() to align properly.
+    axes.set_xticks([])
+    axes.set_yticks([])
+
+    # Plot the correlation heatmap triangle.
+    X = A[:, 1].reshape(N + 1, N + 1)
+    Y = A[:, 0].reshape(N + 1, N + 1)
+    caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
+
+    # Remove the ticks and reset the x limit.
+    axes.set_xlim(right=1)
+
+    # Add a colorbar below the heatmap triangle.
+    cb = pl.colorbar(caxes, ax=axes, orientation='horizontal', shrink=0.5825,
+                     fraction=0.02, pad=0, ticks=np.linspace(-1, 1, 5),
+                     use_gridspec=True)
+    cb.set_label(label)
+
+    return caxes, D.index
 
 def pairwise_intersection(options):
     if options.test:
@@ -141,10 +283,35 @@ def pairwise_intersection(options):
         #sys.stdout.write('\n')
         f.write('\n')
     f.close()
-    #print("Please check the matrix file "+matrix_file)
-    cmd = 'intervene_heatmap.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
-    os.system(cmd)
 
-    print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')
+    if options.htype == 'tribar':
+        mp.rc("font", family="serif")
+        ncols = nfiles
+        matrix = pd.read_table(matrix_file,index_col=0, delim_whitespace=True)
 
+        labels = list(matrix.columns.values)
 
+        series = pd.Series(bed_sizes, index=labels)
+        if options.type == 'frac':
+            label = 'Fraction of overlap'
+        if options.type == 'jaccard':
+            label = 'Jaccard statistic'
+        if options.type == 'reldist':
+            label = 'Dist of distances'
+        if options.type == 'fisher':
+            label = 'Fisher statistic'
+
+        #series = pd.Series(np.random.random(ncols) * 2.0, index=labels)
+        #df = pd.read_csv('data.csv',index_col=0, delim_whitespace=True)
+        #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
+        outfile = options.output+'/'+str(options.type)+'_barplot_heatmap.'+options.figtype
+        barplot(series, matrix, outfile, max_size=max(bed_sizes), label=label)  
+        
+    else:
+        #print("Please check the matrix file "+matrix_file)
+        cmd = 'intervene_heatmap.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
+        os.system(cmd)
+
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')
+
+        
