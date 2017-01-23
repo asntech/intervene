@@ -73,7 +73,7 @@ def main():
                        'frac - Calculates the fraction of overlap. \n'
                        'jaccard - Calculate the Jaccard statistic. '
                        'reldist - Calculate the distribution of relative distances. '
-                       'fisher - Calculate Fisher statistic. '
+                       'fisher - Calculate Fisher`s statistic. '
                        'Default is "%(default)s"')
 
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 

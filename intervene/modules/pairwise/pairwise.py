@@ -308,9 +308,9 @@ def pairwise_intersection(options):
         if options.type == 'jaccard':
             options.hlabel = 'Jaccard statistic'
         if options.type == 'reldist':
-            options.hlabel = 'Dist of distances'
+            options.hlabel = 'Relative distance'
         if options.type == 'fisher':
-            options.hlabel = 'Fisher statistic'
+            options.hlabel = 'Fisher p-value'
 
         options.title = "Pairwise intersection"
         #options.figsize=(8, 6)
