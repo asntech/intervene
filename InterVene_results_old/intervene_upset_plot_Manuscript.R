@@ -1,0 +1,6 @@
+#!/usr/bin/env Rscript
+library("UpSetR")
+pdf("/Users/azizkhan/projects/python/intervene/InterVene_results/intervene_upset_plot_manuscript.pdf", width=14, height=8)
+expressionInput <- c('H3K27ac'=6705,'H3K27ac&H3K4me2'=599,'H3K27ac&H3K4me3&H3K4me2'=3150,'H3K27ac&H3K4me3'=146,'H3K4me1&H3K4me3&H3K4me2'=3907,'H3K4me1&H3K4me3'=342,'H3K27ac&H3K4me1&H3K4me3&H3K27me3&H3K4me2'=6817,'H3K27ac&H3K4me1&H3K4me3&H3K27me3'=182,'H3K27ac&H3K4me1&H3K27me3'=974,'H3K27ac&H3K4me1&H3K27me3&H3K4me2'=1632,'H3K4me1'=30388,'H3K4me1&H3K4me2'=12658,'H3K4me3&H3K27me3&H3K4me2'=676,'H3K4me3&H3K27me3'=103,'H3K27me3'=4021,'H3K27me3&H3K4me2'=667,'H3K27ac&H3K27me3&H3K4me2'=66,'H3K27ac&H3K27me3'=516,'H3K27ac&H3K4me3&H3K27me3'=113,'H3K27ac&H3K4me3&H3K27me3&H3K4me2'=418,'H3K4me1&H3K4me3&H3K27me3'=187,'H3K4me1&H3K4me3&H3K27me3&H3K4me2'=8492,'H3K27ac&H3K4me1&H3K4me2'=11412,'H3K27ac&H3K4me1'=8316,'H3K27ac&H3K4me1&H3K4me3'=327,'H3K27ac&H3K4me1&H3K4me3&H3K4me2'=14355,'H3K4me1&H3K27me3&H3K4me2'=3775,'H3K4me1&H3K27me3'=4303,'H3K4me2'=3195,'H3K4me3'=206,'H3K4me3&H3K4me2'=907)
+upset(fromExpression(expressionInput), nsets=5, main.bar.color="brown",sets.bar.color="#56B4E9", order.by = "freq", mainbar.y.label = "Intersections of ChIP-seq peaks ", sets.x.label = "Total ChIP-seq peaks")
+dev.off()

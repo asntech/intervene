@@ -11,6 +11,7 @@ import os
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import pybedtools
 from pybedtools import BedTool, example_bedtool
 from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
