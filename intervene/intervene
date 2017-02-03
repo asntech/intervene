@@ -17,11 +17,13 @@ from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
 import argparse
-
 from intervene import __version__
 
 
 def create_dir(dir_path):
+    '''
+    Create a output directory if it's not exists.
+    '''
 
     if not os.path.exists(dir_path):
         try:
@@ -30,21 +32,40 @@ def create_dir(dir_path):
             sys.exit( "Output directory (%s) could not be created." % dir_path )
     return dir_path
 
-def venn_ways(options):
+def venn_order(input_files):
+    """
+    Checks the order of venn plot. 
+
+    @type input_files: list[Iterable] 
+    @rtype int 
+
+    input
+      input_files: a list of files of genomic regions or lists
+
+    return
+      len(input_files): return length of input files
     """
 
-    """
-    if not options.c:
-        return 2
-    if not options.d:
-        return 3
-    if not options.e:
-        return 4
-    if not options.f:
-        return 5
-    if options.f:
-        return 6
+    return len(input_files)
 
+def get_filenames(input_files):
+    """
+    Checks the venn-type
+
+    @type input_files: list[Iterable] 
+    @rtype file_names: list[Iterable]
+
+    input
+      input_files: a list of files of genomic regions or lists
+
+    return
+      file_names:: return a list of file names
+    """
+    file_names=[]
+    for fname in input_files:
+      file_names.append(os.path.splitext(os.path.basename(fname))[0])
+
+    return file_names
 
 def main():
     #print 'InterVene: a tool for intersection and visualization of multiple genomic region sets'
@@ -62,86 +83,26 @@ def main():
     parser = argparse.ArgumentParser(usage='intervene <subcommand> [options]', description=desc)
     subparsers = parser.add_subparsers(dest='command',help='List of subcommands')
 
-    #pairwise
-    pairwise_parser = subparsers.add_parser('pairwise', usage='intervene pairwise [options]', 
-        description='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.',
-        help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.')
-    pairwise_parser.add_argument('-i','--input', nargs="*",
-        help='Input BED/GTF/GFF/VCF files. For files in a directory use *.bed')
     
-    pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
-        default='frac', help='Report count/fraction of overlaps or statistical relationships. \n'
-                       'frac - Calculates the fraction of overlap. \n'
-                       'jaccard - Calculate the Jaccard statistic. '
-                       'reldist - Calculate the distribution of relative distances. '
-                       'fisher - Calculate Fisher`s statistic. '
-                       'Default is "%(default)s"')
 
-    pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
-                   default='tribar',help='Heatmap plot type. '
-                           'Default is "%(default)s"')  
-    
-   
-    pairwise_parser.add_argument('--enrichment', action='store_true',
-                    help='Run randomizations (default 1000, specify otherwise '
-                    'with --iterations) on each pairwise comparison and '
-                    'compute the enrichment score as '
-                    '(actual intersection count + 1) / (median randomized + 1)'
-                    )
-    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher or --enrichment is '
-                    'used. Needs to be a string assembly name like "mm9" or "hg19"')
-    pairwise_parser.add_argument('--iterations', default=1000, type=int,
-                    help='Number of randomizations to perform for enrichement '
-                    'scores')
-    pairwise_parser.add_argument('-o', '--output', dest='output', 
-                    help='Output folder path where plots will store. '
-                       'Default is current working directory.')
-    pairwise_parser.add_argument('--blabel', dest="blabel", default='Set size',
-                    help='x-axis label of boxplot if --htype=tribar. '
-                       'Default is "%(default)s"')
-    pairwise_parser.add_argument('--barcolor', dest="barcolor", default='#53cfff',
-                    help='Boxplot color (hex vlaue or name, e.g. blue). '
-                       'Default is "%(default)s"') 
-  
-    pairwise_parser.add_argument('--fontsize', default=8,
-                   help='Label abel fount size. '
-                       'Default is "%(default)s"')
-
-    pairwise_parser.add_argument('--space', type=float, default=1.1,
-                   help='White space between barplt and heatmap. '
-                       'Default is "%(default)s"')
-
-
-    
-    pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','png'), 
-                   default='pdf',help='Figure type for the plot. '
-                       'e.g. --figtype svg. Default is "%(default)s"')    
-    pairwise_parser.add_argument('--figsize', nargs=2, type=float, default=(8,6),
-                   help='Figure size for the output plot (width,height). '
-                       'Default is "%(default)s"')    
-   
-    pairwise_parser.add_argument('--dpi', type=int, default=300,
-                  help='Dots-per-inch (DPI) for the output. '
-                       'Default is: "%(default)s"')  
-
-    #venn
+    #venn module argument parser
     venn_parser = subparsers.add_parser('venn', usage='intervene venn [options]', 
         description='Create Venn diagram upto 6-way after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
         help='Venn diagram of intersection of genomic regions or list sets (upto 6-way).')
-    venn_parser.add_argument('-a', dest="a", required=True, default=None, help='BED or list of genes/names file 1 (required)')
-    venn_parser.add_argument('-b', dest="b", required=True, default=None, help='BED or list of genes/names file 2 (required)')
-    venn_parser.add_argument('-c', dest="c", default=None, help='BED or list of genes/names file 3 (optional)')
-    venn_parser.add_argument('-d', dest="d", default=None, help='BED or list of genes/names file 4 (optional)')
-    venn_parser.add_argument('-e', dest="e", default=None, help='BED or list of genes/names file 5 (optional)')
-    venn_parser.add_argument('-f', dest="f", default=None, help='BED or list of genes/names file 6 (optional)')
     
+    venn_parser.add_argument('-i', dest='input', required=True, nargs="*",
+        help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
+        'For files in a directory use *.<extension>. e.g. *.bed')
+
     venn_parser.add_argument('--type', dest='type', choices=('genomic','list'),
                   help='Type of input sets. Genomic regions or lists of genes sets. ')
    
-    venn_parser.add_argument('--labels', dest='labels', default='A,B,C,D,E,F',
+    venn_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
                   help='Comma-separated list of names for input files. '
                        'Default is: --labels=A,B,C,D,E,F')
-   
+    venn_parser.add_argument('--filenames', action='store_true', default=False,
+                  help='Use file names as labels instead. '
+                       'Default is "%(default)s"')
     venn_parser.add_argument('--colors', dest='colors',
                   help='Comma-separated list of matplotlib-valid colors. '
                        'E.g., --colors=r,b,k')
@@ -149,7 +110,7 @@ def main():
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where plots will store.'
                        'Default is current working directory.')
-    venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','png','tif','jpg'), 
+    venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
     venn_parser.add_argument('--figsize', nargs=2, default=(8,10),
@@ -162,41 +123,51 @@ def main():
                   help='Report number or  percentage of overlaps (Only if --type=list)'
                        'Default is "%(default)s"')
 
-    #upset
+    #upset module argument parser
     upset_parser = subparsers.add_parser('upset', usage='intervene upset [options]', 
         description='Create UpSet diagram after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
         help='UpSet diagram of intersection of genomic regions or list sets.')
+  
+    upset_parser.add_argument('-i', dest='input', required=True, nargs="*",
+        help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
+        'For files in a directory use *.<extension>. e.g. *.bed')
 
-    upset_parser.add_argument('-a', dest="a", required=True, default=None, help='BED or list of genes/names file 1 (required)')
-    upset_parser.add_argument('-b', dest="b", required=True, default=None, help='BED or list of genes/names file 2 (required)')
-    upset_parser.add_argument('-c', dest="c", default=None, help='BED or list of genes/names file 3 (optional)')
-    upset_parser.add_argument('-d', dest="d", default=None, help='BED or list of genes/names file 4 (optional)')
-    upset_parser.add_argument('-e', dest="e", default=None, help='BED or list of genes/names file 5 (optional)')
-    upset_parser.add_argument('-f', dest="f", default=None, help='BED or list of genes/names file 6 (optional)')
-    
     upset_parser.add_argument('--type', dest='type', choices=('genomic','list'),default='genomic',
                   help='Type of input sets. Genomic regions or lists of genes sets. '
                        'Default is "%(default)s"') 
    
-    upset_parser.add_argument('--labels', dest='labels', default='A,B,C,D,E,F',
+    upset_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
                   help='Comma-separated list of names for input files. '
-                       'Default is: --labels=A,B,C,D,E,F')
+                       'Default is: --names=A,B,C,D,E,F')
+    
+    upset_parser.add_argument('--filenames', action='store_true', default=False,
+                  help='Use file names as labels instead. '
+                       'Default is "%(default)s"')
    
-    upset_parser.add_argument('--colors', dest='colors',
-                  help='Comma-separated list of matplotlib-valid colors. '
-                       'E.g., --colors=r,b,k')
-
     upset_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where plots will store.'
                        'Default is current working directory.')
+    
     upset_parser.add_argument('--order', dest="order",choices=("freq", "degree"), 
                    default='freq',help='The order of intersections of sets. '
                        'e.g. --order degree. Default is "%(default)s"')
+    
+    upset_parser.add_argument('--ninter', type=int, default=40, 
+                  help='Number of top intersections to plot. '
+                       'By default all intersections will be plotted.')
 
-    upset_parser.add_argument('--mbcolor', type=str, default='brown', 
+    upset_parser.add_argument('--showzero', action='store_true', default=False,
+                    help='Show empty overlap combinations. '
+                       'Default is "%(default)s"')
+
+    upset_parser.add_argument('--showsize', action='store_true', default=False,
+                    help='Show intersection sizes above bars. '
+                       'Default is "%(default)s"')
+   
+    upset_parser.add_argument('--mbcolor', type=str, default='gray23', 
                   help='Color of the main bar plot.'
                        'Default is: "%(default)s"')
-    upset_parser.add_argument('--sbcolor', type=str, default='blue', 
+    upset_parser.add_argument('--sbcolor', type=str, default='#56B4E9', 
                   help='Color of set size bar plot.'
                        'Default is: "%(default)s"')
 
@@ -207,7 +178,7 @@ def main():
                   help='The x-axis label of the set size bars.'
                        'Default is: "%(default)s"')
            
-    upset_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','png'), 
+    upset_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
     upset_parser.add_argument('--figsize', type=tuple, default=(10,6),
@@ -216,6 +187,68 @@ def main():
     upset_parser.add_argument('--dpi', type=int, dest='dpi', default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')
+
+    upset_parser.add_argument('--run', action='store_false', default=True,
+                    help='Run Rscript if R and UpSetR package is installed. '
+                       'Default is "%(default)s"')
+
+    #pairwise module argument parser
+    pairwise_parser = subparsers.add_parser('pairwise', usage='intervene pairwise [options]', 
+        description='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.',
+        help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.')
+    
+    pairwise_parser.add_argument('-i', dest='input', nargs="*",
+        help='Input genomic regions in <BED/GTF/GFF/VCF> format. '
+        'For files in a directory use *.<extension>. e.g. *.bed')
+    
+    pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
+        default='frac', help='Report count/fraction of overlaps or statistical relationships. \n'
+                       'frac - Calculates the fraction of overlap. \n'
+                       'jaccard - Calculate the Jaccard statistic. '
+                       'reldist - Calculate the distribution of relative distances. '
+                       'fisher - Calculate Fisher`s statistic. '
+                       'Default is "%(default)s"')
+
+    pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
+                   default='tribar',help='Heatmap plot type. '
+                           'Default is "%(default)s"')  
+    '''
+    pairwise_parser.add_argument('--enrichment', action='store_true',
+                    help='Run randomizations (default 1000, specify otherwise '
+                    'with --iterations) on each pairwise comparison and '
+                    'compute the enrichment score as '
+                    '(actual intersection count + 1) / (median randomized + 1)')
+    '''
+    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher or --enrichment is '
+                    'used. Needs to be a string assembly name like "mm10" or "hg38"')
+    pairwise_parser.add_argument('--iterations', default=1000, type=int,
+                    help='Number of randomizations to perform for enrichement '
+                    'scores')
+    pairwise_parser.add_argument('-o', '--output', dest='output', 
+                    help='Output folder path where plots will store. '
+                       'Default is current working directory.')
+    pairwise_parser.add_argument('--barlabel', dest="blabel", default='Set size',
+                    help='x-axis label of boxplot if --htype=tribar. '
+                       'Default is "%(default)s"')
+    pairwise_parser.add_argument('--barcolor', dest="barcolor", default='#53cfff',
+                    help='Boxplot color (hex vlaue or name, e.g. blue). '
+                       'Default is "%(default)s"') 
+    pairwise_parser.add_argument('--fontsize', default=8,
+                   help='Label abel fount size. '
+                       'Default is "%(default)s"')
+    pairwise_parser.add_argument('--space', type=float, default=1.1,
+                   help='White space between barplt and heatmap. '
+                       'Default is "%(default)s"')
+    pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'),  
+                   default='pdf',help='Figure type for the plot. '
+                       'e.g. --figtype svg. Default is "%(default)s"')    
+    pairwise_parser.add_argument('--figsize', nargs=2, type=float, default=(8,6),
+                   help='Figure size for the output plot (width,height). '
+                       'Default is "%(default)s"')    
+   
+    pairwise_parser.add_argument('--dpi', type=int, default=300,
+                  help='Dots-per-inch (DPI) for the output. '
+                       'Default is: "%(default)s"')  
     
     parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
     
@@ -252,10 +285,10 @@ def main():
         pairwise.pairwise_intersection(options)
         sys.exit(1)
 
-    output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_ways(options))+'way_'+options.type+'.'+options.figtype
+    output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_order(options.input))+'way_'+options.type+'.'+options.figtype
 
-    #checke if there are atleast two (a & b) bed/list files    
-    reqd_args = ['a','b']
+    #checke if there are atleast two input bed/list files
+    reqd_args = ['input']
     if not options.test:
         for ra in reqd_args:
             if not getattr(options,ra):
@@ -265,6 +298,9 @@ def main():
                     upset_parser.print_help()
                 sys.stderr.write('Missing required arg "%s"\n' % ra)
                 sys.exit(1)
+        if len(options.input) < 2:
+          sys.stderr.write('Input should have at least two files.\n')
+          sys.exit(1)
 
     if options.command == 'venn' or options.command == 'upset':
         if not options.type:
@@ -279,132 +315,164 @@ def main():
         plot_type = 'upset'
     else:
         plot_type = 'venn'
-
-    if venn_ways(options) == 2:
+    #print(options.filenames)
+    #sys.exit(1)
+    if venn_order(options.input) == 2:
+        
         print('\nGenerating a 2-way "%s" diagram.\n' %options.command)
-        if options.labels:
+        
+        if options.filenames:
+          label_names = get_filenames(options.input)
+        elif options.labels:
             label_names = options.labels.split(',')
         else:
             label_names = ['A','B']
 
         #If the input is a gene list
         if options.type == 'list':
-            #print options.a[0]
-            a = open(options.a, 'r').readlines()
-            b = open(options.b, 'r').readlines()
+            if options.command == 'upset':
+                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s' % ('list',2,output_name, label_names,options.input[0],options.input[1])
+                os.system(cmd)
+                sys.exit(1)
 
-            labels = list_venn.get_labels([a,b], fill=[str(options.fill)])
-            fig, ax = list_venn.venn2(labels, names=label_names)
-            
+            else:
+                a = open(options.a, 'r').readlines()
+                b = open(options.b, 'r').readlines()
+                labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
+                fig, ax = list_venn.venn2(labels, names=label_names)            
+        
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn2(a=options.a, b=options.b, names=label_names, plot_type=plot_type, dpi=options.dpi, output=options.output, fig_type=options.figtype)
+            fig, ax = genomic_venn.venn2(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
      
-    elif venn_ways(options) == 3:
+    elif venn_order(options.input) == 3:
+        
         print('\nGenerating a 3-way "%s" diagram.\n' %options.command)
-        if options.labels:
+        
+        if options.filenames:
+          label_names = get_filenames(options.input)         
+        elif options.labels:
             label_names = options.labels.split(',')
         else:
             label_names = ['A','B','C']
         #If the input is a gene list
         if options.type == 'list':
-            a = open(options.a, 'r').readlines()
-            b = open(options.b, 'r').readlines()
-            c = open(options.c, 'r').readlines()
-            labels = list_venn.get_labels([a, b, c], fill=[str(options.fill)])
-            fig, ax = list_venn.venn3(labels, names=label_names)
-            
+          a = open(options.input[0], 'r').readlines()
+          b = open(options.input[1], 'r').readlines()
+          c = open(options.input[2], 'r').readlines()
+          labels = list_venn.get_labels([a, b, c], fill=['number'])
+          if options.command == 'upset':
+            #create an RScript
+            upset.create_r_script(labels, label_names, options)
+
+          else:
+            fig, ax = list_venn.venn3(labels, names=label_names)          
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn3(a=options.a, b=options.b, c=options.c, 
-                names=label_names, plot_type=plot_type, dpi=options.dpi, output=options.output, fig_type=options.figtype)
+            fig, ax = genomic_venn.venn3(input_files=options.input,
+                options=options, names=label_names, plot_type=plot_type)
 
-    elif venn_ways(options) == 4:
+    elif venn_order(options.input) == 4:
+        
         print('\nGenerating a 4-way "%s" diagram.\n' %options.command)
-        if options.labels:
+        
+        if options.filenames:
+          label_names = get_filenames(options.input)
+        elif options.labels:
             label_names = options.labels.split(',')
         else:
             label_names = ['A','B','C','D']
         #If the input is a gene list
         if options.type == 'list':
+          a = open(options.input[0], 'r').readlines()
+          b = open(options.input[1], 'r').readlines()
+          c = open(options.input[2], 'r').readlines()
+          d = open(options.input[3], 'r').readlines()
+          labels = list_venn.get_labels([a, b, c, d], fill=['number'])
+          if options.command == 'upset':
+            #create an RScript
+            upset.create_r_script(labels, label_names, options)
 
-            if options.command == 'upset':
-                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s %s %s' % ('list',4,options.a,options.b,options.c,options.d, options.o, options.labels)
-                os.system(cmd)
-                sys.exit(1)
-
-            else:
-                a = open(options.a, 'r').readlines()
-                b = open(options.b, 'r').readlines()
-                c = open(options.c, 'r').readlines()
-                d = open(options.d, 'r').readlines()
-                labels = list_venn.get_labels([a, b, c, d], fill=[str(options.fill)])
-                fig, ax = list_venn.venn4(labels, names=label_names)
+          else:
+            fig, ax = list_venn.venn4(labels, names=label_names)
             
         #else input considered as bed file
         else:
-             fig, ax = genomic_venn.venn4(a=options.a, b=options.b, c=options.c, d=options.d, 
-                names=label_names, plot_type=plot_type, dpi=options.dpi, output=options.output, fig_type=options.figtype)
+             fig, ax = genomic_venn.venn4(input_files=options.input, 
+                options=options, names=label_names, plot_type=plot_type)
             
                    
-    elif venn_ways(options) == 5:
+    elif venn_order(options.input) == 5:
+        
         print('\nGenerating a 5-way "%s" diagram.\n' %options.command)
-        if options.labels:
-            label_names = options.labels.split(',')
+        
+        if options.filenames:
+          label_names = get_filenames(options.input)   
+        elif options.labels:
+            label_names = options.labels.split(',') 
         else:
             label_names = ['A','B','C','D','E']
         #If the input is a gene list
         if options.type == 'list':
+          a = open(options.input[0], 'r').readlines()
+          b = open(options.input[1], 'r').readlines()
+          c = open(options.input[2], 'r').readlines()
+          d = open(options.input[3], 'r').readlines()
+          e = open(options.input[4], 'r').readlines()
 
-            if options.command == 'upset':
-                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s %s %s %s' % ('list',5,options.a,options.b,options.c,options.d, options.e,options.o, options.labels)
-                os.system(cmd)
-                sys.exit(1)
-            else: 
-                a = open(options.a, 'r').readlines()
-                b = open(options.b, 'r').readlines()
-                c = open(options.c, 'r').readlines()
-                d = open(options.d, 'r').readlines()
-                e = open(options.e, 'r').readlines()
+          labels = list_venn.get_labels([a, b, c, d, e], fill=['number'])
+          if options.command == 'upset':
+            #create an RScript
+            upset.create_r_script(labels, label_names, options)
 
-                labels = list_venn.get_labels([a, b, c, d, e], fill=[str(options.fill)])
-                fig, ax = list_venn.venn5(labels, names=label_names)
-            
+          else:
+            fig, ax = list_venn.venn5(labels, names=label_names)
         #else input considered as genomic regions file
         else:
-            fig, ax = genomic_venn.venn5(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e, 
-                names=label_names, plot_type=plot_type, dpi=options.dpi, output=options.output, fig_type=options.figtype)
+            fig, ax = genomic_venn.venn5(input_files=options.input, 
+                options=options, names=label_names, plot_type=plot_type)
         
-    elif venn_ways(options) == 6:
+    elif venn_order(options.input) == 6:
+        
         print('\nGenerating a 6-way "%s" diagram.\n' %options.command)
-        if options.labels:
+        
+        if options.filenames:
+          label_names = get_filenames(options.input) 
+        elif options.labels:
             label_names = options.labels.split(',')
         else:
             label_names = ['A','B','C','D','E','F']
         #If the input is a gene list
         if options.type == 'list':
-            if options.ptype == 'upset':
-                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s %s %s %s %s' % ('list',6,options.a,options.b,options.c,options.d, options.e, options.f,options.o, options.labels)
-                os.system(cmd)
-                sys.exit(1)
-            else:
-                a = open(options.a, 'r').readlines()
-                b = open(options.b, 'r').readlines()
-                c = open(options.c, 'r').readlines()
-                d = open(options.d, 'r').readlines()
-                e = open(options.e, 'r').readlines()
-                f = open(options.f, 'r').readlines()
+          a = open(options.input[0], 'r').readlines()
+          b = open(options.input[1], 'r').readlines()
+          c = open(options.input[2], 'r').readlines()
+          d = open(options.input[3], 'r').readlines()
+          e = open(options.input[4], 'r').readlines()
+          f = open(options.input[5], 'r').readlines()
 
-                labels = list_venn.get_labels([a, b, c, d, e, f], fill=[str(options.fill)])
-                fig, ax = list_venn.venn6(labels, names=label_names)
+          labels = list_venn.get_labels([a, b, c, d, e, f], fill=['number'])
+          if options.command == 'upset':
+            #create an RScript
+            upset.create_r_script(labels, label_names, options)
+          else:
+            fig, ax = list_venn.venn6(labels, names=label_names)
                 
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn6(a=options.a, b=options.b, c=options.c, d=options.d, e=options.e, f=options.f, 
-                names=label_names, plot_type=plot_type, dpi=options.dpi, output=options.output, fig_type=options.figtype)
+            fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
+    
+    elif venn_order(options.input) > 6:
+      if options.command == 'venn':
+        venn_parser.print_help()
+      else:
+        upset_parser.print_help()
+      sys.stderr.write('The number of input files are more than 6.\n')
+      sys.exit(1)
+    
     else:
         parser.print_help()
-        sys.stderr.write('Please make sure your arguments are correct.')
+        sys.stderr.write('Please make sure your arguments are correct.\n')
         sys.exit(1)
 
     fig.savefig(output_name, dpi=options.dpi, bbox_inches='tight')

@@ -16,6 +16,7 @@ Table of Contents
    install
    how_to_use
    modules
+   examples
    support
    cite
    

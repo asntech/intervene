@@ -14,25 +14,17 @@ if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpS
 
 suppressMessages(library("UpSetR"))
 
-output_name <- paste0(args[4],'/Intervene_upset_plot_',args[1])
+output_name <- args[3]
 
-#print(output_name)
-
-
-if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]),width=8, height=5)
-
-if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]),width=8, height=5)
-
-if(args[5] =='png') png(file=paste0(output_name,'.',args[5]),width=8, height=5)
-
+print(args[4])
 
 #listInput <- list(one = c(1, 2, 3, 5, 7, 8, 11, 12, 13), two = c(1, 2, 4, 5, 
  #   10), three = c(1, 5, 6, 7, 8, 9, 10, 12, 13))
 if(args[1] == 'list'){
 
 	if (args[2] == 3){
-		input_data <- list('A' = c(scan(args[3], character(), quote = "\n")),B = c(scan(args[4], character(), quote = "\n")),
-		C= c(scan(args[5], character(), quote = "\n")))
+		input_data <- list('A' = c(scan(args[5], character(), quote = "\n")),B = c(scan(args[6], character(), quote = "\n")),
+		C= c(scan(args[7], character(), quote = "\n")))
 
 		pdf(output_name, width=8, height=5)
 		upset(fromList(input_data), empty.intersections = "on", main.bar.color='brown',sets.bar.color='blue',
@@ -40,8 +32,8 @@ if(args[1] == 'list'){
 		dev.off()
 
 	}else if (args[2] == 4){
-		input_data <- list('A' = c(scan(args[3], character(), quote = "\n")),B = c(scan(args[4], character(), quote = "\n")),
-		C= c(scan(args[5], character(), quote = "\n")), D = c(scan(args[6], character(), quote = "\n")) )
+		input_data <- list('A' = c(scan(args[5], character(), quote = "\n")),B = c(scan(args[6], character(), quote = "\n")),
+		C= c(scan(args[7], character(), quote = "\n")), D = c(scan(args[8], character(), quote = "\n")) )
 
 		pdf(output_name, width=8, height=5)
 		upset(fromList(input_data), empty.intersections = "on", main.bar.color='brown',sets.bar.color='blue',
@@ -49,8 +41,8 @@ if(args[1] == 'list'){
 		dev.off()
 
 	}else if (args[2] == 5){
-		input_data <- list('A' = c(scan(args[3], character(), quote = "\n")),B = c(scan(args[4], character(), quote = "\n")),
-		C= c(scan(args[5], character(), quote = "\n")), D = c(scan(args[6], character(), quote = "\n")),E = c(scan(args[6], character(), quote = "\n")) )
+		input_data <- list('A' = c(scan(args[5], character(), quote = "\n")),B = c(scan(args[6], character(), quote = "\n")),
+		C= c(scan(args[7], character(), quote = "\n")), D = c(scan(args[8], character(), quote = "\n")),E = c(scan(args[9], character(), quote = "\n")) )
 
 		pdf(output_name, width=8, height=5)
 		upset(fromList(input_data), empty.intersections = "on", main.bar.color='brown',sets.bar.color='blue',
@@ -58,9 +50,9 @@ if(args[1] == 'list'){
 		dev.off()
 		
 	}else if (args[2] == 6){
-		input_data <- list('A' = c(scan(args[3], character(), quote = "\n")),B = c(scan(args[4], character(), quote = "\n")),
-		C = c(scan(args[5], character(), quote = "\n")), D = c(scan(args[6], character(), quote = "\n")), 
-		E = c(scan(args[7], character(), quote = "\n")), F = c(scan(args[8], character(), quote = "\n")) )
+		input_data <- list('A' = c(scan(args[5], character(), quote = "\n")),B = c(scan(args[6], character(), quote = "\n")),
+		C = c(scan(args[7], character(), quote = "\n")), D = c(scan(args[8], character(), quote = "\n")), 
+		E = c(scan(args[9], character(), quote = "\n")), F = c(scan(args[10], character(), quote = "\n")) )
 
 		pdf(output_name, width=8, height=5)
 
@@ -76,6 +68,13 @@ if(args[1] == 'list'){
 }
 
 if(args[1] == 'genomic'){
+
+if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
+if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
+if(args[5] =='png') png(file=paste0(output_name,'.',args[5]),width=8, height=5)
+
 
 expressionInput <- source(args[3])
 

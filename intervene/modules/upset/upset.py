@@ -10,16 +10,27 @@ import sys
 import os
 import tempfile
 
-def create_r_script(labels, names, output, fig_type):
+def create_r_script(labels, names, options):
+    """
+    It create an Rscript for UpSetR plot for the genomic regions.
+
+
+    """
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     #temp_f = open(tempfile.mktemp(), "w")
-    script_file = output+'/'+'intervene_upset_plot.R'
+    script_file = options.output+'/'+'intervene_'+options.type+'_UpSet_plot.R'
     temp_f = open(script_file, 'w')
-    output_name = output+'/'+'intervene_upset_plot.pdf'
+
+    output_name = options.output+'/'+'intervene_'+options.type+'_UpSet_plot.'+options.figtype
 
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('library("UpSetR")\n')
-    temp_f.write('pdf("'+output_name+'", width=8, height=5)\n')
+    
+    if options.figtype == 'pdf':
+        temp_f.write(options.figtype+'("'+output_name+'", width=8, height=5)'+'\n')
+    else:
+        temp_f.write(options.figtype+'("'+output_name+'", width=8, height=5, res='+str(options.dpi)+')\n')
+    
     temp_f.write("expressionInput <- c(")
 
     last = 1
@@ -51,7 +62,18 @@ def create_r_script(labels, names, output, fig_type):
         #temp_f.write("'="+str(value)+',')
     temp_f.write(")\n")
 
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', main.bar.color="brown",sets.bar.color="#56B4E9", order.by = "freq", number.angles = 45, mainbar.y.label = "No of Intersections", sets.x.label = "Number of ChIP-seq peaks")\n')
+    if options.showsize:
+        options.showsize = 'yes'
+
+    #if options.ninter == 0:
+    #    options.ninter = "NA"
+
+    if not options.showzero:
+        options.showzero = 'NULL'
+    else:
+        options.showzero = 'on'
+
+    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections="'+str(options.showzero)+'", order.by = "'+options.order+'", number.angles = 0, mainbar.y.label ="'+options.mblabel+'", sets.x.label ="'+options.sxlabel+'")\n')
     temp_f.write('invisible(dev.off())\n')
 
     #print temp_f.read()
@@ -59,10 +81,16 @@ def create_r_script(labels, names, output, fig_type):
     #cmd = 'intervene_upset_plot.R %s %s %s' % ('genomic',5,temp_f.name)
     cmd = temp_f.name
     temp_f.close()
-    os.system('chmod +x '+cmd)
-    os.system(cmd)
-    sys.exit(1)
 
+    if options.run == True:
+        os.system('chmod +x '+cmd)
+        os.system(cmd)
+        sys.exit(1)
+    else:
+        print('Please find the Rscript here: '+cmd)
+        sys.exit(1)
+
+        
 def draw_genomic(labels, names, output, fig_type):
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     temp_f = open(tempfile.mktemp(), "w")

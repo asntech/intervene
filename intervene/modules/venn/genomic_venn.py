@@ -13,40 +13,33 @@ from intervene.modules.venn import list_venn
 from intervene.modules.upset import upset
 
 
-def venn2(a,b,names=['A','B'],plot_type=None, **options):
+def venn2(input_files, options,names=['A','B'], plot_type='venn'):
 
-    a = BedTool(a)
-    b = BedTool(b)
+    a = BedTool(input_files[0])
+    b = BedTool(input_files[1])
 
-    dpi = options.get('dpi', 300)
-    output = options.get('output')
-    fig_type = options.get('fig_type', 'pdf')
 
     labels = {'10': (a - b).count(), #Only A
      '01': (b - a).count(), #Only B
-     '11': (a + b).count()
-     } #Common in A and B
+     '11': (a + b).count() #Common in A and B
+     } 
 
     if plot_type == 'upset':
-        upset.draw_genomic(labels, names, output, fig_type)
+        upset.create_r_script(labels, names, options)
     
     else:
-        fig, ax = list_venn.venn2(labels, names=names, dpi=dpi)
+        fig, ax = list_venn.venn2(labels, names=names, dpi=options.dpi)
 
         return fig, ax
 
-def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
+def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
 
-    a = BedTool(a)
-    b = BedTool(b)
-    c = BedTool(c)
+    a = BedTool(input_files[0])
+    b = BedTool(input_files[1])
+    c = BedTool(input_files[2])
 
-    dpi = options.get('dpi', 300)
-    output = options.get('output')
-    fig_type = options.get('fig_type', 'pdf')
-
-
-    labels = {'001': (c - a - b).count(),
+    
+    labels = {'001': (c - a - b).count(), #Only C
     '010': (b - a - c).count(),
     '011': (b + c - a).count(),
     '100': (a - b - c).count(),
@@ -55,24 +48,21 @@ def venn3(a,b,c,names=['A','B','C'],plot_type=None, **options):
     '111': (a + b + c).count()}
 
     if plot_type == 'upset':
-        upset.draw_genomic(labels, names, output, fig_type)
+        upset.create_r_script(labels, names, options)
         
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
+        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi)
         return fig, ax
 
 
-def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
+def venn4(input_files, options, names=['A','B','C','D'],plot_type='venn'):
 
-    a = BedTool(a)
-    b = BedTool(b)
-    c = BedTool(c)
-    d = BedTool(d)
+    a = BedTool(input_files[0])
+    b = BedTool(input_files[1])
+    c = BedTool(input_files[2])
+    d = BedTool(input_files[3])
 
-    dpi = options.get('dpi', 300)
-    output = options.get('output')
-    fig_type = options.get('fig_type', 'pdf')
-
+   
     #ABCD
     labels = {'0001': str((d - a - b - c).count()),
     '0010': str((c - a - b - d).count()),
@@ -92,27 +82,24 @@ def venn4(a,b,c,d, names=['A','B','C','D'],plot_type=None,**options):
     }
     
     if plot_type == 'upset':
-        upset.draw_genomic(labels, names, output, fig_type)
+        upset.create_r_script(labels, names, options)
  
     else:
-        fig, ax = list_venn.venn4(labels, names=names, dpi=dpi)
+        fig, ax = list_venn.venn4(labels, names=names, dpi=options.dpi)
 
         return fig, ax
 
-def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **options):
+def venn5(input_files, options, names=['A','B','C','D','E'], plot_type='venn'):
 
-    a = BedTool(a)
-    b = BedTool(b)
-    c = BedTool(c)
-    d = BedTool(d)
-    e = BedTool(e)
+    a = BedTool(input_files[0])
+    b = BedTool(input_files[1])
+    c = BedTool(input_files[2])
+    d = BedTool(input_files[3])
+    e = BedTool(input_files[4])
 
-    dpi = options.get('dpi', 300)
-    output = options.get('output')
-    fig_type = options.get('fig_type', 'pdf')
 
     #ABCDE
-    labels = {'00001': (e - a - b - c - d).count(),
+    labels = {'00001': str((e - a - b - c - d).count()),
     '00010': str((d - a - b - c - e).count()),
     '00011': str((d + e - a - b - c).count()),
     '00100': str((c - a - b - d - e).count()),
@@ -146,32 +133,28 @@ def venn5(a, b, c, d, e, names=['A','B','C','D','E'], plot_type='venn', **option
     }
     
     if plot_type == 'upset':
-        #upset.draw_genomic(labels, names, output, fig_type)
-        upset.create_r_script(labels, names, output, fig_type)
-
+        #upset.draw_genomic(labels, names, output, fig_type, options)
+        upset.create_r_script(labels, names, options)
 
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
+        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi)
         return fig, ax
 
 
-def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options):
+def venn6(input_files, options, names=['A','B','C','D','E','F'],plot_type='venn'):
     """
     6-way Venn diagram from a list of six genomic region sets in <BED/GTF/GFF/VCF> format.
 
     """
 
-    a = BedTool(a)
-    b = BedTool(b)
-    c = BedTool(c)
-    d = BedTool(d)
-    e = BedTool(e)
-    f = BedTool(f)
+    a = BedTool(input_files[0])
+    b = BedTool(input_files[1])
+    c = BedTool(input_files[2])
+    d = BedTool(input_files[3])
+    e = BedTool(input_files[4])
+    f = BedTool(input_files[5])
 
-    dpi = options.get('dpi', 300)
-    output = options.get('output')
-    fig_type = options.get('fig_type', 'pdf')
-
+   
     #ABCDEF
     labels = {'000001': str((f - a - b - c - d - e).count()),
     '000010': str((e - a - b - c - d - f).count()),
@@ -184,12 +167,12 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
     '001001': str((c + f - a - b - d - e).count()),
     '001010': str((c + e - a - b - d - f).count()),
     '001011': str((c + e + f - a - b - d).count()),
-    '001100': str((- a - b - c - d - e - f).count()),
-    '001101': str((- a - b - c - d - e - f).count()),
-    '001110': str((- a - b - c - d - e - f).count()),
-    '001111': str((- a - b - c - d - e - f).count()),
-    '010000': str((- a - b - c - d - e - f).count()),
-    '010001': str((- a - b - c - d - e - f).count()),
+    '001100': str((c + d - a - b - e - f).count()),
+    '001101': str((c + d + f - a - b - e).count()),
+    '001110': str((c + d + e - a - b - f).count()),
+    '001111': str((c + d + e + f - a - b).count()),
+    '010000': str((b - a - c - d - e - f).count()),
+    '010001': str((b + f - a - c - d - e).count()),
     '010010': str((- a - b - c - d - e - f).count()),
     '010011': str((- a - b - c - d - e - f).count()),
     '010100': str((- a - b - c - d - e - f).count()),
@@ -239,9 +222,9 @@ def venn6(a,b,c,d,e,f,names=['A','B','C','D','E','F'],plot_type=None, **options)
     }
 
     if plot_type == 'upset':
-        upset.write_r_script(labels, names, output,fig_type)
+        upset.create_r_script(labels, names, options)
 
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=dpi)
+        fig, ax = list_venn.venn6(labels, names=names, dpi=options.dpi)
         
         return fig, ax

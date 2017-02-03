@@ -1,4 +1,6 @@
-Cite us
+Citation
 ========
 
-If you use Intervene please cite us: ``Khan A. and Mathelier A., InterVene: a tool for intersection and visualization of multiple genomic region sets``
+If you use Intervene in a paper, please cite:
+
+	- *Aziz Khan and Anthony Mathelier,* **Intervene: a tool for intersection and visualization of multiple genomic region sets**, 2017

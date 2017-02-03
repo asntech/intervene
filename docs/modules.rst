@@ -7,11 +7,26 @@ Pairwise intersection heatmaps
 ------------------------------
 Pairwise intersection heatmaps
 
+.. toctree::
+   :maxdepth: 1
+
+   pairwise
+
+Venn diagrams up-to 6-way
+-------------------------
 
 Venn diagrams upto 6-way
-------------------------
-Venn diagrams upto 6-way
+
+.. toctree::
+   :maxdepth: 1
+
+   venn
 
 UpSet plots
 -----------
 UpSet plots
+
+.. toctree::
+   :maxdepth: 1
+
+   upset
