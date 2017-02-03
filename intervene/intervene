@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-InterVene: a tool for intersection and visualization of multiple genomic region sets
+Intervene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 
@@ -218,12 +218,13 @@ def main():
                     'with --iterations) on each pairwise comparison and '
                     'compute the enrichment score as '
                     '(actual intersection count + 1) / (median randomized + 1)')
-    '''
-    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher or --enrichment is '
-                    'used. Needs to be a string assembly name like "mm10" or "hg38"')
+
     pairwise_parser.add_argument('--iterations', default=1000, type=int,
                     help='Number of randomizations to perform for enrichement '
                     'scores')
+    '''
+    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher or --enrichment is '
+                    'used. Needs to be a string assembly name like "mm10" or "hg38"')
     pairwise_parser.add_argument('-o', '--output', dest='output', 
                     help='Output folder path where plots will store. '
                        'Default is current working directory.')
@@ -249,8 +250,9 @@ def main():
     pairwise_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')  
-    
+    '''
     parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
+    '''
     
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s 1.0')
 

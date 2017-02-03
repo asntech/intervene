@@ -1,17 +1,17 @@
 Introduction
 ============
-InterVene is a tool for intersection and visualization of multiple genomic region sets.
+Intervene is a tool for intersection and visualization of multiple genomic region sets.
 
 Installation
 ============
 
 Prerequisites
 -------------
-InterVene requires:
+Intervene requires:
 
 	* Python (>= 2.7 or >= 3.3)
 	* pybedtools (>= 1.6.1): https://daler.github.io/pybedtools/
-	* R (>= )
+	* R (>= 3.0)
 
 If you already have a working installation of Python, the easiest way to install pybedtools and argparser is using pip::
 
@@ -30,7 +30,7 @@ If you're setting up Python for the first time, we recommend to install it using
 
 Install using `pip`
 -------------------
-You can install InterVene either from PyPi using pip or install it from the source. Please make sure you have already installed the above mentioned python libraries required to run InterVene.
+You can install Intervene either from PyPi using pip or install it from the source. Please make sure you have already installed the above mentioned python libraries required to run Intervene.
 
 Install from PyPi::
 
@@ -44,18 +44,9 @@ If you have `git` is installed, use this:
 .. code-block:: bash
 
     git clone https://github.com/asntech/intervene.git
-    cd intervene
+    cd Intervene
     python setup.py install
 
-Install from Intervene source
------------------------------
-
-.. code-block:: bash
-	
-	wget https://github.com/asntech/intervene/intervene-1.0.tar.gz
-	tar -zxvf intervene-1.0.tar.gz
-	cd intervene-1.0
-	python setup.py install
 
 How to use Intervene
 ====================
@@ -90,14 +81,23 @@ Types of plots
 ==============
 Intervene provides three types of plots to visualize intersections of genomic regions and list sets. These are pairwise heatmap of N genomic region sets, classic Venn diagrams of genomic regions and list sets of up to 6-way and UpSet plots.
 
-Pairwise intersection heatmaps
-------------------------------
-
+	
 Venn diagrams upto 6-way
 ------------------------
 
+	intervene venn --test
+
+
 UpSet plots
 -----------
+
+	intervene upset --test
+
+
+Pairwise intersection heatmaps
+------------------------------
+	
+	intervene pairwise --help
 
 
 Support
@@ -106,4 +106,4 @@ If you have questions, or found any bug in the program, please write to us at ``
 
 Cite Us
 =========
-If you use Intervene please cite us: ``Khan A. and Mathelier A., InterVene: a tool for intersection and visualization of multiple genomic region sets``
+If you use Intervene please cite us: ``Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple genomic region sets``
