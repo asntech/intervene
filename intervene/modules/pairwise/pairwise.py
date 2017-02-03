@@ -11,7 +11,7 @@ import sys
 import collections
 import time
 import os.path as op
-from pybedtools import BedTool #, example_filename
+from pybedtools import BedTool
 
 import matplotlib as mp
 import numpy as np
@@ -46,7 +46,7 @@ def frac_of_a(a, b):
     len_a = float(len(a))
     return len(a.intersect(b, u=True)) / len_a
 
-def enrichment_score(a, b, genome_fn, iterations=None, processes=None):
+def enrichment_score(a, b, genome_fn, iterations=1000, processes=1):
     results = a\
             .randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
     return (results['actual'] + 1) / (results['median randomized'] + 1)
@@ -219,19 +219,6 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     return caxes, D.index
 
 def pairwise_intersection(options):
-    if options.test:
-    # insulator binding sites from ChIP-chip -- 4 proteins, 2 cell types
-    # Genes Dev. 2009 23(11):1338-1350
-        options.input = [example_filename(i) for i in  [
-                'Cp190_Kc_Bushey_2009.bed',
-                'Cp190_Mbn2_Bushey_2009.bed',
-                'CTCF_Kc_Bushey_2009.bed',
-                'CTCF_Mbn2_Bushey_2009.bed',
-                'SuHw_Kc_Bushey_2009.bed',
-                'SuHw_Mbn2_Bushey_2009.bed',
-                'BEAF_Mbn2_Bushey_2009.bed',
-                'BEAF_Kc_Bushey_2009.bed'
-                ]]
 
     if options.enrichment:
         FUNC = enrichment_score

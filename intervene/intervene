@@ -17,8 +17,8 @@ from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
 import argparse
-from intervene import __version__
 
+from intervene import __version__
 
 def create_dir(dir_path):
     '''
@@ -63,9 +63,107 @@ def get_filenames(input_files):
     """
     file_names=[]
     for fname in input_files:
-      file_names.append(os.path.splitext(os.path.basename(fname))[0])
+      file_names.append(os.path.splitext(os.path.basename(fname))[0].replace(" ", "_"))
 
     return file_names
+
+
+"""
+Provides access to example files
+
+"""
+
+def data_dir():
+    """
+    Returns the data directory that contains example files.
+    """
+    return os.path.join(os.path.dirname(__file__), 'example_data')
+
+
+def example_filename(fn,sub_dir=None):
+    """
+    Return a bed file from the pybedtools examples directory.
+    This code is adapted from https://github.com/daler/pybedtools
+
+    """
+    if sub_dir:
+      fn = os.path.join(data_dir(), sub_dir, fn)
+    else:
+      fn = os.path.join(data_dir(), fn)
+    
+    if not os.path.exists(fn):
+        raise ValueError("%s does not exist" % fn)
+    return fn
+
+
+def get_test_data(module_name):
+  '''
+  It returns a list of test data files, if the user uses --test argument
+  
+  @type module_name: chr
+  @rtype test_files: list[Iterable]
+
+  input
+      module_name: Name of Intervene module
+
+  return
+      test_files:: return a list of file paths
+
+  '''
+
+  test_files = []
+  
+  if module_name == 'venn':
+    test_files = [example_filename(i,'ENCODE_hESC') for i in  [
+        'H3K27ac.bed',
+        'H3K4me2.bed',
+        'H3K4me3.bed',
+        'H3K27me3.bed'
+        ]]
+
+  elif module_name == 'upset':
+    test_files = [example_filename(i, 'ENCODE_hESC') for i in  [
+        'H3K27ac.bed',
+        'H3K4me2.bed',
+        'H3K4me1.bed',
+        'H3K4me3.bed',
+        'H3K27me3.bed'
+        ]]
+
+  elif module_name == 'pairwise':
+    test_files = [example_filename(i, 'dbSUPER_mm9') for i in  [
+        'BoneMarrow.bed',
+        'Cerebellum.bed',
+        'Cortex.bed',
+        'E14.5Brain.bed',
+        'E14.5Heart.bed',
+        'E14.5Limb.bed',
+        'E14.5Liver.bed',
+        'Heart.bed',
+        'HFSCs.bed',
+        'Intestine.bed',
+        'Kidney.bed',
+        'Liver.bed',
+        'Lung.bed',
+        'Macrophage.bed',
+        'MEF.bed',
+        'mESC.bed',
+        'Myotubes.bed',
+        'Olfactory_Bulb.bed',
+        'pro-B.bed',
+        'Spleen.bed',
+        'TACs.bed',
+        'Testis.bed',
+        'ThCells.bed',
+        'Thymus.bed'
+        ]]
+
+  else:
+
+    sys.exit(1)
+
+  return test_files
+
 
 def main():
     #print 'InterVene: a tool for intersection and visualization of multiple genomic region sets'
@@ -83,14 +181,12 @@ def main():
     parser = argparse.ArgumentParser(usage='intervene <subcommand> [options]', description=desc)
     subparsers = parser.add_subparsers(dest='command',help='List of subcommands')
 
-    
-
     #venn module argument parser
     venn_parser = subparsers.add_parser('venn', usage='intervene venn [options]', 
         description='Create Venn diagram upto 6-way after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
         help='Venn diagram of intersection of genomic regions or list sets (upto 6-way).')
     
-    venn_parser.add_argument('-i', dest='input', required=True, nargs="*",
+    venn_parser.add_argument('-i', dest='input', nargs="*",
         help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
         'For files in a directory use *.<extension>. e.g. *.bed')
 
@@ -122,13 +218,15 @@ def main():
     venn_parser.add_argument('--fill', choices=('number','percentage'),default='number',
                   help='Report number or  percentage of overlaps (Only if --type=list)'
                        'Default is "%(default)s"')
+    venn_parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
+
 
     #upset module argument parser
     upset_parser = subparsers.add_parser('upset', usage='intervene upset [options]', 
         description='Create UpSet diagram after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
         help='UpSet diagram of intersection of genomic regions or list sets.')
   
-    upset_parser.add_argument('-i', dest='input', required=True, nargs="*",
+    upset_parser.add_argument('-i', dest='input', nargs="*",
         help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
         'For files in a directory use *.<extension>. e.g. *.bed')
 
@@ -191,6 +289,8 @@ def main():
     upset_parser.add_argument('--run', action='store_false', default=True,
                     help='Run Rscript if R and UpSetR package is installed. '
                        'Default is "%(default)s"')
+    upset_parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
+
 
     #pairwise module argument parser
     pairwise_parser = subparsers.add_parser('pairwise', usage='intervene pairwise [options]', 
@@ -212,7 +312,16 @@ def main():
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
                    default='tribar',help='Heatmap plot type. '
                            'Default is "%(default)s"')  
-    '''
+    
+    pairwise_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
+                  help='Comma-separated list of names for input files. '
+                       'Default is: --names=A,B,C,D,E,F')
+    
+    pairwise_parser.add_argument('--filenames', action='store_true', default=False,
+                  help='Use file names as labels instead. '
+                       'Default is "%(default)s"')
+   
+    #'''
     pairwise_parser.add_argument('--enrichment', action='store_true',
                     help='Run randomizations (default 1000, specify otherwise '
                     'with --iterations) on each pairwise comparison and '
@@ -222,9 +331,9 @@ def main():
     pairwise_parser.add_argument('--iterations', default=1000, type=int,
                     help='Number of randomizations to perform for enrichement '
                     'scores')
-    '''
-    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher or --enrichment is '
-                    'used. Needs to be a string assembly name like "mm10" or "hg38"')
+    #'''
+    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher. '
+                    'Needs to be a string assembly name like "mm10" or "hg38"')
     pairwise_parser.add_argument('-o', '--output', dest='output', 
                     help='Output folder path where plots will store. '
                        'Default is current working directory.')
@@ -250,37 +359,36 @@ def main():
     pairwise_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')  
-    '''
-    parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
-    '''
+    
+    pairwise_parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
     
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s 1.0')
 
     options = parser.parse_args()
-
-    if options.test:
-        pybedtools.bedtool.random.seed(1)
-        a = example_bedtool('rmsk.hg18.chr21.small.bed')
-        b = example_bedtool('venn.b.bed')
-        c = example_bedtool('venn.c.bed')
-        options.a = a.fn
-        options.b = b.fn
-        options.c = c.fn
-        #options.colors='r,b,g'
-        options.output = 'bedVenn.png'
-        options.labels = ['A','B','C']
-        sys.exit(1)
 
     if not options.command:
         venn_parser.print_help()
         sys.stderr.write('Missing required arguments. ')
         sys.exit(1) 
 
+    if options.command == 'upset':
+        plot_type = 'upset'
+    else:
+        plot_type = 'venn'
+
     #making the out folder if it doesn't exist
     if options.output:
         output_dir = create_dir(options.output)
     else:
         options.output = create_dir(os.getcwd()+"/InterVene_results")
+
+    #check if user want to user test data to plot and get get test files.
+    if options.test:
+        print("\nRunning Intervene with test data.\n")
+        options.input = get_test_data(options.command)
+        options.filenames = True
+
+        #sys.exit(1)
 
     if options.command =='pairwise':
         print("\nPerforming a pairwise intersection/overlap analysis.\n")
@@ -313,10 +421,7 @@ def main():
             sys.stderr.write('Missing required arg --type {genomic,list}')
             sys.exit(0)
     
-    if options.command == 'upset':
-        plot_type = 'upset'
-    else:
-        plot_type = 'venn'
+    
     #print(options.filenames)
     #sys.exit(1)
     if venn_order(options.input) == 2:
