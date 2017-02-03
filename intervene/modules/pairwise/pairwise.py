@@ -11,8 +11,8 @@ import sys
 import collections
 import time
 import os.path as op
+import pybedtools
 from pybedtools import BedTool
-
 import matplotlib as mp
 import numpy as np
 import pandas as pd
@@ -22,10 +22,8 @@ import string
 from matplotlib import gridspec
 
 
-
 def get_name(fname):
     return op.splitext(op.basename(fname))[0]
-
 
 def actual_intersection(a, b):
     return len(a.intersect(b, u=True))
@@ -47,8 +45,7 @@ def frac_of_a(a, b):
     return len(a.intersect(b, u=True)) / len_a
 
 def enrichment_score(a, b, genome_fn, iterations=1000, processes=1):
-    results = a\
-            .randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
+    results = a.randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
     return (results['actual'] + 1) / (results['median randomized'] + 1)
 
 def create_matrix(beds, func, verbose=False, **kwoptions):
