@@ -190,8 +190,9 @@ def main():
         help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
         'For files in a directory use *.<extension>. e.g. *.bed')
 
-    venn_parser.add_argument('--type', dest='type', choices=('genomic','list'),
-                  help='Type of input sets. Genomic regions or lists of genes sets. ')
+    venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
+                  help='Type of input data sets. Genomic regions or name lists. '
+                        'Default is "%(default)s"')
    
     venn_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
                   help='Comma-separated list of names for input files. '
@@ -395,9 +396,17 @@ def main():
         pairwise.pairwise_intersection(options)
         sys.exit(1)
 
-    output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_order(options.input))+'way_'+options.type+'.'+options.figtype
+    output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
 
-    #checke if there are atleast two input bed/list files
+    #check file name already exists and ask if user want to overwrite
+    if os.path.exists(output_name):
+      print("The file name "+str(output_name)+" already exist.\n")
+      answer = str(raw_input("Do you want to overwrite? [yes/no]: "))
+      if answer == 'no':
+        print("You can run Intervene by setting a different --output path.\nThanks for using Intervene!")
+        sys.exit(1)
+    
+    #checke if there are at least two input bed/list files
     reqd_args = ['input']
     if not options.test:
         for ra in reqd_args:
@@ -420,7 +429,6 @@ def main():
                 upset_parser.print_help()
             sys.stderr.write('Missing required arg --type {genomic,list}')
             sys.exit(0)
-    
     
     #print(options.filenames)
     #sys.exit(1)

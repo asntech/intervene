@@ -9,9 +9,9 @@ Prerequisites
 -------------
 Intervene requires:
 
-	* Python (= 2.7 )
+	* Python (=> 2.7 ): https://www.python.org/
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
-	* R (>= 3.0)
+	* R (>= 3.0): https://www.r-project.org/
 
 If you already have a working installation of Python, the easiest way to install pybedtools and argparser is using pip::
 
