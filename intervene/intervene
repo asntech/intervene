@@ -63,8 +63,7 @@ def get_filenames(input_files):
     """
     file_names=[]
     for fname in input_files:
-      print(os.path.basename(fname))
-      file_names.append(os.path.splitext(os.path.basename(fname))[0].replace(" ", "_"))
+      file_names.append(os.path.splitext(os.path.basename(fname))[0])
 
     return file_names
 
