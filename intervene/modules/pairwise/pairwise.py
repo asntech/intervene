@@ -323,7 +323,7 @@ def pairwise_intersection(options):
         
     else:
         #print("Please check the matrix file "+matrix_file)
-        cmd = 'intervene_heatmap.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
+        cmd = 'heatmap_intervene.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
         os.system(cmd)
 
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')

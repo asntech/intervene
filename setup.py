@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 """
-This is a setup script for InterVene: a toolfor intersection and visualization of multiple genomic region sets
+This is a setup script for Intervene: a toolfor intersection and visualization of multiple genomic region sets
 
 This code is free software; you can redistribute it and/or modify it under the terms of the 
 BSD License (see the file LICENSE.md included with the distribution).
@@ -56,7 +56,7 @@ setup(
     packages=['intervene', 'intervene.modules','intervene.modules.pairwise',
     'intervene.modules.venn','intervene.modules.upset'],
 
-    scripts=['intervene/intervene','intervene/scripts/intervene_upset_plot.R','intervene/scripts/intervene_heatmap.R',
+    scripts=['intervene/intervene','intervene/scripts/upset_plot_intervene.R','intervene/scripts/heatmap_intervene.R',
                    ],
     package_data={'intervene': ['intervene/example_data/*.*']},
     include_package_data=True,

@@ -127,7 +127,7 @@ def draw_genomic(labels, names, output, fig_type):
     #print temp_f.read()
     #print temp_f.name
     temp_f.close()
-    cmd = 'intervene_upset_plot.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
+    cmd = 'upset_plot_intervene.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
     os.system(cmd)
     sys.exit(1)
     

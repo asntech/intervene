@@ -333,7 +333,7 @@ def main():
         #If the input is a gene list
         if options.type == 'list':
             if options.command == 'upset':
-                cmd = 'intervene_upset_plot.R %s %s %s %s %s %s' % ('list',2,output_name, label_names,options.input[0],options.input[1])
+                cmd = 'upset_plot_intervene.R %s %s %s %s %s %s' % ('list',2,output_name, label_names,options.input[0],options.input[1])
                 os.system(cmd)
                 sys.exit(1)
 
