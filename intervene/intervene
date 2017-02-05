@@ -183,11 +183,11 @@ def main():
 
     #venn module argument parser
     venn_parser = subparsers.add_parser('venn', usage='intervene venn [options]', 
-        description='Create Venn diagram upto 6-way after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
+        description='Create Venn diagram upto 6-way after intersection of genomic regions in (BED/GTF/GFF) format or list sets.', 
         help='Venn diagram of intersection of genomic regions or list sets (upto 6-way).')
     
     venn_parser.add_argument('-i', dest='input', nargs="*",
-        help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
+        help='Input genomic regions in (BED/GTF/GFF) format or list files. '
         'For files in a directory use *.<extension>. e.g. *.bed')
 
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
@@ -224,12 +224,16 @@ def main():
 
     #upset module argument parser
     upset_parser = subparsers.add_parser('upset', usage='intervene upset [options]', 
-        description='Create UpSet diagram after intersection of genomic regions in <BED/GTF/GFF/VCF> or list sets.', 
+        description='Create UpSet diagram after intersection of genomic regions in (BED/GTF/GFF) or list sets.', 
         help='UpSet diagram of intersection of genomic regions or list sets.')
-  
+    
     upset_parser.add_argument('-i', dest='input', nargs="*",
-        help='Input genomic regions in <BED/GTF/GFF/VCF> format or list files. '
+        help='Input genomic regions in (BED/GTF/GFF) format or list files. '
         'For files in a directory use *.<extension>. e.g. *.bed')
+    '''
+    upset_parser.add_argument('-c', dest='compare', nargs=1,
+        help='Input genomic region file (BED/GTF/GFF) format to compare with input files.')
+    '''
 
     upset_parser.add_argument('--type', dest='type', choices=('genomic','list'),default='genomic',
                   help='Type of input sets. Genomic regions or lists of genes sets. '
@@ -295,11 +299,11 @@ def main():
 
     #pairwise module argument parser
     pairwise_parser = subparsers.add_parser('pairwise', usage='intervene pairwise [options]', 
-        description='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.',
-        help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF/VCF> format.')
+        description='Pairwise intersection and heatmap of N genomic region sets in (BED/GTF/GFF/VCF) format.',
+        help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF> format.')
     
     pairwise_parser.add_argument('-i', dest='input', nargs="*",
-        help='Input genomic regions in <BED/GTF/GFF/VCF> format. '
+        help='Input genomic regions in (BED/GTF/GFF) format. '
         'For files in a directory use *.<extension>. e.g. *.bed')
     
     pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
@@ -311,18 +315,22 @@ def main():
                        'Default is "%(default)s"')
 
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
-                   default='tribar',help='Heatmap plot type. '
+                   default='pie',help='Heatmap plot type. '
                            'Default is "%(default)s"')  
     
-    pairwise_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
+    pairwise_parser.add_argument('--names', dest='labels',
                   help='Comma-separated list of names for input files. '
-                       'Default is: --names=A,B,C,D,E,F')
+                       'Default is base name of input files')
     
     pairwise_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s"')
-   
-    #'''
+
+    pairwise_parser.add_argument('--sort', action='store_true', default=False,
+                  help='Set this only if your files are not sorted. '
+                       'Default is "%(default)s"')
+
+    '''
     pairwise_parser.add_argument('--enrichment', action='store_true',
                     help='Run randomizations (default 1000, specify otherwise '
                     'with --iterations) on each pairwise comparison and '
@@ -334,7 +342,7 @@ def main():
     pairwise_parser.add_argument('--processes', default=1, type=int,
                     help='Number of processors to perform for enrichement '
                     'scores')
-    #'''
+    '''
     pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher. '
                     'Needs to be a string assembly name like "mm10" or "hg38"')
     pairwise_parser.add_argument('-o', '--output', dest='output', 
@@ -397,6 +405,13 @@ def main():
         print("\nPerforming a pairwise intersection/overlap analysis.\n")
         pairwise.pairwise_intersection(options)
         sys.exit(1)
+
+    '''
+    if options.command =='upset':
+      if options.compare:
+        upset.one_vs_rest_intersection(options.input,options.compare,options.output)
+        sys.exit(1)
+    '''
 
     output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
 

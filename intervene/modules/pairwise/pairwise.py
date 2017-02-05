@@ -32,8 +32,8 @@ def jaccard_of_a(a, b):
     return a.jaccard(b,u=True)['jaccard']
 
 #Calculate the fisher 
-def fisher_of_a(a, b):
-    return a.fisher(b,genome='hg19').two_tail
+def fisher_of_a(a, b, genome):
+    return a.fisher(b,genome=genome).two_tail
 
 #Calculate the reldist 
 def reldist_of_a(a, b):
@@ -48,7 +48,7 @@ def enrichment_score(a, b, genome_fn, iterations=1000, processes=1):
     results = a.randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
     return (results['actual'] + 1) / (results['median randomized'] + 1)
 
-def create_matrix(beds, func, verbose=False, **kwoptions):
+def create_matrix(beds, func, verbose=False, sort_bed=False, **kwoptions):
     nfiles = len(beds)
     total = nfiles ** 2
     i = 0
@@ -58,10 +58,13 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
     matrix = collections.defaultdict(dict)
     for fa in beds:
         a = BedTool(fa)
+        if sort_bed:
+            a = a.sort()
         for fb in beds:
             i += 1
             b = BedTool(fb)
-
+            if sort_bed:
+                b = b.sort()
             if verbose:
                 sys.stderr.write(
                         '%(i)s of %(total)s: %(fa)s + %(fb)s\n' % locals())
@@ -72,6 +75,7 @@ def create_matrix(beds, func, verbose=False, **kwoptions):
         bed_names.append(get_name(fa))
         bed_sizes.append(len(a))
     return matrix, bed_names, bed_sizes
+
 
 
 def barplot(series, matrix, outfile, options, max_size=1):
@@ -215,15 +219,18 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
 
     return caxes, D.index
 
+
 def pairwise_intersection(options):
 
+    '''
     if options.enrichment:
         FUNC = enrichment_score
         genome_fn = pybedtools.chromsizes_to_file(pybedtools.chromsizes(options.genome))
         kwoptions = dict(genome_fn=genome_fn, iterations=options.iterations,
                 processes=options.processes)
+    '''
 
-    elif options.type == "frac":
+    if options.type == "frac":
         FUNC = frac_of_a
         kwoptions = {}
 
@@ -233,7 +240,9 @@ def pairwise_intersection(options):
 
     elif options.type == 'fisher':
         FUNC = fisher_of_a
-        kwoptions = {}
+        kwoptions = dict(genome=options.genome)
+
+        #kwoptions = {}
 
     elif options.type == 'reldist':
         FUNC = reldist_of_a
@@ -243,17 +252,13 @@ def pairwise_intersection(options):
         FUNC = actual_intersection
         kwoptions = {}
 
-    t0 = time.time()
     #matrix = create_matrix(beds=options.input, func=FUNC, verbose=options.verbose, **kwoptions)
-    matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, **kwoptions)
+    matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
 
-    #print(bed_sizes)
-
-    t1 = time.time()
 
     nfiles = len(options.input)
 
-    output_name =  options.output+'/InterVene_'+options.command+'_'+str(nfiles)+'_files_'
+    output_name =  options.output+'/Intervene_'+options.command+'_'+str(nfiles)+'_files_'
 
     #if options.verbose:
     #    sys.stderr.write('Time to construct %s x %s matrix: %.1fs' \
@@ -303,13 +308,18 @@ def pairwise_intersection(options):
         #df = pd.read_csv('data.csv',index_col=0, delim_whitespace=True)
         #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
         outfile = options.output+'/'+str(options.type)+'_barplot_heatmap.'+options.figtype
-        barplot(series, matrix, outfile, options, max_size=max(bed_sizes))  
+        barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
+
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+  
         
     else:
         #print("Please check the matrix file "+matrix_file)
         cmd = 'heatmap_intervene.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
         os.system(cmd)
 
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+
+
 
         

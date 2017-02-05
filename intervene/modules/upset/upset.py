@@ -9,6 +9,9 @@ Version: 1.0
 import sys
 import os
 import tempfile
+from intervene.modules.pairwise.pairwise import get_name
+from pybedtools import BedTool
+
 
 def create_r_script(labels, names, options):
     """
@@ -130,4 +133,46 @@ def draw_genomic(labels, names, output, fig_type):
     cmd = 'upset_plot_intervene.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
     os.system(cmd)
     sys.exit(1)
+
+
+def one_vs_rest_intersection(beds, peaks, output, **kwoptions):
+    '''
+    Compares a set of peaks with several other peaks sets.
+
+    '''
+    names = []
+    matrix_file = output+'/One_vs_all_peak_set_matrix.txt'
+    f = open(matrix_file, 'w')
+    
+    f.write('peak_id')
+    #f.write('peak_id\tchrom\tstart\tend')
+
+    for bed in beds:
+        names.append(get_name(bed))
+        f.write('\t' + str(get_name(bed)))
+    #main_int.append(names)
+
+    peaks = BedTool(peaks[0])
+    f.write('\n')
+    for i in peaks:
+        #region_int = []
+        peak_id = str(i.chrom)+"_"+str(i.start)+"_"+str(i.end)
+        f.write(peak_id)
+        #f.write(peak_id + '\t' + i.chrom + '\t' + str(i.start) + '\t' + str(i.end))
+
+        for bed in beds:
+            b = BedTool(bed)
+            int_count = BedTool(str(i), from_string=True).intersect(b).count()
+            if (int_count > 0):
+                #region_int.append("1")
+                f.write('\t' + str(1))
+            else:
+                #region_int.append("0")
+                f.write('\t' + str(0))
+        f.write('\n')
+        #main_int.append(region_int)
+        #matrix[peak_id] = region_int
+    f.close()
+
+    return matrix_file
     
