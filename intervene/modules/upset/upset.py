@@ -41,33 +41,50 @@ def create_r_script(labels, names, options):
     temp_f.write("expressionInput <- c(")
 
     last = 1
+
+    shiny = ""
+
     for key, value in labels.iteritems():
         i = 0
         first = 1
         for x in key:
             if i == 0:
-                #print("'")
-                temp_f.write("'")      
+                temp_f.write("'")
+                #shiny += "'"
+      
             if x == '1':
                 if first == 1:
                     temp_f.write(str(names[i]))
-                    #print(str(names[i]))
+                    shiny += str(names[i])
                     first = 0
                 else:
                     temp_f.write('&'+str(names[i]))
-                    #print('&'+str(names[i]))
+                    shiny += '&'+str(names[i])
 
             if i == len(key)-1:
                 if last == len(labels):
                     temp_f.write("'="+str(value))
+                    shiny += "="+str(value)
+
                 else:
                     temp_f.write("'="+str(value)+',')
-                #print("'="+str(value)+',')
+                    shiny += "="+str(value)+','
             i += 1
         last +=1
-        #print("'="+str(value)+',')
-        #temp_f.write("'="+str(value)+',')
     temp_f.write(")\n")
+
+    options.shiny = True
+    #If shiny output
+    if options.shiny:
+
+        shiny_import = options.output+'/'+'Intervene_Shiny_App_'+options.type+'_UpSet_module_import.txt'
+        shiny_file = open(shiny_import, 'w')
+        shiny_file.write("You can go to Intervene Shiny App https://asntech.shinyapps.io/Intervene-app/ and copy/paste the following intersection data to get more interactive figures.\n\n")
+        shiny_file.write(shiny)
+        shiny_file.close()
+    
+    else:
+        print(shiny)
 
     if options.showsize:
         options.showsize = 'yes'

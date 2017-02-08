@@ -104,7 +104,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 	#corrplot(intersection_matrix, method = args[2], title = "", is.corr = FALSE, cl.lim=c(min(intersection_matrix), max(intersection_matrix)))
 	#print('Something went wrong!')
-	corrplot(intersection_matrix, method = args[2], title =paste0("'",args[6],"'"), tl.col='black', tl.cex=0.8, is.corr = FALSE, diag=FALSE, addrect = 1, mar=c(0,0,2,1), rect.col = "black")
+	corrplot(intersection_matrix, method = args[2], title=args[6], tl.col='black', tl.cex=0.8, is.corr = FALSE, diag=FALSE, addrect = 1, mar=c(0,0,2,1), rect.col = "black")
 
 	invisible(dev.off())
 }

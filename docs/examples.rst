@@ -3,24 +3,8 @@ Example gallery
 
 Here we listed some examples to demonstrate how Intervene can be used to generated different types of set intersection plots.
 
-Pairwise intersection heatmaps
-------------------------------
-In this example ... 
-
-.. code-block:: bash
-
-    intervene pairwise --help
-
-Read more about the ``pairwise`` module here:
-
-.. toctree::
-   :maxdepth: 1
-   
-   pairwise
-
-
-Venn diagrams
--------------
+Venn module examples
+--------------------
 In this example ... 
 
 .. code-block:: bash
@@ -29,14 +13,10 @@ In this example ...
 
 Read more about the ``venn`` diagrams module here:
 
-.. toctree::
-   :maxdepth: 1
-   
-   venn
 
 
-UpSet plots
------------
+UpSet module examples
+---------------------
 In this example ... 
 
 .. code-block:: bash
@@ -45,10 +25,6 @@ In this example ...
 
 Read more about the ``upset`` module:
 
-.. toctree::
-   :maxdepth: 1
-   
-   upset
 
 
 In this example ... 
@@ -56,6 +32,18 @@ In this example ...
 .. code-block:: bash
 
     intervene pairwise --help
+
+
+Pairwise module examples
+------------------------
+In this example ... 
+
+.. code-block:: bash
+
+    intervene pairwise --help
+
+Read more about the ``pairwise`` module here:
+
    
 
 Usage:

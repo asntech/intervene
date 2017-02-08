@@ -120,7 +120,7 @@ def get_test_data(module_name):
   if module_name == 'venn':
     test_files = [example_filename(i,'ENCODE_hESC') for i in  [
         'H3K27ac.bed',
-        'H3K4me2.bed',
+        #'H3K4me2.bed',
         'H3K4me3.bed',
         'H3K27me3.bed'
         ]]
@@ -129,7 +129,7 @@ def get_test_data(module_name):
     test_files = [example_filename(i, 'ENCODE_hESC') for i in  [
         'H3K27ac.bed',
         'H3K4me2.bed',
-        'H3K4me1.bed',
+        #'H3K4me1.bed',
         'H3K4me3.bed',
         'H3K27me3.bed'
         ]]
@@ -210,7 +210,7 @@ def main():
     venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
-    venn_parser.add_argument('--figsize',  nargs=2, type=int,
+    venn_parser.add_argument('--figsize',  nargs=2, type=int, default=(12,12),
                    help='Figure size as width and height.'
                        'e.g. --figsize 12 12.\n\n')    
     venn_parser.add_argument('--dpi', type=int, default=300,
@@ -403,6 +403,9 @@ def main():
         print("\nRunning Intervene with test data.\n")
         options.input = get_test_data(options.command)
         options.filenames = True
+        options.htype = "tribar"
+        if options.command == 'venn':
+          options.figsize = (7, 7)
 
         #sys.exit(1)
 

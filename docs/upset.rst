@@ -1,5 +1,5 @@
-UpSet intersection plot
-=======================
+UpSet plot module
+=================
 
 Once you have installed Intervene, you can type:
 

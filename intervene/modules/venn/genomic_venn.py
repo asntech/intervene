@@ -50,7 +50,7 @@ def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
         upset.create_r_script(labels, names, options)
         
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+        fig, ax = list_venn.venn3(labels, names=names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
         return fig, ax
 
 

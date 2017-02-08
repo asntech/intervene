@@ -1,5 +1,5 @@
-Venn diagrams up-to 6-way
-=========================
+Up-to 6-way Venn module 
+=======================
 
 Once you have installed Intervene, you can type:
 

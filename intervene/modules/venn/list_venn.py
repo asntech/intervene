@@ -155,8 +155,8 @@ def venn2(labels, names=['A', 'B'], **options):
     """
     #colors = get_colors(default_colors)[i] for i in range(2)]
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(2)])
-    figsize = options.get('figsize', (9, 7))
-    dpi = options.get('dpi', 96)
+    figsize = options.get('figsize', (6, 5))
+    dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -248,7 +248,7 @@ def venn4(labels, names=['A', 'B', 'C', 'D'], **options):
       pyplot Figure and AxesSubplot object
     """
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(4)])
-    figsize = options.get('figsize', (12, 12))
+    figsize = options.get('figsize', (14, 14))
     dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
