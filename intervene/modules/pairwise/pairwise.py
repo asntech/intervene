@@ -3,7 +3,6 @@
 """
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
-Version: 1.0
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 """
 import os
@@ -301,7 +300,7 @@ def pairwise_intersection(options):
         if options.type == 'fisher':
             options.hlabel = 'Fisher p-value'
 
-        options.title = "Pairwise intersection"
+        #options.title = "Pairwise intersection"
         #options.figsize=(8, 6)
 
         #series = pd.Series(np.random.random(ncols) * 2.0, index=labels)
@@ -315,7 +314,7 @@ def pairwise_intersection(options):
         
     else:
         #print("Please check the matrix file "+matrix_file)
-        cmd = 'heatmap_intervene.R %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype)
+        cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype, str(options.title), options.dpi)
         os.system(cmd)
 
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')

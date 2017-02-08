@@ -16,11 +16,18 @@ output_name <- paste0(args[4],'_',args[3])
 
 #print(output_name)
 
+res = args[7]
+
 if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]))
 
 if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]))
 
 if(args[5] =='png') png(file=paste0(output_name,'.',args[5]))
+
+if(args[5] =='tiff') tiff(file=paste0(output_name,'.',args[5]))
+
+if(args[5] =='ps') postscript(file=paste0(output_name,'.',args[5]))
+
 
 x_label = 'Value'
 test_type <- args[3]
@@ -97,7 +104,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 	#corrplot(intersection_matrix, method = args[2], title = "", is.corr = FALSE, cl.lim=c(min(intersection_matrix), max(intersection_matrix)))
 	#print('Something went wrong!')
-	corrplot(intersection_matrix, method = args[2], title = " ", tl.col='black', tl.cex=0.8, is.corr = FALSE, diag = FALSE, addrect = 1, rect.col = "black")
+	corrplot(intersection_matrix, method = args[2], title =paste0("'",args[6],"'"), tl.col='black', tl.cex=0.8, is.corr = FALSE, diag=FALSE, addrect = 1, mar=c(0,0,2,1), rect.col = "black")
 
 	invisible(dev.off())
 }

@@ -3,7 +3,6 @@
 """
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
-Version: 1.0
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 """
 import sys
@@ -28,11 +27,16 @@ def create_r_script(labels, names, options):
 
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('library("UpSetR")\n')
+
     
     if options.figtype == 'pdf':
-        temp_f.write(options.figtype+'("'+output_name+'", width=8, height=5)'+'\n')
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
+    
+    elif options.figtype == 'ps':
+        temp_f.write('postscript("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
+    
     else:
-        temp_f.write(options.figtype+'("'+output_name+'", width=8, height=5, res='+str(options.dpi)+')\n')
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.dpi*options.figsize[0])+', height='+str(options.dpi*options.figsize[1])+', res='+str(options.dpi)+')\n')
     
     temp_f.write("expressionInput <- c(")
 

@@ -3,7 +3,6 @@
 """
 InterVene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
-Version: 1.0
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 """
 import sys
@@ -175,7 +174,7 @@ def venn6(input_files, options, names=['A','B','C','D','E','F'],plot_type='venn'
     '010001': str((b + f - a - c - d - e).count()),
     '010010': str((b + e - a - c - d - f).count()),
     '010011': str((b + e + f - a - c - d).count()),
-    
+
     '010100': str((a - b - c - d - e - f).count()),
     '010101': str((a - b - c - d - e - f).count()),
     '010110': str((a - b - c - d - e - f).count()),

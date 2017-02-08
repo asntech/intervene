@@ -2,21 +2,21 @@
 '''
 Helper functions for Intervene
 '''
-import matplotlib
+from matplotlib import colors
 
 def default_colors():
     """
     Get a list of RGBA colors 
     """
-    default_colors = [
-        # r, g, b, a
-        [92, 192, 98, 0.5],
-        [90, 155, 212, 0.5],
-        [246, 236, 86, 0.6],
-        [241, 90, 96, 0.4],
-        [255, 117, 0, 0.3],
-        [82, 82, 190, 0.2],
-    ]
+    # default_colors = [
+    #     # r, g, b, a
+    #     [92, 192, 98, 0.5],
+    #     [90, 155, 212, 0.5],
+    #     [246, 236, 86, 0.6],
+    #     [241, 90, 96, 0.4],
+    #     [255, 117, 0, 0.3],
+    #     [82, 82, 190, 0.2],
+    # ]
 
     default_colors = [
         # r, g, b, a
@@ -44,7 +44,8 @@ def get_colors(color_list):
     a = [0.5,0.5,0.6,0.4,0.3,0.2]
     i = 0
     for c in color_list:
-        rgba_colors.append(list(matplotlib.colors.to_rgba(c)))
+        rgba_colors.append(list(colors.to_rgba(c)))
         rgba_colors[i][3] = a[i]
         i+=1
+
     return rgba_colors
