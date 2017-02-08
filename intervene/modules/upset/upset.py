@@ -88,9 +88,10 @@ def create_r_script(labels, names, options):
     if options.run == True:
         os.system('chmod +x '+cmd)
         os.system(cmd)
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(1)
     else:
-        print('Please find the Rscript here: '+cmd)
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(1)
 
         

@@ -28,7 +28,7 @@ def venn2(input_files, options,names=['A','B'], plot_type='venn'):
         upset.create_r_script(labels, names, options)
     
     else:
-        fig, ax = list_venn.venn2(labels, names=names, dpi=options.dpi)
+        fig, ax = list_venn.venn2(labels, names=names, dpi=options.dpi, colors=options.colors, figsize=options.figsize)
 
         return fig, ax
 
@@ -51,7 +51,7 @@ def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
         upset.create_r_script(labels, names, options)
         
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi)
+        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
         return fig, ax
 
 
@@ -85,7 +85,7 @@ def venn4(input_files, options, names=['A','B','C','D'],plot_type='venn'):
         upset.create_r_script(labels, names, options)
  
     else:
-        fig, ax = list_venn.venn4(labels, names=names, dpi=options.dpi)
+        fig, ax = list_venn.venn4(labels, names=names, dpi=options.dpi, colors=options.colors, figsize=options.figsize)
 
         return fig, ax
 
@@ -137,7 +137,7 @@ def venn5(input_files, options, names=['A','B','C','D','E'], plot_type='venn'):
         upset.create_r_script(labels, names, options)
 
     else:
-        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi)
+        fig, ax = list_venn.venn5(labels, names=names, dpi=options.dpi, colors=options.colors, figsize=options.figsize)
         return fig, ax
 
 
@@ -173,40 +173,42 @@ def venn6(input_files, options, names=['A','B','C','D','E','F'],plot_type='venn'
     '001111': str((c + d + e + f - a - b).count()),
     '010000': str((b - a - c - d - e - f).count()),
     '010001': str((b + f - a - c - d - e).count()),
-    '010010': str((- a - b - c - d - e - f).count()),
-    '010011': str((- a - b - c - d - e - f).count()),
-    '010100': str((- a - b - c - d - e - f).count()),
-    '010101': str((- a - b - c - d - e - f).count()),
-    '010110': str((- a - b - c - d - e - f).count()),
-    '010111': str((- a - b - c - d - e - f).count()),
-    '011000': str((- a - b - c - d - e - f).count()),
-    '011001': str((- a - b - c - d - e - f).count()),
-    '011010': str((- a - b - c - d - e - f).count()),
-    '011011': str((- a - b - c - d - e - f).count()),
-    '011100': str((- a - b - c - d - e - f).count()),
-    '011101': str((- a - b - c - d - e - f).count()),
-    '011110': str((- a - b - c - d - e - f).count()),
-    '011111': str((- a - b - c - d - e - f).count()),
-    '100000': str((- a - b - c - d - e - f).count()),
-    '100001': str((- a - b - c - d - e - f).count()),
-    '100010': str((- a - b - c - d - e - f).count()),
-    '100011': str((- a - b - c - d - e - f).count()),
-    '100100': str((- a - b - c - d - e - f).count()),
-    '100101': str((- a - b - c - d - e - f).count()),
-    '100110': str((- a - b - c - d - e - f).count()),
-    '100111': str((- a - b - c - d - e - f).count()),
-    '101000': str((- a - b - c - d - e - f).count()),
-    '101001': str((- a - b - c - d - e - f).count()),
-    '101010': str((- a - b - c - d - e - f).count()),
-    '101011': str((- a - b - c - d - e - f).count()),
-    '101100': str((- a - b - c - d - e - f).count()),
-    '101101': str((- a - b - c - d - e - f).count()),
-    '101110': str((- a - b - c - d - e - f).count()),
+    '010010': str((b + e - a - c - d - f).count()),
+    '010011': str((b + e + f - a - c - d).count()),
+    
+    '010100': str((a - b - c - d - e - f).count()),
+    '010101': str((a - b - c - d - e - f).count()),
+    '010110': str((a - b - c - d - e - f).count()),
+    '010111': str((a - b - c - d - e - f).count()),
+    '011000': str((a - b - c - d - e - f).count()),
+    '011001': str((a - b - c - d - e - f).count()),
+    '011010': str((a - b - c - d - e - f).count()),
+    '011011': str((a - b - c - d - e - f).count()),
+    '011100': str((a - b - c - d - e - f).count()),
+    '011101': str((a - b - c - d - e - f).count()),
+    '011110': str((a - b - c - d - e - f).count()),
+    '011111': str((a - b - c - d - e - f).count()),
+    '100000': str((a - b - c - d - e - f).count()),
+    '100001': str((a - b - c - d - e - f).count()),
+    '100010': str((a - b - c - d - e - f).count()),
+    '100011': str((a - b - c - d - e - f).count()),
+    '100100': str((a - b - c - d - e - f).count()),
+    '100101': str((a - b - c - d - e - f).count()),
+    '100110': str((a - b - c - d - e - f).count()),
+    '100111': str((a - b - c - d - e - f).count()),
+    '101000': str((a - b - c - d - e - f).count()),
+    '101001': str((a - b - c - d - e - f).count()),
+    '101010': str((a - b - c - d - e - f).count()),
+    '101011': str((a - b - c - d - e - f).count()),
+
+    '101100': str((a + c + d - b - e - f).count()),
+    '101101': str((a + c + d + f - b - e).count()),
+    '101110': str((a + c + d + e - b - f).count()),
     '101111': str((a + c + d + e + f - b).count()),
-    '110000': str((- a - b - c - d - e - f).count()),
-    '110001': str((- a - b - c - d - e - f).count()),
-    '110010': str((- a - b - c - d - e - f).count()),
-    '110011': str((- a - b - c - d - e - f).count()),
+    '110000': str((a + b - c - d - e - f).count()),
+    '110001': str((a + b + f - c - d - e).count()),
+    '110010': str((a + b + e - c - d - f).count()),
+    '110011': str((a + b + e + f - c - d).count()),
     '110100': str((a + b + d - c - e - f).count()),
     '110101': str((a + b + d + f + e - c).count()),
     '110110': str((a + b + d + e - f - c).count()),
@@ -225,6 +227,6 @@ def venn6(input_files, options, names=['A','B','C','D','E','F'],plot_type='venn'
         upset.create_r_script(labels, names, options)
 
     else:
-        fig, ax = list_venn.venn6(labels, names=names, dpi=options.dpi)
+        fig, ax = list_venn.venn6(labels, names=names, dpi=options.dpi, colors=options.colors, figsize=options.figsize)
         
         return fig, ax

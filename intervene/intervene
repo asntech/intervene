@@ -16,7 +16,9 @@ from pybedtools import BedTool, example_bedtool
 from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
+from intervene import helpers
 import argparse
+
 
 from intervene import __version__
 
@@ -193,26 +195,24 @@ def main():
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
                   help='Type of input data sets. Genomic regions or name lists. '
                         'Default is "%(default)s"')
-   
     venn_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
                   help='Comma-separated list of names for input files. '
-                       'Default is: --labels=A,B,C,D,E,F')
+                       'Default is: --names=A,B,C,D,E,F')
     venn_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s"')
     venn_parser.add_argument('--colors', dest='colors',
                   help='Comma-separated list of matplotlib-valid colors. '
                        'E.g., --colors=r,b,k')
-    
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where plots will store.'
                        'Default is current working directory.')
     venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
-    venn_parser.add_argument('--figsize', nargs=2, default=(8,10),
-                   help='Figure size for the output plot. '
-                       'e.g. --figsize=8,10 Default is "%(default)s"')    
+    venn_parser.add_argument('--figsize',  nargs=2, type=int,
+                   help='Figure size as width and height.'
+                       'e.g. --figsize 12 12.')    
     venn_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')  
@@ -267,10 +267,10 @@ def main():
                     help='Show intersection sizes above bars. '
                        'Default is "%(default)s"')
    
-    upset_parser.add_argument('--mbcolor', type=str, default='gray23', 
+    upset_parser.add_argument('--mbcolor', type=str, default='#ea5d4e', 
                   help='Color of the main bar plot.'
                        'Default is: "%(default)s"')
-    upset_parser.add_argument('--sbcolor', type=str, default='#56B4E9', 
+    upset_parser.add_argument('--sbcolor', type=str, default='#317eab', 
                   help='Color of set size bar plot.'
                        'Default is: "%(default)s"')
 
@@ -284,9 +284,9 @@ def main():
     upset_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
-    upset_parser.add_argument('--figsize', type=tuple, default=(10,6),
+    upset_parser.add_argument('--figsize', nargs=2, type=int,
                    help='Figure size for the output plot (width,height). '
-                       'Default is "%(default)s"')    
+                        'e.g.  --figsize 14 10')    
     upset_parser.add_argument('--dpi', type=int, dest='dpi', default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')
@@ -363,15 +363,14 @@ def main():
     pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'),  
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"')    
-    pairwise_parser.add_argument('--figsize', nargs=2, type=float, default=(8,6),
+    pairwise_parser.add_argument('--figsize', nargs=2, type=int,
                    help='Figure size for the output plot (width,height). '
-                       'Default is "%(default)s"')    
-   
+                        'e.g.  --figsize 8 8')          
     pairwise_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"')  
-    
     pairwise_parser.add_argument('--test', action='store_true', help='This will run the program on test data.')
+    
     
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s 1.0')
 
@@ -391,7 +390,7 @@ def main():
     if options.output:
         output_dir = create_dir(options.output)
     else:
-        options.output = create_dir(os.getcwd()+"/InterVene_results")
+        options.output = create_dir(os.getcwd()+"/Intervene_results")
 
     #check if user want to user test data to plot and get get test files.
     if options.test:
@@ -402,7 +401,7 @@ def main():
         #sys.exit(1)
 
     if options.command =='pairwise':
-        print("\nPerforming a pairwise intersection/overlap analysis.\n")
+        print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
         sys.exit(1)
 
@@ -413,7 +412,7 @@ def main():
         sys.exit(1)
     '''
 
-    output_name =  options.output+'/InterVene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
+    output_name =  options.output+'/Intervene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
 
     #check file name already exists and ask if user want to overwrite
     if os.path.exists(output_name):
@@ -437,6 +436,18 @@ def main():
         if len(options.input) < 2:
           sys.stderr.write('Input should have at least two files.\n')
           sys.exit(1)
+
+    #Cheeck colors for Venn
+    if options.command == 'venn':
+      if options.colors:
+        options.colors = options.colors.split(',')
+        options.colors = [helpers.get_colors(options.colors)[i] for i in range(venn_order(options.input))]
+      else:
+        options.colors = [helpers.default_colors()[i] for i in range(venn_order(options.input))]
+        
+    #Cheeck figure size
+    if options.figsize:
+      options.figsize = tuple(options.figsize)
 
     if options.command == 'venn' or options.command == 'upset':
         if not options.type:
@@ -465,6 +476,7 @@ def main():
             if options.command == 'upset':
                 cmd = 'upset_plot_intervene.R %s %s %s %s %s %s' % ('list',2,output_name, label_names,options.input[0],options.input[1])
                 os.system(cmd)
+                print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
                 sys.exit(1)
 
             else:
@@ -609,7 +621,7 @@ def main():
 
     fig.savefig(output_name, dpi=options.dpi, bbox_inches='tight')
     plt.close()
-    print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using InterVene!\n')
+    print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
 
 if __name__ == '__main__':
     try:

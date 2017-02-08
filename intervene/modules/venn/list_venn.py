@@ -1,5 +1,7 @@
 # coding: utf-8
-
+'''
+This code is adapted from: https://github.com/tctianchi/pyvenn
+'''
 from itertools import chain
 from collections import Iterable
 import matplotlib.pyplot as plt
@@ -16,10 +18,15 @@ default_colors = [
     [255, 117, 0, 0.3],
     [82, 82, 190, 0.2],
 ]
-default_colors = [
-    [i[0] / 255.0, i[1] / 255.0, i[2] / 255.0, i[3]]
-    for i in default_colors
-]
+
+def get_colors(color_list):
+
+    colors_list = [
+        [i[0] / 255.0, i[1] / 255.0, i[2] / 255.0, i[3]]
+        for i in color_list
+    ]
+
+    return colors_list
 
 def draw_ellipse(fig, ax, x, y, w, h, a, fillcolor):
     e = patches.Ellipse(
@@ -146,7 +153,8 @@ def venn2(labels, names=['A', 'B'], **options):
     return
       pyplot Figure and AxesSubplot object
     """
-    colors = options.get('colors', [default_colors[i] for i in range(2)])
+    #colors = get_colors(default_colors)[i] for i in range(2)]
+    colors = options.get('colors', [get_colors(default_colors)[i] for i in range(2)])
     figsize = options.get('figsize', (9, 7))
     dpi = options.get('dpi', 96)
     
@@ -189,9 +197,10 @@ def venn3(labels, names=['A', 'B', 'C'], **options):
     return
       pyplot Figure and AxesSubplot object
     """
-    colors = options.get('colors', [default_colors[i] for i in range(3)])
+
+    colors = options.get('colors', [get_colors(default_colors)[i] for i in range(3)])
     figsize = options.get('figsize', (9, 9))
-    dpi = options.get('dpi', 96)
+    dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -238,9 +247,9 @@ def venn4(labels, names=['A', 'B', 'C', 'D'], **options):
     return
       pyplot Figure and AxesSubplot object
     """
-    colors = options.get('colors', [default_colors[i] for i in range(4)])
+    colors = options.get('colors', [get_colors(default_colors)[i] for i in range(4)])
     figsize = options.get('figsize', (12, 12))
-    dpi = options.get('dpi', 96)
+    dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -297,9 +306,9 @@ def venn5(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
     return
       pyplot Figure and AxesSubplot object
     """
-    colors = options.get('colors', [default_colors[i] for i in range(5)])
-    figsize = options.get('figsize', (13, 13))
-    dpi = options.get('dpi', 96)
+    colors = options.get('colors', [get_colors(default_colors)[i] for i in range(5)])
+    figsize = options.get('figsize', (15, 15))
+    dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
@@ -374,9 +383,9 @@ def venn6(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
     return
       pyplot Figure and AxesSubplot object
     """
-    colors = options.get('colors', [default_colors[i] for i in range(6)])
+    colors = options.get('colors', [get_colors(default_colors)[i] for i in range(6)])
     figsize = options.get('figsize', (20, 20))
-    dpi = options.get('dpi', 150)
+    dpi = options.get('dpi', 300)
     
     fig = plt.figure(0, figsize=figsize, dpi=dpi)
     ax = fig.add_subplot(111, aspect='equal')
