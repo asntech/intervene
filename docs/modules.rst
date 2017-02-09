@@ -93,24 +93,24 @@ This will save the results in the current working directory with a folder named 
    :header: "Option", "Description"
    :widths: auto
    
-   "*-h, --help*", "show this help message and exit"
-   "*-i, --input*", "Input genomic regions in <BED/GTF/GFF/VCF> format or list files. For files in a directory use *.<ext>. e.g. *.bed"
-   "*--type*","Type of input sets. Genomic regions or lists of genes sets {genomic,list}. Default is ``genomic``"  
-   "*--names*","Comma-separated list of names for input files. Default is``--names=A,B,C,D,E,F``"
-   "*--filenames*", "Use file names as labels instead. Default is ``False``"
-   "*-o, --output*", "Output folder path where plots will store. Default is current working directory."
-   "*--order*", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
-   "*--ninter*", "Number of top intersections to plot. Default is ``40``"
-   "*--showzero*", "Show empty overlap combinations. Default is ``False``"
-   "*--showsize*", "Show intersection sizes above bars. Default is ``False``"
-   "*--mbcolor*", "Color of the main bar plot. Default is ``gray23``"
-   "*--sbcolor*", "Color of set size bar plot. Default is ``#56B4E9``"
-   "*--mblabel*", "The y-axis label of the intersection size bars. Default is ``No of Intersections``"
-   "*--sxlabel*", "The x-axis label of the set size bars. Default is ``Set size``"
-   "*--figtype*", "Figure type for the plot. e.g. --figtype svg {pdf,svg,ps,tiff,png} Default is ``pdf``"
-   "*--figsize*", "Figure size for the output plot (width,height)"
-   "*--dpi*", "Dots-per-inch (DPI) for the output. Default is ``300``"
-   "*--run*", "Run Rscript if R and UpSetR package is installed. Default is ``True``"
+	 "*-h, --help*", "show this help message and exit"
+	 "*-i, --input*", "Input genomic regions in <BED/GTF/GFF/VCF> format or list files. For files in a directory use *.<ext>. e.g. *.bed"
+	 "*--type*","Type of input sets. Genomic regions or lists of genes sets {genomic,list}. Default is ``genomic``"  
+	 "*--names*","Comma-separated list of names for input files. Default is``--names=A,B,C,D,E,F``"
+	 "*--filenames*", "Use file names as labels instead. Default is ``False``"
+	 "*-o, --output*", "Output folder path where plots will store. Default is current working directory."
+	 "*--order*", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
+	 "*--ninter*", "Number of top intersections to plot. Default is ``40``"
+	 "*--showzero*", "Show empty overlap combinations. Default is ``False``"
+	 "*--showsize*", "Show intersection sizes above bars. Default is ``False``"
+	 "*--mbcolor*", "Color of the main bar plot. Default is ``gray23``"
+	 "*--sbcolor*", "Color of set size bar plot. Default is ``#56B4E9``"
+	 "*--mblabel*", "The y-axis label of the intersection size bars. Default is ``No of Intersections``"
+	 "*--sxlabel*", "The x-axis label of the set size bars. Default is ``Set size``"
+	 "*--figtype*", "Figure type for the plot. e.g. --figtype svg {pdf,svg,ps,tiff,png} Default is ``pdf``"
+	 "*--figsize*", "Figure size for the output plot (width,height)"
+	 "*--dpi*", "Dots-per-inch (DPI) for the output. Default is ``300``"
+	 "*--run*", "Run Rscript if R and UpSetR package is installed. Default is ``True``"
 	
    
   
@@ -146,9 +146,6 @@ This will save the results in the current working directory with a folder named 
 .. code-block:: bash
 
     intervene pairwise -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
-
-
-.. note::  This is a **note** box.
 
 
 .. csv-table::
