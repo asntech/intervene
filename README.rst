@@ -59,11 +59,9 @@ Or install with conda
 
 
 Install required R packages
-----------------------------
+---------------------------
 
-Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR
- and ``corrplot`` https://cran.r-project.org/package=corrplot
- for visualization.
+Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR and ``corrplot`` https://cran.r-project.org/package=corrplot for visualization.
 
 .. code-block:: R
 
