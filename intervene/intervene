@@ -17,12 +17,9 @@ from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
 from intervene import helpers
-
 from argparse import ArgumentParser, RawTextHelpFormatter
+from intervene import __version__, __file__
 
-
-
-from intervene import __version__
 
 def create_dir(dir_path):
     '''
@@ -81,6 +78,7 @@ def data_dir():
     """
     Returns the data directory that contains example files.
     """
+    #data_path = os.path.dirname(intervene.__file__)
     return os.path.join(os.path.dirname(__file__), 'example_data')
 
 

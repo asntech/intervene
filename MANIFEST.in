@@ -1,3 +1,5 @@
 include README.md
 exclude .gitignore
 include intervene/example_data/*.*
+include intervene/example_data/dbSUPER_mm9/*.*
+include intervene/example_data/ENCODE_hESC/*.*
