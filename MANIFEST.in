@@ -1,4 +1,4 @@
-include README.md
+include README.rst
 exclude .gitignore
 include intervene/example_data/*.*
 include intervene/example_data/dbSUPER_mm9/*.*
