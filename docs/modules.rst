@@ -86,19 +86,18 @@ This will save the results in the current working directory with a folder named 
     intervene upset -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
 
 
-
 **Summary of options**
 
 .. csv-table::
    :header: "Option", "Description"
-   :widths: auto
+   :widths: 5,30
    
 	 "*-h, --help*", "show this help message and exit"
 	 "*-i, --input*", "Input genomic regions in <BED/GTF/GFF/VCF> format or list files. For files in a directory use *.<ext>. e.g. *.bed"
 	 "*--type*","Type of input sets. Genomic regions or lists of genes sets {genomic,list}. Default is ``genomic``"  
 	 "*--names*","Comma-separated list of names for input files. Default is``--names=A,B,C,D,E,F``"
-	 "*--filenames*", "Use file names as labels instead. Default is ``False``"
-	 "*-o, --output*", "Output folder path where plots will store. Default is current working directory."
+	 "*--filenames*","Use file names as labels instead. Default is ``False``"
+	 "*-o, --output*","Output folder path where plots will store. Default is current working directory."
 	 "*--order*", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
 	 "*--ninter*", "Number of top intersections to plot. Default is ``40``"
 	 "*--showzero*", "Show empty overlap combinations. Default is ``False``"
@@ -111,8 +110,6 @@ This will save the results in the current working directory with a folder named 
 	 "*--figsize*", "Figure size for the output plot (width,height)"
 	 "*--dpi*", "Dots-per-inch (DPI) for the output. Default is ``300``"
 	 "*--run*", "Run Rscript if R and UpSetR package is installed. Default is ``True``"
-	
-   
   
 Pairwise intersection module
 ----------------------------
