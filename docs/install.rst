@@ -62,7 +62,7 @@ Intervene rquires two R packages, ``UpSetR`` and ``corrplot`` for visualization.
 
 .. code-block:: R
 
-    install.packages(c('UpSetR','corrplot'))
+    install.packages(c("UpSetR", "corrplot"))
 
 Install Intervene
 =================
