@@ -1,28 +1,72 @@
 Installation
-============
+############
 
 Prerequisites
--------------
-Intervene requires:
+=============
+Intervene requires the following Python modules and R packages:
+
 
 	* Python (=> 2.7 ): https://www.python.org/
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
+	* Pandas (>= 0.16.0): http://pandas.pydata.org/
 	* R (>= 3.0): https://www.r-project.org/
+	* R packages including UpSetR, corrplot
 
-If you already have a working installation of Python, the easiest way to install pybedtools and argparser is using pip::
+Install required Python modules
+-------------------------------
+
+If you already have a working installation of Python, the easiest way to install required Python modules is by using ``pip``. If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
+
+**Install pybedtools**
+
+Install it from PyPi
+
+.. code-block:: bash
 
 	pip install pybedtools
 
-	pip install argparser
+or using conda
 
-or using conda::
+.. code-block:: bash
 
 	conda install -c bioconda pybedtools
 
-Read more details about ''pybedtools'' installation: https://daler.github.io/pybedtools/main.html#
+Read more details about ''pybedtools'' installation: https://daler.github.io/pybedtools/main.html
 
-If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux. 
 
+**Install Pandas**
+
+Install it from PyPi
+
+.. code-block:: bash
+
+	pip install pandas
+
+Or install with conda
+
+.. code-block:: bash
+
+	conda install pandas
+
+
+**Install argparser**
+
+.. code-block:: bash
+	
+	pip install argparser
+
+
+Install required R packages
+---------------------------
+Intervene rquires two R packages, ``UpSetR`` and ``corrplot`` for visualization.
+
+.. code-block:: R
+
+    install.packages(c('UpSetR','corrplot'))
+
+Install Intervene
+=================
+You can install a stable version of Intervene by using ``pip`` from PyPi or a development version by using ``git`` from GitHub.
 
 Install using `pip`
 -------------------
@@ -32,10 +76,10 @@ Install from PyPi::
 
 	pip install intervene
 
-Install Intervene from `GitHub`
-------------------------------
+Install development version from `GitHub`
+-----------------------------------------
 
-If you have `git` is installed, use this:
+If you have `git` installed, use this:
 
 .. code-block:: bash
 
@@ -43,14 +87,5 @@ If you have `git` is installed, use this:
     cd intervene
     python setup.py install
 
-Install from Intervene source
------------------------------
-
-.. code-block:: bash
-	
-	wget https://github.com/asntech/intervene/intervene-1.0.tar.gz
-	tar -zxvf intervene-1.0.tar.gz
-	cd intervene-1.0
-	python setup.py install
 
 
