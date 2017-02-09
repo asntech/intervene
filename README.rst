@@ -59,7 +59,8 @@ Or install with conda
 
 
 Install required R packages
----------------------------
+----------------------------
+
 Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR
  and ``corrplot`` https://cran.r-project.org/package=corrplot
  for visualization.
@@ -96,7 +97,23 @@ How to use Intervene
 ====================
 Once you have installed Intervene, you can type:
 
+.. code-block:: bash
+
 	intervene --help
+
+	usage: intervene <subcommand> [options]
+	    
+	positional arguments <subcommand>:
+	  {venn,upset,pairwise}
+	                        List of subcommands
+	    venn                Venn diagram of intersection of genomic regions or list sets (upto 6-way).
+	    upset               UpSet diagram of intersection of genomic regions or list sets.
+	    pairwise            Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF> format.
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -v, --version         show program's version number and exit
+
 
 to see the help for the three subcommands ``pairwise``, ``venn`` and ``upset`` type::
 	

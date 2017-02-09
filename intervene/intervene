@@ -20,7 +20,6 @@ from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
 from intervene import __version__, __file__
 
-
 def create_dir(dir_path):
     '''
     Create a output directory if it's not exists.
@@ -170,11 +169,8 @@ def main():
     #print 'For more details: https://github.com/asntech/intervene'
     
     desc = """
-    
-    InterVene: a tool for intersection and visualization of multiple genomic region sets.
-
-    For more details: https://github.com/asntech/intervene
-
+    Intervene: a tool for intersection and visualization of multiple genomic region and gene sets.
+    For more details check documentation: http://intervene.readthedocs.io
     """
     #print desc
     

@@ -54,7 +54,7 @@ setup(
     platforms='linux/unix',
     author_email="azez.khan@gmail.com",
     url="https://github.com/asntech/intervene",
-    long_description=readme("README.md"),
+    long_description=readme("README.rst"),
     package_dir={'intervene': 'intervene'},
 
     packages=['intervene', 'intervene.modules','intervene.modules.pairwise',
