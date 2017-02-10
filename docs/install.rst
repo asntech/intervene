@@ -7,10 +7,15 @@ Intervene requires the following Python modules and R packages:
 
 
 	* Python (=> 2.7 ): https://www.python.org/
+	* BedTools (Latest version): https://github.com/arq5x/bedtools2
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
 	* Pandas (>= 0.16.0): http://pandas.pydata.org/
 	* R (>= 3.0): https://www.r-project.org/
 	* R packages including UpSetR, corrplot
+
+Install BEDTools
+-----------------
+We are using pybedtools, which is Python wraper of BEDTools. So, BEDTools is should be installed before using Intervene.It's recomended to have a latest version, but if you have an older version already install. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTolls, and make sure the bedtools is on your path and you are able to call it from any directory.
 
 Install required Python modules
 -------------------------------
@@ -33,7 +38,6 @@ or using conda
 
 Read more details about ''pybedtools'' installation: https://daler.github.io/pybedtools/main.html
 
-
 **Install Pandas**
 
 Install it from PyPi
@@ -47,7 +51,6 @@ Or install with conda
 .. code-block:: bash
 
 	conda install pandas
-
 
 **Install argparser**
 

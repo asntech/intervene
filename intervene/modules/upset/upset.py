@@ -16,7 +16,6 @@ def create_r_script(labels, names, options):
     """
     It create an Rscript for UpSetR plot for the genomic regions.
 
-
     """
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     #temp_f = open(tempfile.mktemp(), "w")
@@ -26,18 +25,17 @@ def create_r_script(labels, names, options):
     output_name = options.output+'/'+'intervene_'+options.type+'_UpSet_plot.'+options.figtype
 
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
+    temp_f.write('if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpSetR", repos="http://cran.us.r-project.org"))\n')
     temp_f.write('library("UpSetR")\n')
-
     
     if options.figtype == 'pdf':
-        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+', onefile=FALSE)'+'\n')
     
     elif options.figtype == 'ps':
         temp_f.write('postscript("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
-    
     else:
         temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.dpi*options.figsize[0])+', height='+str(options.dpi*options.figsize[1])+', res='+str(options.dpi)+')\n')
-    
+     
     temp_f.write("expressionInput <- c(")
 
     last = 1
