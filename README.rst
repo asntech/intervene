@@ -21,7 +21,7 @@ Intervene requires the following Python modules and R packages:
 
 Install BEDTools
 -----------------
-We are using pybedtools, which is Python wraper of BEDTools. So, BEDTools is should be installed before using Intervene.It's recomended to have a latest version, but if you have an older version already install. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTolls, and make sure the bedtools is on your path and you are able to call it from any directory.
+We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene. It's recomended to have a latest version, but if you have an older version already install, it should be fine. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
 
 
 Install required Python modules
