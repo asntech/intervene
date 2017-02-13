@@ -13,4 +13,4 @@ install:
 #  - pip install scipy
 
 # command to run tests
-#script: pytest
+script: 
