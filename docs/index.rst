@@ -7,7 +7,7 @@ Welcome to Intervene - a tool for intersection and visualization of multiple gen
    :alt: 
 
 Table of Contents
------------------
+=================
 
 .. toctree::
    :maxdepth: 2
