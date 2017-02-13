@@ -9,7 +9,9 @@ python:
   #- "pypy-5.3.1"
 # command to install dependencies
 install:
-  - conda install -c bioconda pybedtools
+  - pip install pybedtools
+  - pip install scipy
+
 
 # command to run tests
 script: pytest
