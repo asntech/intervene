@@ -34,7 +34,6 @@ install_requires = [
     'pandas',
     'numpy',
     'scipy',
-    'argparse'
 ]
 
 #def readme():

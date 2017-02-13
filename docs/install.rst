@@ -53,13 +53,6 @@ Or install with conda
 
 	conda install pandas
 
-**Install argparser**
-
-.. code-block:: bash
-	
-	pip install argparser
-
-
 Install required R packages
 ---------------------------
 Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR
