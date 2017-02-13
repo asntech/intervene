@@ -8,9 +8,9 @@ python:
   - "pypy"
   #- "pypy-5.3.1"
 # command to install dependencies
-install:
-  - pip install pybedtools
-  - pip install scipy
+#install:
+#  - pip install pybedtools
+#  - pip install scipy
 
 
 # command to run tests
