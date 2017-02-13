@@ -9,6 +9,6 @@ python:
   - "pypy-5.3.1"
 # command to install dependencies
 install:
-  - pip install .
+  - pip install intervene
 # command to run tests
 script: pytest
