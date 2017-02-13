@@ -270,7 +270,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   (master_doc, 'Intervene', u'Intervene Documentation',
-   author, 'Intervene', 'One line description of project.',
+   author, 'Intervene', 'Intervene is a tool for intersection and visualization of multiple genomic region and gene sets.',
    'Miscellaneous'),
 ]
 
