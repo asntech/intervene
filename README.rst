@@ -26,43 +26,7 @@ We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools shou
 
 Install required Python modules
 -------------------------------
-If you already have a working installation of Python, the easiest way to install required Python modules is by using ``pip``. If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
-
-**Install pybedtools**
-
-Install it from PyPi
-
-.. code-block:: bash
-
-	pip install pybedtools
-
-or using conda
-
-.. code-block:: bash
-
-	conda install -c bioconda pybedtools
-
-Read more details about ''pybedtools'' installation: https://daler.github.io/pybedtools/main.html
-
-**Install Pandas**
-
-Install it from PyPi
-
-.. code-block:: bash
-
-	pip install pandas
-
-Or install with conda
-
-.. code-block:: bash
-
-	conda install pandas
-
-**Install argparser**
-
-.. code-block:: bash
-	
-	pip install argparser
+Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install Intervene is by using ``pip``. If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
 
 
 Install required R packages
