@@ -12,19 +12,19 @@ This will show the main help, which list three subcommands/modules, including ``
 
 To view the help for the individual subcommands, please type:
 
-You can view ``venn`` module help by typing this commman:
+To view ``venn`` module help, type this;
 
 .. code-block:: bash
 
 	intervene venn --help
 
-You can view ``upset`` module help by typing this commman:
+To view ``upset`` module help, type this;
 
 .. code-block:: bash
 
 	intervene upset --help
 
-You can view ``pairwise`` module help by typing this commman:
+To view ``pairwise`` module help, type this;
 
 .. code-block:: bash
 
