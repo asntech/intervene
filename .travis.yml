@@ -9,7 +9,7 @@ python:
   #- "pypy-5.3.1"
 # command to install dependencies
 install:
-  - pip install -r requirements.txt
+  - pip install --allow-all-external -r requirements.txt 
 #  - pip install scipy
 
 # command to run tests
