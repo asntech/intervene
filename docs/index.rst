@@ -17,6 +17,7 @@ Table of Contents
    how_to_use
    modules
    examples
+   shinyapp
    support
    cite
    

@@ -1,6 +1,7 @@
 Introduction
 ============
 
-InterVene is a tool for intersection and visualization of multiple genomic region sets.
+Intervene is a tool for intersection and visualization of multiple genomic region and gene sets.
 
-Intervene provides three types of plots to visualize intersections of genomic regions and list sets. These are pairwise heatmap of N genomic region sets, classic Venn diagrams of genomic regions and list sets of up to 6-way and UpSet plots.
+Intervene, provides an easy and automated interface for effective intersection and visualization of genomic region sets, thus facilitating their analysis and interpretations. Intervene contains three modules: venn to compute Venn diagrams of up-to 6 sets, upset to compute UpSet plots of more than 3 sets, and pairwise to compute and visualize intersections of genomic sets as clustered heatmap. Intervene gives user flexibility to choose figure colors, labels, size, quality, and type to make them as publication standard.
+
