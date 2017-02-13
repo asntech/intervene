@@ -1,10 +1,11 @@
+===============
 Example gallery
 ===============
 
 Here we listed some examples to demonstrate how Intervene can be used to generated different types of set intersection plots.
 
 Venn module examples
---------------------
+====================
 In this example, a 3-way Venn diagram of ChIP-seq peaks of histone modifications (H3K27ac, H3Kme3 and H3K27me3) in hESC from ENCODE data (Dunham et al., 2012).
 
 .. code-block:: bash
@@ -36,7 +37,7 @@ Read more about the ``venn`` diagrams module here:
 
 
 UpSet module examples
----------------------
+=====================
 In this example, a UpSet plot of ChIP-seq peaks of four histone modifications (H3K27ac, H3Kme3 H3Kme2, and H3K27me3) in hESC from ENCODE data (Dunham et al., 2012).
 
 .. code-block:: bash
@@ -58,7 +59,7 @@ In this example ...
 
 
 Pairwise module examples
-------------------------
+========================
 In this example, we performed a pairwise intersections of super-enhancers in 24 mouse cell and tissue types from dbSUPER(Khan and Zhang, 2016) and showed the fraction of overlap in heatmap. 
 
 .. code-block:: bash

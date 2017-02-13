@@ -1,3 +1,4 @@
+====================
 How to use Intervene
 ====================
 
@@ -26,7 +27,7 @@ To view the help for the individual subcommands, ``venn``, ``upset`` and ``pairw
 	
 
 Run Intervene on test data
---------------------------
+==========================
 
 To run Intervene's each module using example data use the following commands.
 

@@ -1,3 +1,4 @@
+=================
 Intervene modules
 =================
 
@@ -5,7 +6,7 @@ Intervene provides three types of plots to visualize intersections of genomic re
 
 
 Venn diagram module 
--------------------
+===================
 
 Once you have installed Intervene, you can type:
 
@@ -56,7 +57,7 @@ This will save the results in the current working directory with a folder named 
 
 
 UpSet plot module
------------------
+=================
 
 Once you have installed Intervene, you can type:
 
@@ -113,7 +114,7 @@ This will save the results in the current working directory with a folder named 
 	 "--run", "Run Rscript if R and UpSetR package is installed. Default is ``True``"
   
 Pairwise intersection module
-----------------------------
+============================
 
 Once you have installed Intervene, you can type:
 

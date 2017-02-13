@@ -1,14 +1,16 @@
+=======================
 Intervene Documentation
-=====================
+=======================
 
 Welcome to Intervene - a tool for intersection and visualization of multiple genomic region sets
 
 .. figure:: img/Intervene_plots.png
    :alt: 
 
-   
+
 .. toctree::
    :maxdepth: 2
+   :caption: Table of contents
 
    introduction
    install
