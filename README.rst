@@ -10,7 +10,7 @@ Intervene is a tool for intersection and visualization of multiple genomic regio
 
 **[Documentation](http://intervene.readthedocs.org)**
 
-.. figure:: docs/img/Intervene_plots.png
+.. image:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
 
 
 Installation
@@ -109,10 +109,9 @@ To run Intervene using example data use the following command::
 
 	intervene upset --test
 
-This will save the results in the current working directory with a folder named ``Intervene_test``. If you wish to save the results in a specific folder, you can type::
+This will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type::
 
-	intervene upset --test --output ~/path/to/your/folder/file_name.pdf
-
+	intervene upset --test --output ~/path/to/your/folder
 
 Support
 ========
