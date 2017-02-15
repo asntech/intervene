@@ -8,7 +8,7 @@
     :target:  https://pypi.python.org/pypi/intervene/
 
 .. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
-	:target: https://twitter.com/intent/tweet?text=Intervene - a tool for intersection and visualization of multiple genomic region and gene sets https://github.com/asntech/intervene&url=%5Bobject%20Object%5D
+	:target: https://twitter.com/intent/tweet?text=Intervene%20-%20a%20tool%20for%20intersection%20and%20visualization%20of%20multiple%20genomic%20region%20and%20gene%20sets%20https://github.com/asntech/intervene&url=%5Bobject%20Object%5D
 
 
 Introduction
