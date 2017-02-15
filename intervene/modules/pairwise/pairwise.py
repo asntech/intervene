@@ -163,7 +163,7 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     """Create a heatmap of the lower triangle of a pairwise correlation
     matrix of all pairs of columns in the given dataframe. The heatmap
     triangle is rotated 45 degrees clockwise and drawn on the given axes.
-    Thanks to Kamil Slowikowski for this code https://gist.github.com/slowkow/5797728
+    Thanks to Kamil Slowikowski for sharing this code https://gist.github.com/slowkow/5797728
 
     Parameters
     ----------
@@ -172,6 +172,9 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     """
     N = dataframe.shape[1]
     D = dataframe
+    
+    tri_type = "lower"
+    
     #D = dataframe.corr(method='pearson')
 
     # UPGMA clustering, but other methods are also available.
@@ -181,17 +184,32 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     D = D.ix[cluster_order, cluster_order]
 
     # Get the lower triangle of the matrix. 
-    C = np.tril(D)
+    #C = np.tril(D)
+    # Mask the lower triangle.
+    #L = np.ma.masked_array(L, L == 0)
+    
+    if tri_type == "upper":
+        # Get the upper triangle of the matrix.
+        D = np.transpose(D)
+        C = np.triu(D)
+    elif tri_type == "full":
+        C = D
+    # Get the lower triangle of the matrix. 
+    else:
+        C = np.tril(D)
+    
     # Mask the upper triangle.
     C = np.ma.masked_array(C, C == 0)
+
+    diagonal_val = 0
     # Set the diagonal to zero.
     for i in range(N):
-        C[i, i] = 0
+        C[i, i] = diagonal_val
 
     # Transformation matrix for rotating the heatmap.
-    A = np.array([(y, x) for x in range(N, -1, -1) for y in range(N + 1)])
+    Aa = np.array([(y, x) for x in range(N, -1, -1) for y in range(N + 1)])
     t = np.array([[0.5, 1], [0.5, -1]])
-    A = np.dot(A, t)
+    A = np.dot(Aa, t)
 
     # -1.0 correlation is blue, 0.0 is white, 1.0 is red.
     # 1.0 correlation is blue, 0.0 is white, 1.0 is red.
@@ -203,9 +221,14 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     axes.set_yticks([])
 
     # Plot the correlation heatmap triangle.
-    X = A[:, 1].reshape(N + 1, N + 1)
-    Y = A[:, 0].reshape(N + 1, N + 1)
-    caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
+    if tri_type != "full":
+        X = Aa[:, 1].reshape(N + 1, N + 1)
+        Y = Aa[:, 0].reshape(N + 1, N + 1)
+        caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
+    else:
+        X = A[:, 0].reshape(N + 1, N + 1)
+        Y = A[:, 1].reshape(N + 1, N + 1)
+        caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
 
     # Remove the ticks and reset the x limit.
     axes.set_xlim(right=1)
