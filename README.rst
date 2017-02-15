@@ -1,15 +1,18 @@
-Introduction
-============
 .. image:: https://badge.fury.io/py/intervene.svg
     :target: https://badge.fury.io/py/intervene
-
-.. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
-	:target: https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D
 
 .. image:: https://img.shields.io/github/issues/asntech/intervene.svg
 	:target: https://github.com/asntech/intervene/issues
 
+.. image:: https://img.shields.io/pypi/dm/intervene.svg
+    :target:  https://pypi.python.org/pypi/intervene/
+    
+.. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
+	:target: https://twitter.com/intent/tweet?text=Wow:&url=%5Bobject%20Object%5D
 
+
+Introduction
+============
 Intervene is a tool for intersection and visualization of multiple genomic region and gene sets.
 
 **[Documentation](http://intervene.readthedocs.org)**
