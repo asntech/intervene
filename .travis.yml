@@ -5,12 +5,15 @@ python:
   - "3.5"
 
   # PyPy versions
-  - "pypy"
+  #- "pypy"
   #- "pypy-5.3.1"
 # command to install dependencies
 install:
   - pip install --allow-all-external -r requirements.txt 
-#  - pip install scipy
+  - pip install intervene
 
 # command to run tests
-script: 
+script:
+  - intervene venn --test
+  - intervene upset --test
+  - intervene pairwise --test
