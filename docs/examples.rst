@@ -2,7 +2,7 @@
 Example gallery
 ===============
 
-Here we listed some examples to demonstrate how Intervene can be used to generated different types of set intersection plots.
+Here we provide some examples of how Intervene can be used to generate different types of set intersection plots.
 
 Venn module examples
 ====================
@@ -51,8 +51,6 @@ In this example, a UpSet plot of ChIP-seq peaks of four histone modifications (H
 
 Read more about the ``upset`` module:
 
-In this example ... 
-
 .. code-block:: bash
 
     intervene upset --help
@@ -60,7 +58,7 @@ In this example ...
 
 Pairwise module examples
 ========================
-In this example, we performed a pairwise intersections of super-enhancers in 24 mouse cell and tissue types from dbSUPER(Khan and Zhang, 2016) and showed the fraction of overlap in heatmap. 
+In this example, we performed a pairwise intersections of super-enhancers in 24 mouse cell and tissue types from dbSUPER (Khan and Zhang, 2016) and showed the fraction of overlap in heatmap. 
 
 .. code-block:: bash
 

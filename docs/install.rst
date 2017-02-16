@@ -7,7 +7,7 @@ Prerequisites
 Intervene requires the following Python modules and R packages:
 
 	* Python (=> 2.7 ): https://www.python.org/
-	* BedTools (Latest version): https://github.com/arq5x/bedtools2
+	* BEDTools (Latest version): https://github.com/arq5x/bedtools2
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
 	* Pandas (>= 0.16.0): http://pandas.pydata.org/
 	* R (>= 3.0): https://www.r-project.org/
@@ -15,13 +15,13 @@ Intervene requires the following Python modules and R packages:
 
 Install BEDTools
 -----------------
-Intervene is using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene It's recomended to have a latest version, but if you have an older version already install, it should be fine. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
+Intervene is using pybedtools, which is a Python wrapper for the BEDTools. BEDTools should be installed before using Intervene. It is recomended to have the latest version of the tool. Please read the installation instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is accessible through your PATH variable.
 
 Install required Python modules
 -------------------------------
-Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install required Python modules is by installing Intervene using ``pip``. If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
+Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install the required Python modules is by installing Intervene using ``pip``. If you're setting up Python for the first time, we recommend to install it using the Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
 
-If you want to install requires Python modules individually, you can use the following commands, else you can install Intervene directly.
+If you want to install the required Python modules manually, you can use the following commands.
 
 **Install pybedtools**
 
@@ -55,9 +55,7 @@ Or install with conda
 
 Install required R packages
 ---------------------------
-Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR
- and ``corrplot`` https://cran.r-project.org/package=corrplot
- for visualization. To install these open R/RStudio and use the following command.
+Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR and ``corrplot`` https://cran.r-project.org/package=corrplot for visualization. To install them, open R/RStudio and use the following command.
 
 .. code-block:: R
 
@@ -65,24 +63,24 @@ Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package
 
 Install Intervene
 =================
-You can install a stable version of Intervene by using ``pip`` from PyPi or a development version by using ``git`` from GitHub.
+You can install a stable version of Intervene by using ``pip`` from PyPi or a development version by using ``git`` from our bitbucket repository at https://bitbucket.org/CBGR/intervene.
 
 Install using `pip`
 -------------------
-You can install InterVene either from PyPi using pip or install it from the source. Please make sure you have already installed the above mentioned python libraries required to run InterVene.
+You can install Intervene either from PyPi using pip or install it from the source. Please make sure you have already installed the above mentioned python libraries required to run Intervene.
 
 Install from PyPi::
 
 	pip install intervene
 
-Install development version from `GitHub`
------------------------------------------
+Install development version from `Bitbucket`
+--------------------------------------------
 
 If you have `git` installed, use this:
 
 .. code-block:: bash
 
-    git clone https://github.com/asntech/intervene.git
+    git clone https://MathelierGroup@bitbucket.org/CBGR/intervene.git
     cd intervene
     python setup.py install
 
