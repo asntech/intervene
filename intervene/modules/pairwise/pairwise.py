@@ -211,9 +211,17 @@ def heatmap_triangle(dataframe, axes, options):
     t = np.array([[0.5, 1], [0.5, -1]])
     A = np.dot(A, t)
 
-    min_val = np.round(np.amin(C), decimals=1)
-    max_val = np.round(np.amax(C), decimals=1)
-    
+    if options.type == 'reldist':
+        min_val = 0.0
+        max_val = 0.5
+
+    elif options.type == 'count':
+        min_val = 0.0
+        max_val = np.round(np.amax(C), decimals=1)
+    else:
+        min_val = np.round(np.amin(C), decimals=1)
+        max_val = np.round(np.amax(C), decimals=1)
+
     #if min_val == 0:
     #   min_val = -1
     # -1.0 correlation is blue, 0.0 is white, 1.0 is red.
@@ -238,13 +246,13 @@ def heatmap_triangle(dataframe, axes, options):
     # Remove the ticks and reset the x limit.
     axes.set_xlim(right=1)
     #axes.labelsize = "small"
-    axes.tick_params(labelsize=6)
+    #axes.tick_params(labelsize=6)
     if options.type == 'count':
         ticks = np.linspace(min_val, max_val, 3)
     elif options.type == 'reldist':
-        ticks = np.linspace(min_val, max_val, 5)
+        ticks = np.linspace(min_val, max_val, 3)
     else:
-        ticks = np.linspace(min_val, max_val, 5)
+        ticks = np.linspace(min_val, 1.0, 3)
     # Add a colorbar below the heatmap triangle.
     cb = pl.colorbar(caxes, ax=axes, orientation='horizontal', shrink=0.5825,
                      fraction=0.02, pad=0, ticks=ticks,
@@ -289,7 +297,6 @@ def pairwise_intersection(options):
     #matrix = create_matrix(beds=options.input, func=FUNC, verbose=options.verbose, **kwoptions)
     matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
 
-
     nfiles = len(options.input)
 
     output_name =  options.output+'/Intervene_'+options.command+'_'+str(nfiles)+'_files_'
@@ -321,7 +328,7 @@ def pairwise_intersection(options):
         matrix = pd.read_table(matrix_file,index_col=0, delim_whitespace=True)
 
         labels = list(matrix.columns.values)
-
+        labels = bed_names
         series = pd.Series(bed_sizes, index=labels)
         #Set heatmap label
         if options.type == 'count':
@@ -331,7 +338,7 @@ def pairwise_intersection(options):
         if options.type == 'jaccard':
             options.hlabel = 'Jaccard statistic'
         if options.type == 'reldist':
-            options.hlabel = 'Relative distance'
+            options.hlabel = 'Dist. of relative distance'
         if options.type == 'fisher':
             options.hlabel = 'Fisher p-value'
 
