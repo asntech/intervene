@@ -17,8 +17,9 @@ Intervene is a tool for intersection and visualization of multiple genomic regio
 
 **[Documentation](http://intervene.readthedocs.org)**
 
-.. image:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
-
+.. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
+   :width: 800px
+   :align: left
 
 Installation
 ============
