@@ -103,7 +103,7 @@ def barplot(series, matrix, outfile, options, max_size=1):
     #ax = fig.add_subplot(121, frame_on=False, aspect=2.0)
     
     # Get the heatmap triangle's axes and the order of the clustered samples.
-    cax, order = heatmap_triangle(matrix, ax, options.hlabel)
+    cax, order = heatmap_triangle(matrix, ax, options)
 
     # Adjust spacing between the heatmap triangle and the barplot.
     #fig.subplots_adjust(wspace=-0.25, hspace=0, left=0, right=1)
@@ -159,7 +159,7 @@ def shorten(x, n=48):
         return x[:n/2] + '..' + x[-n/2:]
     return x
 
-def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
+def heatmap_triangle(dataframe, axes, options):
     """Create a heatmap of the lower triangle of a pairwise correlation
     matrix of all pairs of columns in the given dataframe. The heatmap
     triangle is rotated 45 degrees clockwise and drawn on the given axes.
@@ -172,8 +172,8 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     """
     N = dataframe.shape[1]
     D = dataframe
-    
-    tri_type = "lower"
+
+    tri_type = options.triangle
     
     #D = dataframe.corr(method='pearson')
 
@@ -190,8 +190,8 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     
     if tri_type == "upper":
         # Get the upper triangle of the matrix.
-        D = np.transpose(D)
         C = np.triu(D)
+        C = np.transpose(C)
     elif tri_type == "full":
         C = D
     # Get the lower triangle of the matrix. 
@@ -201,43 +201,55 @@ def heatmap_triangle(dataframe, axes, hlabel='Fraction of overlap'):
     # Mask the upper triangle.
     C = np.ma.masked_array(C, C == 0)
 
-    diagonal_val = 0
+    #diagonal_val = 1
     # Set the diagonal to zero.
-    for i in range(N):
-        C[i, i] = diagonal_val
+    #for i in range(N):
+    #    C[i, i] = diagonal_val
 
     # Transformation matrix for rotating the heatmap.
-    Aa = np.array([(y, x) for x in range(N, -1, -1) for y in range(N + 1)])
+    A = np.array([(y, x) for x in range(N, -1, -1) for y in range(N + 1)])
     t = np.array([[0.5, 1], [0.5, -1]])
-    A = np.dot(Aa, t)
+    A = np.dot(A, t)
 
+    min_val = np.round(np.amin(C), decimals=1)
+    max_val = np.round(np.amax(C), decimals=1)
+    
+    #if min_val == 0:
+    #   min_val = -1
     # -1.0 correlation is blue, 0.0 is white, 1.0 is red.
     # 1.0 correlation is blue, 0.0 is white, 1.0 is red.
     cmap = pl.cm.RdBu_r
-    norm = mp.colors.BoundaryNorm(np.linspace(0, 1, 10), cmap.N)
+    norm = mp.colors.BoundaryNorm(np.linspace(min_val, max_val, 20), cmap.N)
 
     # This MUST be before the call to pl.pcolormesh() to align properly.
     axes.set_xticks([])
     axes.set_yticks([])
 
     # Plot the correlation heatmap triangle.
-    if tri_type != "full":
-        X = Aa[:, 1].reshape(N + 1, N + 1)
-        Y = Aa[:, 0].reshape(N + 1, N + 1)
+    if tri_type == "full":
+        X = A[:, 1].reshape(N + 1, N + 1)
+        Y = A[:, 1].reshape(N + 1, N + 1)
         caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
     else:
-        X = A[:, 0].reshape(N + 1, N + 1)
-        Y = A[:, 1].reshape(N + 1, N + 1)
+        X = A[:, 1].reshape(N + 1, N + 1)
+        Y = A[:, 0].reshape(N + 1, N + 1)
         caxes = pl.pcolormesh(X, Y, np.flipud(C), axes=axes, cmap=cmap, norm=norm)
 
     # Remove the ticks and reset the x limit.
     axes.set_xlim(right=1)
-
+    #axes.labelsize = "small"
+    axes.tick_params(labelsize=6)
+    if options.type == 'count':
+        ticks = np.linspace(min_val, max_val, 3)
+    elif options.type == 'reldist':
+        ticks = np.linspace(min_val, max_val, 5)
+    else:
+        ticks = np.linspace(min_val, max_val, 5)
     # Add a colorbar below the heatmap triangle.
     cb = pl.colorbar(caxes, ax=axes, orientation='horizontal', shrink=0.5825,
-                     fraction=0.02, pad=0, ticks=np.linspace(-1, 1, 5),
+                     fraction=0.02, pad=0, ticks=ticks,
                      use_gridspec=True)
-    cb.set_label(hlabel)
+    cb.set_label(options.hlabel)
 
     return caxes, D.index
 
@@ -313,7 +325,7 @@ def pairwise_intersection(options):
         series = pd.Series(bed_sizes, index=labels)
         #Set heatmap label
         if options.type == 'count':
-            options.hlabel = 'Number of overlap'
+            options.hlabel = 'Number of overlaps'
         if options.type == 'frac':
             options.hlabel = 'Fraction of overlap'
         if options.type == 'jaccard':

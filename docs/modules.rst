@@ -162,6 +162,7 @@ This will save the results in the current working directory with a folder named 
 	  " ","Default is ``frac``"
 	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``pie``."
 	  " ", "Read the below note for ``tribar`` option."
+	  "--triangle","Show lower/upper triangle of the matrix as heatmap. Default is ``lower``"
 	  "--names","Comma-separated list of names for input files. Default is base name of input files."
 	  "--filenames","Use file names as labels instead. Default is ``False``."
 	  "--sort","Set this only if your files are not sorted. Default is ``False``."
@@ -176,5 +177,6 @@ This will save the results in the current working directory with a folder named 
 	  "--figsize","Figure size for the output plot (width,height). e.g.  --figsize 8 8"
 	  "--dpi","Dots-per-inch (DPI) for the output. Default is: ``300``."
 	  "--test","This will run the program on test data."
+
 
 .. note::  The option ``--htype=tribar`` will generate a horizontal bar plot with an adjacent heatmap rotated 45 degrees to show the lower triangle of the matrix comparing all sets of bars.

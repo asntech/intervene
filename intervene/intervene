@@ -312,7 +312,10 @@ def main():
 
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
                    default='pie',help='Heatmap plot type. '
-                           'Default is "%(default)s".\n\n')  
+                           'Default is "%(default)s".\n\n')
+    pairwise_parser.add_argument('--triangle', dest="triangle",choices=("lower","upper"), 
+                   default='lower',help='Show lower/upper triangle of the matrix as heatmap. '
+                           'Default is "%(default)s".\n\n')
     
     pairwise_parser.add_argument('--names', dest='labels',
                   help='Comma-separated list of names for input files. \n'
