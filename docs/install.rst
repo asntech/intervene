@@ -80,7 +80,7 @@ If you have `git` installed, use this:
 
 .. code-block:: bash
 
-    git clone https://MathelierGroup@bitbucket.org/CBGR/intervene.git
+    git clone https://bitbucket.org/CBGR/intervene.git
     cd intervene
     python setup.py install
 
