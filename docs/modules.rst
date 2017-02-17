@@ -96,32 +96,32 @@ This will save the results in the current working directory with a folder named 
 	 "-i, --input", "Input genomic regions in <BED/GTF/GFF/VCF> format or list files. For files in a directory use *.<ext>. e.g. *.bed"
 	 "--type","Type of input sets. Genomic regions or lists of genes sets {genomic,list}. Default is ``genomic``"  
 	 "--names","Comma-separated list of names for input files. Default is``--names=A,B,C,D,E,F``"
-	 "--filenames","Use file names as labels instead. Default is ``False``"
+	 "--filenames","Use file names as labels instead. Default is ``True``"
 	 "-o, --output","Output folder path where plots will store. Default is current working directory."
 	 "--order", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
-	 "--ninter", "Number of top intersections to plot. Default is ``40``"
+	 "--ninter", "Number of top intersections to plot. Default is ``30``"
 	 "--showzero", "Show empty overlap combinations. Default is ``False``"
-	 "--showsize", "Show intersection sizes above bars. Default is ``False``"
+	 "--showsize", "Show intersection sizes above bars. Default is ``True``"
 	 "--mbcolor", "Color of the main bar plot. Default is ``gray23``"
 	 "--sbcolor", "Color of set size bar plot. Default is ``#56B4E9``"
 	 "--mblabel", "The y-axis label of the intersection size bars. Default is ``No of Intersections``"
 	 "--sxlabel", "The x-axis label of the set size bars. Default is ``Set size``"
 	 "--figtype", "Figure type for the plot. e.g. --figtype svg {pdf,svg,ps,tiff,png} Default is ``pdf``"
-	 "--figsize", "Figure size for the output plot (width,height)"
+	 "--figsize", "Figure size for the output plot (width,height)."
 	 "--dpi", "Dots-per-inch (DPI) for the output. Default is ``300``"
-	 "--run", "Run Rscript if R and UpSetR package is installed. Default is ``True``"
+	 "--scriptonly", "Set to generate Rscript only, if R/UpSetR package is not installed. Default is ``False``"
+	 "--showshiny", "Print the combinations of intersections to input to Shiny App. Default is ``False``"
+
   
 Pairwise intersection module
 ============================
-
-Once you have installed Intervene, you can type:
+Once you have installed Intervene, you can type: 
 
 **Usage:**
 
 .. code-block:: bash
 
     intervene pairwise [options]
-
 
 .. note::  Please scroll down to see a detailed summary of available **options**.
 
@@ -144,7 +144,6 @@ This will save the results in the current working directory with a folder named 
 
     intervene pairwise -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
 
-
 **Summary of options**
 
 .. csv-table::
@@ -159,7 +158,7 @@ This will save the results in the current working directory with a folder named 
 	  " ","--type=jaccard - calculate the Jaccard statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/jaccard.html>`_"
 	  " ","--type=reldist - calculate the distribution of relative distances. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/reldist.html>`_"
 	  " ","--type=fisher - calculate Fisher`s statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/fisher.html>`_"
-	  " ","Default is ``frac``"
+	  " ","Note: For jaccard and reldist regions should be pre-shorted or set --sort``"
 	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``pie``."
 	  " ", "Read the below note for ``tribar`` option."
 	  "--triangle","Show lower/upper triangle of the matrix as heatmap. Default is ``lower``"
@@ -176,6 +175,7 @@ This will save the results in the current working directory with a folder named 
 	  "--figtype","{pdf,svg,ps,tiff,png} Figure type for the plot. e.g. --figtype svg. Default is ``pdf``"
 	  "--figsize","Figure size for the output plot (width,height). e.g.  --figsize 8 8"
 	  "--dpi","Dots-per-inch (DPI) for the output. Default is: ``300``."
+	  "--scriptonly", "Set to generate Rscript only, if R/UpSetR package is not installed. Default is ``False``"
 	  "--test","This will run the program on test data."
 
 

@@ -10,7 +10,7 @@ python:
 # command to install dependencies
 install:
   - pip install --allow-all-external -r requirements.txt 
-  - pip install intervene
+  - pip install -e .
 
 # command to run tests
 script:

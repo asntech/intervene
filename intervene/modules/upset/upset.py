@@ -27,12 +27,15 @@ def create_r_script(labels, names, options):
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpSetR", repos="http://cran.us.r-project.org"))\n')
     temp_f.write('library("UpSetR")\n')
+    if options.figtype == 'ps':
+        temp_f.write('if (suppressMessages(!require("Cairo"))) suppressMessages(install.packages("Cairo", repos="http://cran.us.r-project.org"))\n')
+        temp_f.write('library("Cairo")\n')
     
-    if options.figtype == 'pdf':
+    if options.figtype == 'pdf' or options.figtype == 'svg':
         temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+', onefile=FALSE)'+'\n')
     
     elif options.figtype == 'ps':
-        temp_f.write('postscript("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
+        temp_f.write('cairo_ps("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
     else:
         temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.dpi*options.figsize[0])+', height='+str(options.dpi*options.figsize[1])+', res='+str(options.dpi)+')\n')
      
@@ -71,9 +74,9 @@ def create_r_script(labels, names, options):
         last +=1
     temp_f.write(")\n")
 
-    options.shiny = True
+    #options.shiny = True
     #If shiny output
-    if options.shiny:
+    if options.showshiny == False:
 
         shiny_import = options.output+'/'+'Intervene_Shiny_App_'+options.type+'_UpSet_module_import.txt'
         shiny_file = open(shiny_import, 'w')
@@ -90,12 +93,12 @@ def create_r_script(labels, names, options):
     #if options.ninter == 0:
     #    options.ninter = "NA"
 
-    if not options.showzero:
+    if options.showzero == False:
         options.showzero = 'NULL'
     else:
-        options.showzero = 'on'
+        options.showzero = "'on'"
 
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections="'+str(options.showzero)+'", order.by = "'+options.order+'", number.angles = 0, mainbar.y.label ="'+options.mblabel+'", sets.x.label ="'+options.sxlabel+'")\n')
+    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections='+str(options.showzero)+', order.by = "'+options.order+'", number.angles = 0, mainbar.y.label ="'+options.mblabel+'", sets.x.label ="'+options.sxlabel+'")\n')
     temp_f.write('invisible(dev.off())\n')
 
     #print temp_f.read()
@@ -104,13 +107,13 @@ def create_r_script(labels, names, options):
     cmd = temp_f.name
     temp_f.close()
 
-    if options.run == True:
+    if options.scriptonly == False:
         os.system('chmod +x '+cmd)
         os.system(cmd)
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(1)
     else:
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(1)
 
         

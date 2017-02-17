@@ -18,7 +18,7 @@ from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
 from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
-from intervene import __version__, __file__
+import intervene
 
 def create_dir(dir_path):
     '''
@@ -78,7 +78,7 @@ def data_dir():
     Returns the data directory that contains example files.
     """
     #data_path = os.path.dirname(intervene.__file__)
-    return os.path.join(os.path.dirname(__file__), 'example_data')
+    return os.path.join(os.path.dirname(intervene.__file__), 'example_data')
 
 
 def example_filename(fn,sub_dir=None):
@@ -87,6 +87,8 @@ def example_filename(fn,sub_dir=None):
     This code is adapted from https://github.com/daler/pybedtools
 
     """
+    #print(data_dir())
+    #sys.exit()
     if sub_dir:
       fn = os.path.join(data_dir(), sub_dir, fn)
     else:
@@ -215,7 +217,6 @@ def main():
                        'Default is "%(default)s"\n\n')
     venn_parser.add_argument('--test', action='store_true', help='This will run the program on test data.\n\n')
 
-
     #upset module argument parser
     upset_parser = subparsers.add_parser('upset', usage='intervene upset [options]', formatter_class=RawTextHelpFormatter,
         description='Create UpSet diagram after intersection of genomic regions in (BED/GTF/GFF) or list sets.', 
@@ -249,7 +250,7 @@ def main():
                    default='freq',help='The order of intersections of sets. '
                        'e.g. --order degree. Default is "%(default)s".\n\n')
     
-    upset_parser.add_argument('--ninter', type=int, default=40, 
+    upset_parser.add_argument('--ninter', type=int, default=30, 
                   help='Number of top intersections to show in plot. '
                        'Default is "%(default)s".\n\n')
 
@@ -257,7 +258,7 @@ def main():
                     help='Show empty intersection combinations. '
                        'Default is "%(default)s".\n\n')
 
-    upset_parser.add_argument('--showsize', action='store_true', default=False,
+    upset_parser.add_argument('--showsize', action='store_false', default=True,
                     help='Show intersection sizes above bars. '
                        'Default is "%(default)s".\n\n')
    
@@ -269,7 +270,7 @@ def main():
                   help='Color of set size bar plot. '
                        'Default is: "%(default)s".\n\n')
 
-    upset_parser.add_argument('--mblabel', type=str, default='No of Intersections', 
+    upset_parser.add_argument('--mblabel', type=str, default='No. of Intersections', 
                   help='The y-axis label of the intersection size bars. '
                        'Default is: "%(default)s".\n\n')
     upset_parser.add_argument('--sxlabel', type=str, default='Set size', 
@@ -281,14 +282,19 @@ def main():
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
     upset_parser.add_argument('--figsize', nargs=2, type=int, default=(14,8),
                    help='Figure size for the output plot (width,height). '
-                        'e.g.  --figsize 14 10\n\n')    
+                        'e.g.  --figsize 14 8\n\n')
     upset_parser.add_argument('--dpi', type=int, dest='dpi', default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s".\n\n')
 
-    upset_parser.add_argument('--run', action='store_false', default=True,
-                    help='Run Rscript if R and UpSetR package are installed. '
+    upset_parser.add_argument('--scriptonly', action='store_true', default=False,
+                    help='Set to generate Rscript only, if R/UpSetR package is not installed. '
                        'Default is "%(default)s".\n\n')
+
+    upset_parser.add_argument('--showshiny', action='store_true', default=False,
+                    help='Print the combinations of intersections to input to Shiny App. '
+                       'Default is "%(default)s".\n\n')
+  
     upset_parser.add_argument('--test', action='store_true', help='This will run the program on test data.\n\n')
 
 
@@ -304,11 +310,11 @@ def main():
     pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
         default='frac', help='Report count/fraction of overlaps or statistical relationships. \n'
                        'count: calculates the number of overlaps. \n'
-                       'frac: calculates the fraction of overlap. \n'
+                       'frac: calculates the fraction of overlap. (Default)\n'
                        'jaccard: calculate the Jaccard statistic. \n'
                        'reldist: calculate the distribution of relative distances.\n'
-                       'fisher: calculate Fisher`s statistic.\n'
-                       'Default is "%(default)s".\n\n')
+                       'fisher: calculate Fisher`s statistic. \n'
+                       'Note: For jaccard and reldist regions should be pre-shorted or set --sort.\n\n')
 
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
                    default='pie',help='Heatmap plot type. '
@@ -366,24 +372,47 @@ def main():
     pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'),  
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
-    pairwise_parser.add_argument('--figsize', nargs=2, type=int,
+    pairwise_parser.add_argument('--figsize', nargs=2, type=int, default=(10,10),
                    help='Figure size for the output plot (width,height). '
                         'e.g.  --figsize 8 8\n\n')          
     pairwise_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
-                       'Default is: "%(default)s".\n\n')  
+                       'Default is: "%(default)s".\n\n')
+    pairwise_parser.add_argument('--scriptonly', action='store_true', default=False,
+                    help='Set to generate Rscript only, if R/Corrplot package are not installed. '
+                       'Default is "%(default)s".\n\n')
+  
     pairwise_parser.add_argument('--test', action='store_true', help='This will run the program on test data.\n\n')
     
     
-    parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s version '+__version__)
+    parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s version '+intervene.__version__)
 
     options = parser.parse_args()
 
     if not options.command:
-        venn_parser.print_help()
+        parser.print_help()
         sys.stderr.write('Missing required arguments. ')
-        sys.exit(1) 
+        sys.exit(1)
 
+    #checke if there are at least two input bed/list files
+    reqd_args = ['input']
+    if not options.test:
+        for ra in reqd_args:
+            if not getattr(options,ra):
+                if options.command == 'venn':
+                    venn_parser.print_help()
+                else:
+                    upset_parser.print_help()
+                sys.stderr.write('Missing required arg "%s"\n' % ra)
+                sys.exit(1)
+        if len(options.input) < 2:
+          sys.stderr.write('Input should have at least two files.\n')
+          sys.exit(1)
+        if len(options.input) > 6 and options.command !='pairwise':
+          sys.stderr.write('Input should not have more than six files.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
+          sys.exit(1)
+
+    
     if options.command == 'upset':
         plot_type = 'upset'
     else:
@@ -417,7 +446,6 @@ def main():
         upset.one_vs_rest_intersection(options.input,options.compare,options.output)
         sys.exit(1)
     '''
-
     output_name =  options.output+'/Intervene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
 
     #check file name already exists and ask if user want to overwrite
@@ -428,21 +456,6 @@ def main():
         print("You can run Intervene by setting a different --output path.\nThanks for using Intervene!")
         sys.exit(1)
     
-    #checke if there are at least two input bed/list files
-    reqd_args = ['input']
-    if not options.test:
-        for ra in reqd_args:
-            if not getattr(options,ra):
-                if options.command == 'venn':
-                    venn_parser.print_help()
-                else:
-                    upset_parser.print_help()
-                sys.stderr.write('Missing required arg "%s"\n' % ra)
-                sys.exit(1)
-        if len(options.input) < 2:
-          sys.stderr.write('Input should have at least two files.\n')
-          sys.exit(1)
-
     #Cheeck colors for Venn
     if options.command == 'venn':
       if options.colors:
@@ -611,15 +624,7 @@ def main():
         #else input considered as bed file
         else:
             fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
-    
-    elif venn_order(options.input) > 6:
-      if options.command == 'venn':
-        venn_parser.print_help()
-      else:
-        upset_parser.print_help()
-      sys.stderr.write('The number of input files are more than 6.\n')
-      sys.exit(1)
-    
+   
     else:
         parser.print_help()
         sys.stderr.write('Please make sure your arguments are correct.\n')

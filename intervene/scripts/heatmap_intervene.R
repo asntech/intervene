@@ -2,7 +2,6 @@
 #Pairwise intersection heatmap using corrplot package
 #Author: Aziz Khan
 #Email: aziz.khan@ncmm.uio.no
-
 #================================================================#
 args = commandArgs(trailingOnly=TRUE)
 # test if there is at least one argument: if not, return an error
@@ -20,14 +19,18 @@ res = args[7]
 
 if(args[5] =='pdf') pdf(file=paste0(output_name,'.',args[5]))
 
-if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]))
+if(args[5] =='svg') svg(file=paste0(output_name,'.',args[5]), pointsize = 12)
 
-if(args[5] =='png') png(file=paste0(output_name,'.',args[5]))
+if(args[5] =='png') png(file=paste0(output_name,'.',args[5]), res=res)
 
-if(args[5] =='tiff') tiff(file=paste0(output_name,'.',args[5]))
+if(args[5] =='tiff') tiff(file=paste0(output_name,'.',args[5]), res=res)
 
-if(args[5] =='ps') postscript(file=paste0(output_name,'.',args[5]))
+if(args[5] =='ps') {
+	if (suppressMessages(!require("Cairo"))) {suppressMessages(install.packages("Cairo", repos="http://cran.us.r-project.org"))}
+    library("Cairo")
 
+    cairo_ps(file=paste0(output_name,'.',args[5]), pointsize = 12)
+}
 
 x_label = 'Value'
 test_type <- args[3]
@@ -39,14 +42,14 @@ if(test_type == 'count') x_label <- 'No. of overlap'
 if(args[2] == 'heatmap2' || args[2] ==''){
 
 	# install.packages("gplots")
-	if (suppressMessages(!require("gplots"))) suppressMessages(install.packages("gplots"))
+	if (suppressMessages(!require("gplots"))) suppressMessages(install.packages("gplots", repos="http://cran.us.r-project.org"))
 	suppressPackageStartupMessages(library("gplots"))
-	if (suppressMessages(!require("RColorBrewer"))) suppressMessages(install.packages("RColorBrewer"))
+	if (suppressMessages(!require("RColorBrewer"))) suppressMessages(install.packages("RColorBrewer", repos="http://cran.us.r-project.org"))
 	suppressPackageStartupMessages(library("RColorBrewer"))
 
 	col <- colorRampPalette(brewer.pal(10, "RdYlBu"))(256)
 
-	heatmap.2(intersection_matrix, scale = "none", col = col, key.title = NULL, main = "Pairewise Intersection",
+	heatmap.2(intersection_matrix, scale = "none", col = col, key.title = NULL, main = "Pairwise Intersection",
 		dendrogram = c('none'),
 		Colv="Rowv",
         key.xlab = x_label,
@@ -58,7 +61,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 	#Create D3 Heatmap
 	if (suppressMessages(!require("d3heatmap"))){
-			if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools"))
+			if (suppressMessages(!require("devtools"))) suppressMessages(install.packages("devtools", repos="http://cran.us.r-project.org"))
 
 			suppressPackageStartupMessages(library("devtools"))
 
@@ -66,7 +69,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 		}
 
-	if (suppressMessages(!require("htmlwidgets"))) suppressMessages(install.packages("htmlwidgets"))
+	if (suppressMessages(!require("htmlwidgets"))) suppressMessages(install.packages("htmlwidgets", repos="http://cran.us.r-project.org"))
 
 	suppressPackageStartupMessages(library("d3heatmap"))
 	suppressPackageStartupMessages(library("htmlwidgets"))
@@ -78,7 +81,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
 
 }else if(args[2] == 'corrplot'){
 	
-	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot"))
+	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot", repos="http://cran.us.r-project.org"))
 	suppressPackageStartupMessages(library('corrplot'))
 
 	#diag(intersection_matrix) = 0
@@ -97,7 +100,7 @@ if(args[2] == 'heatmap2' || args[2] ==''){
      #     trace = "none", density.info = "none")
 }else{
 
-	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot"))
+	if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot", repos="http://cran.us.r-project.org"))
 	suppressPackageStartupMessages(library('corrplot'))
 
 	#diag(intersection_matrix) = 0

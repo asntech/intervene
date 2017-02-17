@@ -13,9 +13,9 @@
 
 Introduction
 ============
-Intervene is a tool for intersection and visualization of multiple genomic region and gene sets.
+Intervene is a tool for intersection and visualization of multiple gene or genomic region sets.
 
-**[Documentation](http://intervene.readthedocs.org)**
+`Read detailed **documentation** here <http://intervene.readthedocs.org>`_
 
 .. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
    :width: 800px
@@ -34,7 +34,7 @@ Intervene requires the following Python modules and R packages:
 	* R packages including UpSetR, corrplot
 
 Install BEDTools
------------------
+----------------
 We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene. It's recomended to have a latest version, but if you have an older version already install, it should be fine. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
 
 

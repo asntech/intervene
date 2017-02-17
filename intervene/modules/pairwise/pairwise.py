@@ -261,7 +261,53 @@ def heatmap_triangle(dataframe, axes, options):
 
     return caxes, D.index
 
+def create_r_script(matrix_file, options):
+    """
+    
+    It create an Rscript for pairwise heatmap plot for the genomic regions.
 
+    """
+    
+    script_file = options.output+'/'+'intervene_'+options.type+'_pairwise_heatmap.R'
+    temp_f = open(script_file, 'w')
+
+    output_name = options.output+'/'+'intervene_'+options.type+'_pairwise_heatmap.'+options.figtype
+
+    temp_f.write('#!/usr/bin/env Rscript'+"\n")
+    temp_f.write('if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot", repos="http://cran.us.r-project.org"))\n')
+    temp_f.write('library("corrplot")\n')
+    if options.figtype == 'ps':
+        temp_f.write('if (suppressMessages(!require("Cairo"))) suppressMessages(install.packages("Cairo", repos="http://cran.us.r-project.org"))\n')
+        temp_f.write('library("Cairo")\n')
+    
+    if options.figtype == 'pdf' or options.figtype == 'svg':
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+', onefile=FALSE)'+'\n')
+    
+    elif options.figtype == 'ps':
+        temp_f.write('cairo_ps("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
+    else:
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.dpi*options.figsize[0])+', height='+str(options.dpi*options.figsize[1])+', res='+str(options.dpi)+')\n')
+     
+    temp_f.write("\n")
+
+    #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,,options.type, output_name,, , options.dpi)
+
+    temp_f.write('intersection_matrix <- as.matrix(read.table("'+matrix_file+'"))\n')
+    temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'", tl.col="black", tl.cex=0.8, is.corr = FALSE, diag=FALSE, addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
+    temp_f.write('invisible(dev.off())\n')
+
+    cmd = temp_f.name
+    temp_f.close()
+
+    if options.scriptonly == False:
+        os.system('chmod +x '+cmd)
+        os.system(cmd)
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        sys.exit(1)
+    else:
+        print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
+        sys.exit(1)
+        
 def pairwise_intersection(options):
 
     '''
@@ -344,22 +390,20 @@ def pairwise_intersection(options):
 
         #options.title = "Pairwise intersection"
         #options.figsize=(8, 6)
-
         #series = pd.Series(np.random.random(ncols) * 2.0, index=labels)
         #df = pd.read_csv('data.csv',index_col=0, delim_whitespace=True)
         #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
         outfile = options.output+'/'+str(options.type)+'_barplot_heatmap.'+options.figtype
         barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
 
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
-  
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n') 
         
     else:
         #print("Please check the matrix file "+matrix_file)
-        cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype, str(options.title), options.dpi)
-        os.system(cmd)
-
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        create_r_script(matrix_file, options)
+        #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype, str(options.title), options.dpi)
+        #os.system(cmd)
+        #print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
 
 
 

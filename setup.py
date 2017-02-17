@@ -59,7 +59,7 @@ setup(
     packages=['intervene', 'intervene.modules','intervene.modules.pairwise',
     'intervene.modules.venn','intervene.modules.upset'],
 
-    scripts=['intervene/intervene','intervene/scripts/upset_plot_intervene.R','intervene/scripts/heatmap_intervene.R',
+    scripts=['intervene/intervene',
                    ],
     package_data={'intervene': ['intervene/example_data/*.*', 'intervene/example_data/dbSUPER_mm9/*.*', 'intervene/example_data/ENCODE_hESC/*.*']},
     include_package_data=True,
