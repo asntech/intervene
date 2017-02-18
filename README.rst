@@ -15,7 +15,7 @@ Introduction
 ============
 Intervene is a tool for intersection and visualization of multiple gene or genomic region sets.
 
-`Read detailed **documentation** here <http://intervene.readthedocs.org>`_
+`Read detailed documentation here <http://intervene.readthedocs.org>`_
 
 .. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
    :width: 800px
@@ -127,4 +127,4 @@ If you have questions, or found any bug in the program, please write to us at ``
 
 Cite Us
 =========
-If you use Intervene please cite us: ``Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple genomic region sets``
+If you use Intervene please cite us: ``Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple gene or genomic region sets, Submitted, 2017.``

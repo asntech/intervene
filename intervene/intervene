@@ -189,7 +189,7 @@ def main():
         'For files in a directory use *.<extension>. e.g. *.bed\n\n')
 
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
-                  help='Type of input data sets. Genomic regions or lists of genes/SNPs. '
+                  help='Type of input sets. Genomic regions or lists of genes/SNPs. '
                         'Default is "%(default)s"\n\n')
     venn_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
                   help='Comma-separated list of names as labels for input files. '
@@ -323,6 +323,10 @@ def main():
                    default='lower',help='Show lower/upper triangle of the matrix as heatmap. '
                            'Default is "%(default)s".\n\n')
     
+    pairwise_parser.add_argument('--diagonal', action='store_true', default=False,
+                  help='Show the diagonal values in the heatmap. \n'
+                       'Default is "%(default)s".\n\n')
+
     pairwise_parser.add_argument('--names', dest='labels',
                   help='Comma-separated list of names for input files. \n'
                        'Default is base name of input files.\n\n')
@@ -372,7 +376,7 @@ def main():
     pairwise_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'),  
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
-    pairwise_parser.add_argument('--figsize', nargs=2, type=int, default=(10,10),
+    pairwise_parser.add_argument('--figsize', nargs=2, type=int,
                    help='Figure size for the output plot (width,height). '
                         'e.g.  --figsize 8 8\n\n')          
     pairwise_parser.add_argument('--dpi', type=int, default=300,
@@ -436,6 +440,11 @@ def main():
         #sys.exit(1)
 
     if options.command =='pairwise':
+        if options.type == 'fisher':
+          if not options.genome:
+            sys.stderr.write('Fisher test requires genome name. Please set the --genome argument.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
+            sys.exit(1)
+
         print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
         sys.exit(1)

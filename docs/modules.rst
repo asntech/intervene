@@ -43,7 +43,7 @@ This will save the results in the current working directory with a folder named 
 
      "-h, ---help","To show the help message and exit"
 	 "-i","Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs. For files in a directory use *.<extension>. e.g. *.bed"
-	 "--type","{genomic,list}. Type of input data sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
+	 "--type","{genomic,list}. Type of input sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
 	 "--names","Comma-separated list of names as labels for input files. Default is: --names=A,B,C,D,E,F"
 	 "--filenames","Use file names as labels instead. Default is ``False``"             
 	 "--colors","Comma-separated list of matplotlib-valid colors. E.g., --colors=r,b,k"
@@ -162,6 +162,7 @@ This will save the results in the current working directory with a folder named 
 	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``pie``."
 	  " ", "Read the below note for ``tribar`` option."
 	  "--triangle","Show lower/upper triangle of the matrix as heatmap. Default is ``lower``"
+	  "--diagonal", "Show the diagonal values in the heatmap. Default is ``False``."
 	  "--names","Comma-separated list of names for input files. Default is base name of input files."
 	  "--filenames","Use file names as labels instead. Default is ``False``."
 	  "--sort","Set this only if your files are not sorted. Default is ``False``."
@@ -175,8 +176,8 @@ This will save the results in the current working directory with a folder named 
 	  "--figtype","{pdf,svg,ps,tiff,png} Figure type for the plot. e.g. --figtype svg. Default is ``pdf``"
 	  "--figsize","Figure size for the output plot (width,height). e.g.  --figsize 8 8"
 	  "--dpi","Dots-per-inch (DPI) for the output. Default is: ``300``."
-	  "--scriptonly", "Set to generate Rscript only, if R/UpSetR package is not installed. Default is ``False``"
+	  "--scriptonly", "Set to generate Rscript only, if R/Corrplot package is not installed. Default is ``False``"
 	  "--test","This will run the program on test data."
 
 
-.. note::  The option ``--htype=tribar`` will generate a horizontal bar plot with an adjacent heatmap rotated 45 degrees to show the lower triangle of the matrix comparing all sets of bars.
+.. note::  The option ``--htype=tribar`` will generate a horizontal bar plot with an adjacent heatmap rotated 45 degrees to show the lower triangle of the matrix comparing all sets of bars. If you want to view upper triangle, please ``--triangle upper``. It's only recomended to use ``tribar`` if ``type`` is set to ``jaccard`` or ``fisher``.
