@@ -64,9 +64,19 @@ Install from PyPi::
 
 	pip install intervene
 
+Install development version from `Bitbucket`
+--------------------------------------------
+
+If you have `git` installed, use this:
+
+.. code-block:: bash
+
+    git clone https://bitbucket.org/CBGR/intervene.git
+    cd intervene
+    python setup.py install
+
 Install development version from `GitHub`
 -----------------------------------------
-
 If you have `git` installed, use this:
 
 .. code-block:: bash
@@ -74,7 +84,6 @@ If you have `git` installed, use this:
     git clone https://github.com/asntech/intervene.git
     cd intervene
     python setup.py install
-
 
 How to use Intervene
 ====================
