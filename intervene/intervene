@@ -390,13 +390,21 @@ def main():
     
     
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s version '+intervene.__version__)
-
+   
     options = parser.parse_args()
 
     if not options.command:
         parser.print_help()
         sys.stderr.write('Missing required arguments. ')
         sys.exit(1)
+
+    # if options.cite:
+    #     if options.cite == 'bib':
+    #       sys.stderr.write('Missing required arguments. ')
+    #       sys.exit(1)
+    #     else:
+    #       sys.stderr.write('Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple gene or genomic region sets, Submitted, 2017. ')
+    #       sys.exit(1)
 
     #checke if there are at least two input bed/list files
     reqd_args = ['input']

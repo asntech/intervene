@@ -25,7 +25,7 @@ By adding one more BED file to ``-i`` argument, Intervene will generate a 4-way 
     intervene venn -i ~/ENCODE/data/H3K27ac.bed ~/ENCODE/data/H3Kme3.bed ~/ENCODE/data/H3K27me3.bed  ~/ENCODE/data/H3Kme2.bed --filenames
 
 .. figure:: img/venn4way.png
-   :height: 400px
+   :height: 300px
    :alt: 4-way Venn diagram
    :align: center
 
@@ -45,7 +45,7 @@ In this example, a UpSet plot of ChIP-seq peaks of four histone modifications (H
     intervene upset -i ~/ENCODE/data/H3K27ac.bed ~/ENCODE/data/H3Kme3.bed ~/ENCODE/data/H3K27me3.bed ~/ENCODE/data/H3Kme2.bed --filenames
 
 .. figure:: img/upset4.png
-   :height: 500px
+   :height: 400px
    :alt: UpSet plot
    :align: center
 
@@ -65,7 +65,7 @@ In this example, we performed a pairwise intersections of super-enhancers in 24 
     intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype pie
 
 .. figure:: img/pairwise_pie.png
-   :height: 700px
+   :height: 600px
    :alt: Pairwise heatmap
    :align: center
 
@@ -76,7 +76,7 @@ By setting the ``--htype`` to ``color`` will produce this plot.
     intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype color
 
 .. figure:: img/pairwise_color.png
-   :height: 700px
+   :height: 600px
    :alt: Pairwise heatmap
    :align: center
 
@@ -87,7 +87,7 @@ By setting the ``--htype`` to ``tribar`` will produce a triangular heatmap and w
     intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype tribar
 
 .. figure:: img/pairwise_tribar.png
-   :height: 700px
+   :height: 600px
    :alt: Pairwise heatmap
    :align: center
 
