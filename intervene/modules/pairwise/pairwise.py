@@ -155,8 +155,9 @@ def barplot(series, matrix, outfile, options, max_size=1):
     fig.savefig(outfile, bbox_inches='tight', dpi=options.dpi)
 
 def shorten(x, n=48):
+    x = str(x)
     if len(x) > n:
-        return x[:n/2] + '..' + x[-n/2:]
+        return x[:int(n/2)] + '..' + x[-int(n/2):]
     return x
 
 def heatmap_triangle(dataframe, axes, options):
