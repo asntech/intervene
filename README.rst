@@ -136,4 +136,4 @@ If you have questions, or found any bug in the program, please write to us at ``
 
 Cite Us
 =========
-If you use Intervene please cite us: ``Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple gene or genomic region sets, Submitted, 2017.``
+If you use Intervene please cite us: ``Khan A, Mathelier A: Intervene: a tool for intersection and visualization of multiple gene or genomic region sets. bioRxiv 2017, doi: https://doi.org/10.1101/109728``
