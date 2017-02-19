@@ -14,4 +14,4 @@ Intervene also comes with an interactive Shiny App to further explore and filter
 
 Availability
 ============
-The Intervene Shiny App is freely available at https://asntech.shinyapps.io/Intervene-app
+The Intervene Shiny App is freely available at https://asntech.shinyapps.io/intervene

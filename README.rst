@@ -130,6 +130,10 @@ This will save the results in the current working directory with a folder named 
 
 	intervene upset --test --output ~/path/to/your/folder
 
+Interactive Shiny App
+=====================
+Intervene Shiny App is freely available at https://asntech.shinyapps.io/intervene
+
 Support
 ========
 If you have questions, or found any bug in the program, please write to us at ``aziz.khan[at]ncmm.uio.no``
