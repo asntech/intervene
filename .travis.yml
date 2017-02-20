@@ -26,6 +26,6 @@ install:
 
 # command to run tests
 script:
-  - intervene venn -test
-  - intervene upset --test
-  - intervene pairwise --test
+  - ./intervene/intervene venn -i intervene/example_data/ENCODE_hESC/*.bed
+  - ./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed
+  - ./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed
