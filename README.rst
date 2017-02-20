@@ -1,3 +1,6 @@
+.. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
+    :target: https://travis-ci.org/asntech/intervene
+    
 .. image:: https://badge.fury.io/py/intervene.svg
     :target: https://badge.fury.io/py/intervene
 
