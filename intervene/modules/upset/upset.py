@@ -111,10 +111,10 @@ def create_r_script(labels, names, options):
         os.system('chmod +x '+cmd)
         os.system(cmd)
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
-        sys.exit(1)
+        sys.exit(0)
     else:
         print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
-        sys.exit(1)
+        sys.exit(0)
 
         
 def draw_genomic(labels, names, output, fig_type):
