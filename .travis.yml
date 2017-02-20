@@ -19,8 +19,8 @@ install:
     - conda info -a
 
     - conda install cython
-    - conda install bedtools
-    - conda install -c bioconda pybedtools
+    - conda install -c bioconda bedtools
+    #- conda install -c bioconda pybedtools
     - pip install --user -r requirements.txt
 
 # command to run tests
