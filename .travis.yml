@@ -26,6 +26,6 @@ install:
 
 # command to run tests
 script:
-  - ./intervene/intervene venn --test
-  - ./intervene/intervene upset --test
-  - ./intervene/intervene pairwise --test
+  - intervene venn -test
+  - intervene upset --test
+  - intervene pairwise --test
