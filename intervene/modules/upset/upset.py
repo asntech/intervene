@@ -45,7 +45,7 @@ def create_r_script(labels, names, options):
 
     shiny = ""
 
-    for key, value in labels.iteritems():
+    for key, value in labels.items(): #iteritems in python 2.7
         i = 0
         first = 1
         for x in key:
