@@ -34,7 +34,7 @@ To view ``pairwise`` module help, type
 Run Intervene on test data
 ==========================
 
-To run Intervene using example data, use the following commands.
+To run Intervene using example data, use the following commands. To access the test data make sure you have ``sudo`` or ``root`` access. If you have installed Intervene locally from the source code, you may have problem to find test data. You can download the test data here https://github.com/asntech/intervene/tree/master/intervene/example_data and point to it using ``-i`` instead of ``--test``.
 
 To run ``venn`` module with test data, type
 

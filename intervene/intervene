@@ -67,7 +67,6 @@ def get_filenames(input_files):
 
     return file_names
 
-
 """
 Provides access to example files
 
