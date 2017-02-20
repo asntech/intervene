@@ -123,7 +123,7 @@ def draw_genomic(labels, names, output, fig_type):
     
     temp_f.write("expressionInput <- c(")
     last = 1
-    for key, value in labels.iteritems():
+    for key, value in labels.items():
         i = 0
         first = 1
         for x in key:
