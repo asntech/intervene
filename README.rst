@@ -1,6 +1,6 @@
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
-    
+
 .. image:: https://badge.fury.io/py/intervene.svg
     :target: https://badge.fury.io/py/intervene
 
@@ -16,9 +16,6 @@
    
 .. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
 	:target: https://twitter.com/intent/tweet?text=Intervene%20-%20a%20tool%20for%20intersection%20and%20visualization%20of%20multiple%20genomic%20region%20and%20gene%20sets%20https://github.com/asntech/intervene&url=%5Bobject%20Object%5D
-
-
-
 
 Introduction
 ============
@@ -44,8 +41,15 @@ Intervene requires the following Python modules and R packages:
 
 Install BEDTools
 ----------------
-We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene. It's recomended to have a latest version, but if you have an older version already install, it should be fine. Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
+We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene. It's recomended to have a latest version, but if you have an older version already install, it should be fine.
 
+A quick instalation, you have conda installed.
+
+.. code-block:: bash
+
+    conda install -c bioconda bedtools
+
+Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
 
 Install required Python modules
 -------------------------------
