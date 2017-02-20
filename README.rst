@@ -121,6 +121,8 @@ Once you have installed Intervene, you can type:
 
 
 to see the help for the three subcommands ``pairwise``, ``venn`` and ``upset`` type::
+
+.. code-block:: bash
 	
 	intervene pairwise --help
 
@@ -131,7 +133,9 @@ to see the help for the three subcommands ``pairwise``, ``venn`` and ``upset`` t
 Run Intervene on test data
 --------------------------
 
-To run Intervene using example data use the following command::
+To run Intervene using example data, use the following commands. To access the test data make sure you have ``sudo`` or ``root`` access. If you have installed Intervene locally from the source code, you may have problem to find test data. You can download the test data here https://github.com/asntech/intervene/tree/master/intervene/example_data and point to it by using ``-i`` instead of ``--test``. For example ``intervene pairwise -i example_data/dbSUPER_mm9/*.bed``
+
+.. code-block:: bash
 
 	intervene pairwise --test
 
