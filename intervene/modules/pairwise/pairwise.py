@@ -12,7 +12,7 @@ import time
 import os.path as op
 import pybedtools
 from pybedtools import BedTool
-import matplotlib as mp
+from matplotlib import colors, rc
 import numpy as np
 import pandas as pd
 import pylab as pl
@@ -228,7 +228,7 @@ def heatmap_triangle(dataframe, axes, options):
     # -1.0 correlation is blue, 0.0 is white, 1.0 is red.
     # 1.0 correlation is blue, 0.0 is white, 1.0 is red.
     cmap = pl.cm.RdBu_r
-    norm = mp.colors.BoundaryNorm(np.linspace(min_val, max_val, 20), cmap.N)
+    norm = colors.BoundaryNorm(np.linspace(min_val, max_val, 20), cmap.N)
 
     # This MUST be before the call to pl.pcolormesh() to align properly.
     axes.set_xticks([])
@@ -390,7 +390,7 @@ def pairwise_intersection(options):
     f.close()
 
     if options.htype == 'tribar':
-        mp.rc("font", family="serif")
+        rc("font", family="serif")
         ncols = nfiles
         matrix = pd.read_table(matrix_file,index_col=0, delim_whitespace=True)
 
