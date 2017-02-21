@@ -43,7 +43,7 @@ Install BEDTools
 ----------------
 We are using pybedtools, which is Python wrapper for BEDTools. So, BEDTools should be installed before using Intervene. It's recomended to have a latest version, but if you have an older version already install, it should be fine.
 
-A quick instalation, you have conda installed.
+A quick installation, if you have conda installed.
 
 .. code-block:: bash
 
@@ -59,11 +59,11 @@ Intervene takes care of the installation of all the required Python modules. If 
 Install required R packages
 ---------------------------
 
-Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR and ``corrplot`` https://cran.r-project.org/package=corrplot for visualization.
+Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR , ``corrplot`` https://cran.r-project.org/package=corrplot for visualization and ``Cairo`` for https://cran.r-project.org/package=Cairo to generate high-quality vector and bitmap figures.
 
 .. code-block:: R
 
-    install.packages(c("UpSetR", "corrplot"))
+    install.packages(c("UpSetR", "corrplot", "Cairo"))
 
 Install Intervene
 =================

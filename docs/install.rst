@@ -55,11 +55,11 @@ Or install with conda
 
 Install required R packages
 ---------------------------
-Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR and ``corrplot`` https://cran.r-project.org/package=corrplot for visualization. To install them, open R/RStudio and use the following command.
+Intervene requires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR , ``corrplot`` https://cran.r-project.org/package=corrplot for visualization and ``Cairo`` for https://cran.r-project.org/package=Cairo to generate high-quality vector and bitmap figures. To install these, open R/RStudio and use the following command.
 
 .. code-block:: R
 
-    install.packages(c("UpSetR", "corrplot"))
+    install.packages(c("UpSetR", "corrplot","Cairo"))
 
 Install Intervene
 =================
