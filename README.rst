@@ -59,7 +59,7 @@ Intervene takes care of the installation of all the required Python modules. If 
 Install required R packages
 ---------------------------
 
-Intervene rquires two R packages, ``UpSetR`` https://cran.r-project.org/package=UpSetR , ``corrplot`` https://cran.r-project.org/package=corrplot for visualization and ``Cairo`` for https://cran.r-project.org/package=Cairo to generate high-quality vector and bitmap figures.
+Intervene rquires two R packages, `UpSetR <https://cran.r-project.org/package=UpSetR>`_ , `corrplot <https://cran.r-project.org/package=corrplot>`_ for visualization and `Cairo <https://cran.r-project.org/package=Cairo>`_ to generate high-quality vector and bitmap figures.
 
 .. code-block:: R
 
