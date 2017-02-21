@@ -8,8 +8,8 @@ Created on January 10, 2017
 
 import sys
 import os
-#import matplotlib
-#matplotlib.use('Agg')
+from matplotlib import use as mpl_use
+mpl_use('Agg')
 import matplotlib.pyplot as plt
 import pybedtools
 from pybedtools import BedTool, example_bedtool
