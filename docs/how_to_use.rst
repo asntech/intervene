@@ -34,7 +34,7 @@ To view ``pairwise`` module help, type
 Run Intervene on test data
 ==========================
 
-To run Intervene using example data, use the following commands. To access the test data make sure you have ``sudo`` or ``root`` access. If you have installed Intervene locally from the source code, you may have problem to find test data. You can download the test data here https://github.com/asntech/intervene/tree/master/intervene/example_data and point to it using ``-i`` instead of ``--test``.
+To run Intervene using example data, use the following commands. To access the test data make sure you have ``sudo`` or ``root`` access.
 
 To run ``venn`` module with test data, type
 
@@ -53,6 +53,16 @@ To run ``pairwise`` module with test data, type
 .. code-block:: bash
 
 	intervene pairwise --test
+
+
+If you have installed Intervene locally from the source code, you may have problem to find test data. You can download the test data here https://github.com/asntech/intervene/tree/master/intervene/example_data and point to it using ``-i`` instead of ``--test``.
+
+.. code-block:: bash
+
+	./intervene/intervene venn -i intervene/example_data/ENCODE_hESC/*.bed
+  	./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed
+  	./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed
+  
 
 These subcommands will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type:
 
