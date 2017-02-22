@@ -1,3 +1,7 @@
+.. image:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
+   :width: 350px
+   :align: left
+
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
 
@@ -19,10 +23,6 @@ Introduction
 Intervene is a tool for intersection and visualization of multiple gene or genomic region sets.
 
 `Read detailed documentation here <http://intervene.readthedocs.org>`_
-
-.. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
-   :width: 800px
-   :align: left
 
 Installation
 ============
@@ -144,11 +144,17 @@ If you have installed Intervene locally from the source code, you may have probl
 
 .. code-block:: bash
 
-	./intervene/intervene venn -i intervene/example_data/ENCODE_hESC/*.bed
-  	./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed
-  	./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed
+	./intervene/intervene venn -i intervene/example_data/ENCODE_hESC/*.bed       
+  	./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed      
+  	./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed  
 
-This will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type::
+The above three test commnads will generate the following three figures, b,b and c.
+
+.. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
+   :width: 800px
+   :align: left
+
+By default your results will stored in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type::
 
 	intervene upset --test --output ~/path/to/your/folder
 

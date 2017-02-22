@@ -46,7 +46,7 @@ def readme(fname):
 
 setup(
     name="intervene",
-    description="A tool for intersection and visualization of multiple genomic region sets",
+    description="A tool for intersection and visualization of multiple gene or genomic region sets",
     version=VERSION,
     author="Aziz Khan",
     license='MIT',
@@ -68,7 +68,7 @@ setup(
 
     scripts=['intervene/intervene',
                    ],
-    package_data={'intervene': ['example_data/dbSUPER_mm9/*.bed', 'example_data/ENCODE_hESC/*.bed','example_data/Gene_list/*.txt',]},
+    package_data={'intervene': ['example_data/*','example_data/dbSUPER_mm9/*.bed', 'example_data/ENCODE_hESC/*.bed','example_data/Gene_list/*.txt',]},
     #package_data={'intervene': ['example_data/*']},
     include_package_data=True,
     install_requires = install_requires,

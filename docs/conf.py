@@ -114,29 +114,43 @@ todo_include_todos = False
 # a list of builtin themes.
 html_theme = 'alabaster'
 
+import sphinx_rtd_theme
+
+html_theme = "sphinx_rtd_theme"
+
+
+
+html_theme = "bizstyle"
+#html_theme = "alabaster"
+
 # Theme options are theme-specific and customize the look and feel of a theme
 # further.  For a list of options available for each theme, see the
 # documentation.
 #html_theme_options = {}
+html_theme_options = {
+    #'sticky_navigation': True,  # Set to False to disable the sticky nav while scrolling.
+    #'logo_only': True,  # if we have a html_logo below, this shows /only/ the logo with no title text
+}
 
 # Add any paths that contain custom themes here, relative to this directory.
-#html_theme_path = []
+#html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
 # The name for this set of Sphinx documents.  If None, it defaults to
 # "<project> v<release> documentation".
-#html_title = None
+html_title = "A tool for intersection and visualization of multiple gene or genomic region sets"
 
 # A shorter title for the navigation bar.  Default is the same as html_title.
-#html_short_title = None
+html_short_title = "Intervene "+release+" documentation"
 
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
-#html_logo = None
+html_logo = 'img/intervene_logo.png'
 
 # The name of an image file (within the static path) to use as favicon of the
 # docs.  This file should be a Windows icon file (.ico) being 16x16 or 32x32
 # pixels large.
-#html_favicon = None
+
+html_favicon = "img/favicon.ico"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
@@ -226,13 +240,13 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-  (master_doc, 'Intervene.tex', u'Intervene Documentation',
+  (master_doc, 'Intervene.tex', u'Documentation',
    u'Aziz Khan', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
 # the title page.
-#latex_logo = None
+latex_logo = 'img/intervene_logo.png'
 
 # For "manual" documents, if this is true, then toplevel headings are parts,
 # not chapters.
@@ -320,7 +334,7 @@ epub_copyright = copyright
 #epub_uid = ''
 
 # A tuple containing the cover image and cover page html template filenames.
-#epub_cover = ('_images/Intervene_plots.png','')
+#epub_cover = ('img/intervene_logo.png','')
 
 # A sequence of (type, uri, title) tuples for the guide element of content.opf.
 #epub_guide = ()
@@ -356,12 +370,5 @@ epub_show_urls = 'inline'
 
 # If false, no index is generated.
 #epub_use_index = True
-import sphinx_rtd_theme
 
-#html_theme = "sphinx_rtd_theme"
-
-html_theme = "bizstyle"
-#html_theme = "alabaster"
-
-#html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
 
