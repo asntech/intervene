@@ -148,7 +148,7 @@ If you have installed Intervene locally from the source code, you may have probl
   	./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed      
   	./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed  
 
-The above three test commnads will generate the following three figures, b,b and c.
+The above three test commands will generate the following three figures (a, b and c).
 
 .. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_plots.png
    :width: 800px
