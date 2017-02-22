@@ -7,7 +7,7 @@ Created on January 10, 2017
 """
 import sys
 import os
-from pybedtools import BedTool, example_bedtool
+from pybedtools import BedTool
 from intervene.modules.venn import list_venn
 from intervene.modules.upset import upset
 

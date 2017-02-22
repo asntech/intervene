@@ -10,8 +10,7 @@ import sys
 import collections
 import time
 import os.path as op
-import pybedtools
-from pybedtools import BedTool
+from pybedtools import BedTool, chromsizes_to_file, chromsizes
 from matplotlib import colors, rc
 import numpy as np
 import pandas as pd
@@ -334,7 +333,7 @@ def pairwise_intersection(options):
     '''
     if options.enrichment:
         FUNC = enrichment_score
-        genome_fn = pybedtools.chromsizes_to_file(pybedtools.chromsizes(options.genome))
+        genome_fn = chromsizes_to_file(chromsizes(options.genome))
         kwoptions = dict(genome_fn=genome_fn, iterations=options.iterations,
                 processes=options.processes)
     '''
