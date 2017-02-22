@@ -30,7 +30,7 @@ script:
   #- ./intervene/intervene venn -i intervene/example_data/ENCODE_hESC/*.bed
   #- ./intervene/intervene upset -i intervene/example_data/ENCODE_hESC/*.bed --scriptonly
   #- ./intervene/intervene pairwise -i intervene/example_data/dbSUPER_mm9/*.bed --scriptonly
-  - ./intervene/intervene venn --test
-  - ./intervene/intervene upset --test --scriptonly
-  - ./intervene/intervene pairwise --test --scriptonly
+  - intervene venn --test
+  - intervene upset --test --scriptonly
+  - intervene pairwise --test --scriptonly
 

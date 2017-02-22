@@ -78,6 +78,8 @@ def data_dir():
     Returns the data directory that contains example files.
     """
     #data_path = os.path.dirname(intervene.__file__)
+    #data_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'example_data')
+    #print(data_path)
     return os.path.join(os.path.dirname(__file__), 'example_data')
 
 
@@ -469,7 +471,7 @@ def main():
     if os.path.exists(output_name):
       print("The file name "+str(output_name)+" already exist.\n")
       answer = str(raw_input("Do you want to overwrite? [yes/no]: "))
-      if answer == 'no':
+      if answer != 'yes':
         print("You can run Intervene by setting a different --output path.\nThanks for using Intervene!")
         sys.exit(1)
     
