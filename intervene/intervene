@@ -15,9 +15,11 @@ import matplotlib.pyplot as plt
 from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
-from intervene import helpers, example_data
+from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
+from intervene import example_data
 import intervene
+
 
 def create_dir(dir_path):
     '''
@@ -76,7 +78,7 @@ def data_dir():
     Returns the data directory that contains example files.
     """
     #data_path = os.path.dirname(intervene.__file__)
-    return os.path.join(os.path.dirname(example_data.__file__))
+    return os.path.join(os.path.dirname(__file__), 'example_data')
 
 
 def example_filename(fn,sub_dir=None):
@@ -91,8 +93,7 @@ def example_filename(fn,sub_dir=None):
       fn = os.path.join(data_dir(), sub_dir, fn)
     else:
       fn = os.path.join(data_dir(), fn)
-    
-    print(fn)
+    #print(fn)
     if not os.path.exists(fn):
         raise ValueError("%s does not exist" % fn)
     return fn
