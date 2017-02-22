@@ -80,7 +80,7 @@ def data_dir():
     #data_path = os.path.dirname(intervene.__file__)
     #data_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'example_data')
     #print(data_path)
-    return os.path.join(os.path.dirname(__file__), 'example_data')
+    return os.path.join(os.path.dirname(intervene.__file__), 'example_data')
 
 
 def example_filename(fn,sub_dir=None):
