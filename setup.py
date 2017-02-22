@@ -68,8 +68,8 @@ setup(
 
     scripts=['intervene/intervene',
                    ],
-    #package_data={'intervene': ['example_data/Gene_list/*.txt', 'example_data/dbSUPER_mm9/*.bed', 'example_data/ENCODE_hESC/*.bed']},
-    package_data={'intervene': ['example_data/*']},
+    package_data={'intervene': ['example_data/dbSUPER_mm9/*.bed', 'example_data/ENCODE_hESC/*.bed','example_data/H3K27ac_peaks/*.bed','example_data/Gene_list/*.txt',]},
+    #package_data={'intervene': ['example_data/*']},
     include_package_data=True,
     install_requires = install_requires,
     classifiers=CLASSIFIERS,
