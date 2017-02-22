@@ -1,4 +1,4 @@
-.. image:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
+.. figure:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
    :width: 350px
    :align: left
 
