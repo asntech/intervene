@@ -7,9 +7,6 @@
 .. image:: https://img.shields.io/github/issues/asntech/intervene.svg
 	:target: https://github.com/asntech/intervene/issues
 
-.. image:: https://img.shields.io/pypi/dm/intervene.svg
-    :target:  https://pypi.python.org/pypi/intervene/
-
 .. image:: https://readthedocs.org/projects/intervene/badge/?version=latest
    :target: https://readthedocs.org/projects/intervene/?badge=latest
    :alt: sphinx documentation for latest release
