@@ -1,5 +1,4 @@
-.. figure:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
-   :width: 350px
+.. image:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
    :align: left
 
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
