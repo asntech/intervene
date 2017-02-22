@@ -1,6 +1,3 @@
-.. image:: http://intervene.readthedocs.io/en/latest/_static/intervene_logo.png
-   :align: left
-
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
 
@@ -21,7 +18,7 @@ Introduction
 ============
 Intervene is a tool for intersection and visualization of multiple gene or genomic region sets.
 
-`Read detailed documentation here <http://intervene.readthedocs.org>`_
+**A detailed documentation is available in different formats:**  `HTML <http://intervene.readthedocs.org>`_ | `PDF <http://readthedocs.org/projects/intervene/downloads/pdf/latest/>`_ | `ePUB <http://readthedocs.org/projects/intervene/downloads/epub/latest/>`_
 
 Installation
 ============
