@@ -455,7 +455,7 @@ def main():
 
         print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
-        sys.exit(1)
+        sys.exit(0)
 
     '''
     if options.command =='upset':

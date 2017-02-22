@@ -416,7 +416,7 @@ def pairwise_intersection(options):
         outfile = options.output+'/'+str(options.type)+'_tribar_heatmap.'+options.figtype
         barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
 
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n') 
+        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         
     else:
         #print("Please check the matrix file "+matrix_file)
