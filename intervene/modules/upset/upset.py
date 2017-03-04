@@ -12,6 +12,62 @@ from intervene.modules.pairwise.pairwise import get_name
 from pybedtools import BedTool
 
 
+def genomic_sets(S):
+    '''
+    Arguments:
+        S -  List of sets to make in to a Venn diagram
+    Takes a list of sets a list of the sizes of non-overlapping intersections between them 
+    '''
+    
+    if any([type(s) != set for s in S]):
+        raise TypeError("Arguments must be a list of sets")
+
+    N = len(S)
+    
+    # Generate a truth table of intersections to calculate 
+    truth_table = [x for x in itertools.product("01", repeat=N)][1:]
+
+    
+    weights = {}
+    for t in truth_table:
+        ones = [S[i] for i in range(N) if t[i] =='1']
+        zeros = [S[i] for i in range(N) if t[i] =='0']
+        
+        X = set.intersection(*ones)
+        X.difference_update(*zeros)
+        
+        weights[''.join(t)] = len(X)
+    
+    return(weights)
+
+def list_sets(S):
+    '''
+    Arguments:
+        S -  List of sets to make in to a Venn diagram
+    Takes a list of sets a list of the sizes of non-overlapping intersections between them 
+    '''
+    
+    if any([type(s) != set for s in S]):
+        raise TypeError("Arguments must be a list of sets")
+
+    N = len(S)
+    
+    # Generate a truth table of intersections to calculate 
+    truth_table = [x for x in itertools.product("01", repeat=N)][1:]
+
+    
+    weights = {}
+    for t in truth_table:
+        ones = [S[i] for i in range(N) if t[i] =='1']
+        zeros = [S[i] for i in range(N) if t[i] =='0']
+        
+        X = set.intersection(*ones)
+        X.difference_update(*zeros)
+        
+        weights[''.join(t)] = len(X)
+    
+    return(weights)
+
 def create_r_script(labels, names, options):
     """
     It create an Rscript for UpSetR plot for the genomic regions.
