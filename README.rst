@@ -1,6 +1,5 @@
 .. image:: https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo.png
    	:target: http://intervene.readthedocs.org
-   	:height: 150px
    	:alt: Intervene logo
    	:align: center
 
