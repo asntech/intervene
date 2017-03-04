@@ -19,10 +19,9 @@ def create_r_script(labels, names, options):
     """
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     #temp_f = open(tempfile.mktemp(), "w")
-    script_file = options.output+'/'+'intervene_'+options.type+'_UpSet_plot.R'
+    script_file =  options.output+'/'+str(options.project)+'_'+options.command+'.R'
     temp_f = open(script_file, 'w')
-
-    output_name = options.output+'/'+'intervene_'+options.type+'_UpSet_plot.'+options.figtype
+    output_name = options.output+'/'+str(options.project)+'_'+options.command+'.'+options.figtype
 
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpSetR", repos="http://cran.us.r-project.org"))\n')
@@ -78,7 +77,7 @@ def create_r_script(labels, names, options):
     #If shiny output
     if options.showshiny == False:
 
-        shiny_import = options.output+'/'+'Intervene_Shiny_App_'+options.type+'_UpSet_module_import.txt'
+        shiny_import =  options.output+'/'+str(options.project)+'_'+options.command+'_combinations.txt'
         shiny_file = open(shiny_import, 'w')
         shiny_file.write("You can go to Intervene Shiny App https://asntech.shinyapps.io/Intervene-app/ and copy/paste the following intersection data to get more interactive figures.\n\n")
         shiny_file.write(shiny)

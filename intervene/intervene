@@ -80,7 +80,7 @@ def data_dir():
     #data_path = os.path.dirname(intervene.__file__)
     #data_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'example_data')
     #print(data_path)
-    return os.path.join(os.path.dirname(intervene.__file__), 'example_data')
+    return os.path.join(os.path.dirname(__file__), 'example_data')
 
 
 def example_filename(fn,sub_dir=None):
@@ -205,6 +205,9 @@ def main():
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
                        'Default is current working directory.\n\n')
+    venn_parser.add_argument('--project', type=str, default="Intervene",
+                  help='Project name for the output. '
+                       'Default is: "%(default)s"\n\n')  
     venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
@@ -247,7 +250,10 @@ def main():
     upset_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
                        'Default is current working directory.\n\n')
-    
+    upset_parser.add_argument('--project', type=str, default="Intervene",
+                  help='Project name for the output. '
+                       'Default is: "%(default)s"\n\n')  
+ 
     upset_parser.add_argument('--order', dest="order",choices=("freq", "degree"), 
                    default='freq',help='The order of intersections of sets. '
                        'e.g. --order degree. Default is "%(default)s".\n\n')
@@ -309,8 +315,12 @@ def main():
         help='Input genomic regions in (BED/GTF/GFF) format. \n'
         'For files in a directory use *.<extension>. e.g. *.bed\n')
     
-    pairwise_parser.add_argument('--type', choices=('count','frac','jaccard','fisher','reldist'),
-        default='frac', help='Report count/fraction of overlaps or statistical relationships. \n'
+    pairwise_parser.add_argument('--type', dest='type', choices=('genomic','list'),default='genomic',
+                  help='Type of input sets. Genomic regions or lists of genes/SNPs sets. '
+                       'Default is "%(default)s".\n\n') 
+   
+    pairwise_parser.add_argument('--compute', choices=('count','frac','jaccard','fisher','reldist'),
+        default='frac', help='Compute count/fraction of overlaps or other statistical relationships. \n'
                        'count: calculates the number of overlaps. \n'
                        'frac: calculates the fraction of overlap. (Default)\n'
                        'jaccard: calculate the Jaccard statistic. \n'
@@ -319,7 +329,7 @@ def main():
                        'Note: For jaccard and reldist regions should be pre-shorted or set --sort.\n\n')
 
     pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
-                   default='pie',help='Heatmap plot type. '
+                   default='tribar',help='Heatmap plot type. '
                            'Default is "%(default)s".\n\n')
     pairwise_parser.add_argument('--triangle', dest="triangle",choices=("lower","upper"), 
                    default='lower',help='Show lower/upper triangle of the matrix as heatmap. '
@@ -359,6 +369,9 @@ def main():
     pairwise_parser.add_argument('-o', '--output', dest='output', 
                     help='Output folder path where results will be stored. \n'
                        'Default is current working directory.\n\n')
+    pairwise_parser.add_argument('--project', type=str, default="Intervene",
+                  help='Project name for the output. '
+                       'Default is: "%(default)s"\n\n')  
     pairwise_parser.add_argument('--barlabel', dest="blabel", default='Set size',
                     help='x-axis label of boxplot if --htype=tribar. '
                        'Default is "%(default)s"\n\n')
@@ -454,6 +467,10 @@ def main():
           if not options.genome:
             sys.stderr.write('Fisher test requires genome name. Please set the --genome argument.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
             sys.exit(1)
+        
+        #If input type is list then set the compute to count. 
+        if options.type == 'list':
+          options.compute == 'count'
 
         print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
@@ -465,7 +482,7 @@ def main():
         upset.one_vs_rest_intersection(options.input,options.compare,options.output)
         sys.exit(1)
     '''
-    output_name =  options.output+'/Intervene_'+options.command+'_'+str(venn_order(options.input))+'way_'+plot_type+'.'+options.figtype
+    output_name =  options.output+'/'+str(options.project)+'_'+options.command+'.'+options.figtype
 
     #check file name already exists and ask if user want to overwrite
     if os.path.exists(output_name):
@@ -511,21 +528,18 @@ def main():
 
         #If the input is a gene list
         if options.type == 'list':
-            if options.command == 'upset':
-                cmd = 'upset_plot_intervene.R %s %s %s %s %s %s' % ('list',2,output_name, label_names,options.input[0],options.input[1])
-                os.system(cmd)
-                print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
-                sys.exit(1)
-
-            else:
-                a = open(options.a, 'r').readlines()
-                b = open(options.b, 'r').readlines()
-                labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
-                fig, ax = list_venn.venn2(labels, names=label_names)            
+          a = open(options.a, 'r').readlines()
+          b = open(options.b, 'r').readlines()
+          labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
+          if options.command == 'upset':
+            #create an RScript
+            upset.create_r_script(labels, label_names, options)
+          else:
+            fig, ax = list_venn.venn2(labels, names=label_names)
         
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn2(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
+            fig, ax = genomic_venn.venn2(labels, names=label_names)
      
     elif venn_order(options.input) == 3:
         

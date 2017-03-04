@@ -62,7 +62,7 @@ In this example, we performed a pairwise intersections of super-enhancers in 24 
 
 .. code-block:: bash
 
-    intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype pie
+    intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype pie
 
 .. figure:: img/pairwise_pie.png
    :height: 600px
@@ -73,7 +73,7 @@ By setting the ``--htype`` to ``color`` will produce this plot.
 
 .. code-block:: bash
 
-    intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype color
+    intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype color
 
 .. figure:: img/pairwise_color.png
    :height: 600px
@@ -84,14 +84,14 @@ By setting the ``--htype`` to ``tribar`` will produce a triangular heatmap and w
 
 .. code-block:: bash
 
-    intervene upset -i ~/dbSUPER/mm9/*.bed --filenames --type frac --htype tribar
+    intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype tribar
 
 .. figure:: img/pairwise_tribar.png
    :height: 600px
    :alt: Pairwise heatmap
    :align: center
 
-.. note:: Please make sure  that the ``tribar`` will only show lower triangle of the matrix as heatmap and diagoals are set to zero. It recommended to use this if ``--type is set to ``jaccard``, ``fisher`` or ``reldist``.
+.. note:: Please make sure  that the ``tribar`` will only show lower triangle of the matrix as heatmap and diagoals are set to zero. It recommended to use this if ``--compute is set to ``jaccard``, ``fisher`` or ``reldist``.
 
 Read more about the ``pairwise`` module here:
 

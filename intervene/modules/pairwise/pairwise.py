@@ -74,7 +74,34 @@ def create_matrix(beds, func, verbose=False, sort_bed=False, **kwoptions):
         bed_sizes.append(len(a))
     return matrix, bed_names, bed_sizes
 
+def create_list_matrix(lists, verbose=False):
+    nfiles = len(lists)
+    total = nfiles ** 2
+    i = 0
+    list_sizes = []
+    list_names = []
 
+    matrix = collections.defaultdict(dict)
+    for la in lists:
+        with open(la) as f:
+            a = f.read().splitlines()
+        f.close()
+        a = set(a)
+        for lb in lists:
+            i += 1
+            with open(lb) as f:
+                b = f.read().splitlines()
+            f.close()
+            if verbose:
+                sys.stderr.write(
+                        '%(i)s of %(total)s: %(fa)s + %(fb)s\n' % locals())
+                sys.stderr.flush()
+
+            matrix[get_name(la)][get_name(lb)] = len(a.intersection(b))
+
+        list_names.append(get_name(la))
+        list_sizes.append(len(a))
+    return matrix, list_names, list_sizes
 
 def barplot(series, matrix, outfile, options, max_size=1):
     """Create a bar plot and place the lower triangle of a heatmap directly
@@ -211,11 +238,11 @@ def heatmap_triangle(dataframe, axes, options):
     t = np.array([[0.5, 1], [0.5, -1]])
     A = np.dot(A, t)
 
-    if options.type == 'reldist':
+    if options.compute == 'reldist':
         min_val = 0.0
         max_val = 0.5
 
-    elif options.type == 'count':
+    elif options.compute == 'count':
         min_val = 0.0
         max_val = np.round(np.amax(C), decimals=1)
     else:
@@ -247,9 +274,9 @@ def heatmap_triangle(dataframe, axes, options):
     axes.set_xlim(right=1)
     #axes.labelsize = "small"
     #axes.tick_params(labelsize=6)
-    if options.type == 'count':
+    if options.compute == 'count':
         ticks = np.linspace(min_val, max_val, 3)
-    elif options.type == 'reldist':
+    elif options.compute == 'reldist':
         ticks = np.linspace(min_val, max_val, 3)
     else:
         ticks = np.linspace(min_val, 1.0, 3)
@@ -272,11 +299,11 @@ def create_r_script(matrix_file, options, max_size=1):
     if not options.figsize:
         options.figsize = (8,8)
 
-    if options.type == 'reldist':
+    if options.compute == 'reldist':
         min_val = 0.0
         max_val = 0.5
 
-    elif options.type == 'count':
+    elif options.compute == 'count':
         min_val = 0.0
         max_val = max_size
     else:
@@ -288,10 +315,9 @@ def create_r_script(matrix_file, options, max_size=1):
     else:
         diag = 'diag=FALSE'
     
-    script_file = options.output+'/'+'intervene_'+options.type+'_pairwise_heatmap.R'
+    script_file =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.R'
     temp_f = open(script_file, 'w')
-
-    output_name = options.output+'/'+'intervene_'+options.type+'_pairwise_heatmap.'+options.figtype
+    output_name = options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.'+options.figtype
 
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('if (suppressMessages(!require("corrplot"))) suppressMessages(install.packages("corrplot", repos="http://cran.us.r-project.org"))\n')
@@ -310,7 +336,7 @@ def create_r_script(matrix_file, options, max_size=1):
      
     temp_f.write("\n")
 
-    #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,,options.type, output_name,, , options.dpi)
+    #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,,options.compute, output_name,, , options.dpi)
     #cl.lim= c('+str(min_val)+','+str(max_val)+'), 
     temp_f.write('intersection_matrix <- as.matrix(read.table("'+matrix_file+'"))\n')
     temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'", tl.col="black", tl.cex=0.8, is.corr = FALSE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
@@ -338,41 +364,42 @@ def pairwise_intersection(options):
                 processes=options.processes)
     '''
 
-    if options.type == "frac":
-        FUNC = frac_of_a
-        kwoptions = {}
+    if options.type == 'genomic':
+        if options.compute == "frac":
+            FUNC = frac_of_a
+            kwoptions = {}
 
-    elif options.type == 'jaccard':
-        FUNC = jaccard_of_a
-        kwoptions = {}
+        elif options.compute == 'jaccard':
+            FUNC = jaccard_of_a
+            kwoptions = {}
 
-    elif options.type == 'fisher':
-        FUNC = fisher_of_a
-        kwoptions = dict(genome=options.genome)
+        elif options.compute == 'fisher':
+            FUNC = fisher_of_a
+            kwoptions = dict(genome=options.genome)
 
-        #kwoptions = {}
+        elif options.compute == 'reldist':
+            FUNC = reldist_of_a
+            kwoptions = {}
 
-    elif options.type == 'reldist':
-        FUNC = reldist_of_a
-        kwoptions = {}
+        else:
+            FUNC = actual_intersection
+            kwoptions = {}
 
+        matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
     else:
-        FUNC = actual_intersection
-        kwoptions = {}
-
-    #matrix = create_matrix(beds=options.input, func=FUNC, verbose=options.verbose, **kwoptions)
-    matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
+        matrix, bed_names, bed_sizes = create_list_matrix(lists=options.input, verbose=False)
 
     nfiles = len(options.input)
 
-    output_name =  options.output+'/Intervene_'+options.command+'_'+str(nfiles)+'_files_'
+    script_file =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.R'
 
     #if options.verbose:
     #    sys.stderr.write('Time to construct %s x %s matrix: %.1fs' \
     #            % (nfiles, nfiles, (t1 - t0)) + '\n')
     keys = sorted(matrix.keys())
     
-    matrix_file = options.output+'/'+str(options.type)+'_pairwise_matrix.txt'
+    matrix_file =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'_matrix.txt'
+
     f = open(matrix_file, 'w')
 
     #if options.stdout:
@@ -397,15 +424,15 @@ def pairwise_intersection(options):
         labels = bed_names
         series = pd.Series(bed_sizes, index=labels)
         #Set heatmap label
-        if options.type == 'count':
+        if options.compute == 'count':
             options.hlabel = 'Number of overlaps'
-        if options.type == 'frac':
+        if options.compute == 'frac':
             options.hlabel = 'Fraction of overlap'
-        if options.type == 'jaccard':
+        if options.compute == 'jaccard':
             options.hlabel = 'Jaccard statistic'
-        if options.type == 'reldist':
+        if options.compute == 'reldist':
             options.hlabel = 'Dist. of relative distance'
-        if options.type == 'fisher':
+        if options.compute == 'fisher':
             options.hlabel = "Fisher's p-value"
 
         #options.title = "Pairwise intersection"
@@ -413,7 +440,8 @@ def pairwise_intersection(options):
         #series = pd.Series(np.random.random(ncols) * 2.0, index=labels)
         #df = pd.read_csv('data.csv',index_col=0, delim_whitespace=True)
         #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
-        outfile = options.output+'/'+str(options.type)+'_tribar_heatmap.'+options.figtype
+        outfile =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.'+options.figtype
+
         barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
 
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
@@ -421,10 +449,6 @@ def pairwise_intersection(options):
     else:
         #print("Please check the matrix file "+matrix_file)
         create_r_script(matrix_file, options, max_size=max(bed_sizes))
-        #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,options.htype,options.type, output_name,options.figtype, str(options.title), options.dpi)
+        #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,options.htype,options.compute, output_name,options.figtype, str(options.title), options.dpi)
         #os.system(cmd)
         #print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
-
-
-
-        

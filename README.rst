@@ -1,3 +1,13 @@
+<p align="center">
+<a href="http://intervene.readthedocs.io">
+<img height="200" title="Intervene" alt="Intervene logo" src="https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo_full.png"/>
+</a>
+<br/>
+<a href="http://intervene.readthedocs.io">intervene.readthedocs.io</a>
+</p>
+# Intervene
+> a tool for intersection and visualization of multiple gene or genomic region sets
+
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
 
@@ -14,9 +24,8 @@
 .. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
 	:target: https://twitter.com/intent/tweet?text=Intervene%20-%20a%20tool%20for%20intersection%20and%20visualization%20of%20multiple%20genomic%20region%20and%20gene%20sets%20https://github.com/asntech/intervene&url=%5Bobject%20Object%5D
 
-Introduction
-============
-Intervene is a tool for intersection and visualization of multiple gene or genomic region sets.
+Documentation
+=============
 
 **A detailed documentation is available in different formats:**  `HTML <http://intervene.readthedocs.org>`_ | `PDF <http://readthedocs.org/projects/intervene/downloads/pdf/latest/>`_ | `ePUB <http://readthedocs.org/projects/intervene/downloads/epub/latest/>`_
 
@@ -52,7 +61,7 @@ Intervene takes care of the installation of all the required Python modules. If 
 Install required R packages
 ---------------------------
 
-Intervene rquires two R packages, `UpSetR <https://cran.r-project.org/package=UpSetR>`_ , `corrplot <https://cran.r-project.org/package=corrplot>`_ for visualization and `Cairo <https://cran.r-project.org/package=Cairo>`_ to generate high-quality vector and bitmap figures.
+Intervene rquires three R packages, `UpSetR <https://cran.r-project.org/package=UpSetR>`_ , `corrplot <https://cran.r-project.org/package=corrplot>`_ for visualization and `Cairo <https://cran.r-project.org/package=Cairo>`_ to generate high-quality vector and bitmap figures.
 
 .. code-block:: R
 

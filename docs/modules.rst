@@ -27,13 +27,13 @@ Once you have installed Intervene, you can type:
 
 .. code-block:: bash
 
-    intervene venn -i path/to/BED/files/*.bed --type jaccard --htype tribar
+    intervene venn -i path/to/BED/files/*.bed
 
 This will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type:
 
 .. code-block:: bash
 
-    intervene venn -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
+    intervene venn -i path/to/BED/files/*.bed --output ~/results/path
 
 **Summary of options**
 
@@ -77,13 +77,13 @@ Once you have installed Intervene, you can type:
 
 .. code-block:: bash
 
-    intervene upset -i path/to/BED/files/*.bed --type jaccard --htype tribar
+    intervene upset -i path/to/BED/files/*.bed
 
 This will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type:
 
 .. code-block:: bash
 
-    intervene upset -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
+    intervene upset -i path/to/BED/files/*.bed --output ~/results/path
 
 
 **Summary of options**
@@ -152,12 +152,13 @@ This will save the results in the current working directory with a folder named 
 
 	  "-h, --help","show this help message and exit"
 	  "-i","Input genomic regions in (BED/GTF/GFF) format. For files in a directory use *.<extension>. e.g. *.bed"
-	  "--type","Report count/fraction of overlaps or statistical relationships. {``count``, ``frac``, ``jaccard``, ``fisher``, ``reldist``}"
-	  " ","--type=count - calculates the number of overlaps."
-	  " ","--type=frac - calculates the fraction of overlap."
-	  " ","--type=jaccard - calculate the Jaccard statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/jaccard.html>`_"
-	  " ","--type=reldist - calculate the distribution of relative distances. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/reldist.html>`_"
-	  " ","--type=fisher - calculate Fisher`s statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/fisher.html>`_"
+	  "--type","{genomic,list}. Type of input sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
+	  "--compute","Compute count/fraction of overlaps or statistical relationships. {``count``, ``frac``, ``jaccard``, ``fisher``, ``reldist``}"
+	  " ","--compute=count - calculates the number of overlaps."
+	  " ","--compute=frac - calculates the fraction of overlap."
+	  " ","--compute=jaccard - calculate the Jaccard statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/jaccard.html>`_"
+	  " ","--compute=reldist - calculate the distribution of relative distances. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/reldist.html>`_"
+	  " ","--compute=fisher - calculate Fisher`s statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/fisher.html>`_"
 	  " ","Note: For jaccard and reldist regions should be pre-shorted or set --sort``"
 	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``pie``."
 	  " ", "Read the below note for ``tribar`` option."
@@ -166,7 +167,7 @@ This will save the results in the current working directory with a folder named 
 	  "--names","Comma-separated list of names for input files. Default is base name of input files."
 	  "--filenames","Use file names as labels instead. Default is ``False``."
 	  "--sort","Set this only if your files are not sorted. Default is ``False``."
-	  "--genome","Required argument if --type=fisher. Needs to be a string assembly name such as ``mm10`` or ``hg38``"
+	  "--genome","Required argument if --compute=fisher. Needs to be a string assembly name such as ``mm10`` or ``hg38``"
 	  "-o, --output","Output folder path where results will be stored. Default is current working directory."
 	  "--barlabel","x-axis label of boxplot if --htype=tribar. Default is ``Set size``"
 	  "--barcolor","Boxplot color (hex vlaue or name, e.g. blue). Default is ``#53cfff``."
@@ -180,4 +181,4 @@ This will save the results in the current working directory with a folder named 
 	  "--test","This will run the program on test data."
 
 
-.. note::  The option ``--htype=tribar`` will generate a horizontal bar plot with an adjacent heatmap rotated 45 degrees to show the lower triangle of the matrix comparing all sets of bars. If you want to view upper triangle, please ``--triangle upper``. It's only recomended to use ``tribar`` if ``type`` is set to ``jaccard`` or ``fisher``.
+.. note::  The option ``--htype=tribar`` will generate a horizontal bar plot with an adjacent heatmap rotated 45 degrees to show the lower triangle of the matrix comparing all sets of bars. If you want to view upper triangle, please ``--triangle upper``. It's only recomended to use ``tribar`` if ``compute`` is set to ``jaccard`` or ``fisher``.
