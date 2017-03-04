@@ -1,5 +1,6 @@
 .. image:: https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo_full.png
-   :height: 200px
+   :height: 200 px
+   :width: 448 px
    :scale: 50 %
    :alt: Intervene logo
    :align: left
