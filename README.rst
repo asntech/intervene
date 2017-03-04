@@ -1,5 +1,4 @@
 .. raw:: html
-
     <embed>
         <p align="center">
 		<a href="http://intervene.readthedocs.io">
@@ -9,9 +8,10 @@
 		<a href="http://intervene.readthedocs.io">intervene.readthedocs.io</a>
 		</p>
     </embed>
-    
-##Intervene
-> a tool for intersection and visualization of multiple gene or genomic region sets
+
+Intervene
+=========
+a tool for intersection and visualization of multiple gene or genomic region sets
 
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
