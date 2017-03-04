@@ -1,5 +1,8 @@
 .. image:: https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo.png
    	:target: http://intervene.readthedocs.org
+   	
+Intervene
+-----------
 
 	a tool for intersection and visualization of multiple gene or genomic region sets
 
