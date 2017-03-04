@@ -1,14 +1,13 @@
-.. raw:: html
-    
-    <p align="center">
-	<a href="http://intervene.readthedocs.io">
-	<img height="200" title="Intervene" alt="Intervene logo" src="https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo_full.png"/>
-	</a>
-	<br/>
-	<a href="http://intervene.readthedocs.io">intervene.readthedocs.io</a>
-	</p>
+.. image:: https://raw.githubusercontent.com/asntech/intervene/master/docs/img/intervene_logo_full.png
+   :height: 200px
+   :scale: 50 %
+   :alt: Intervene logo
+   :align: left
 
-**Intervene** - a tool for intersection and visualization of multiple gene or genomic region sets
+Intervene
+-----------
+
+	a tool for intersection and visualization of multiple gene or genomic region sets
 
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
