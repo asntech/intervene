@@ -41,7 +41,7 @@ This will save the results in the current working directory with a folder named 
    :header: "Option", "Description"
    :widths: 10, 80
 
-     "-h, ---help","To show the help message and exit"
+     "-h, --help","To show the help message and exit"
 	 "-i","Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs. For files in a directory use *.<extension>. e.g. *.bed"
 	 "--type","{genomic,list}. Type of input sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
 	 "--names","Comma-separated list of names as labels for input files. Default is: --names=A,B,C,D,E,F"
