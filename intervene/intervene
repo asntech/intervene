@@ -435,10 +435,9 @@ def main():
         if len(options.input) < 2:
           sys.stderr.write('Input should have at least two files.\n')
           sys.exit(1)
-        if len(options.input) > 6 and options.command !='pairwise':
-          sys.stderr.write('Input should not have more than six files.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
+        if len(options.input) > 6 and options.command =='venn':
+          sys.stderr.write('Input should not have more than six files. You can use upset or pairwise module instead.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
           sys.exit(1)
-
     
     if options.command == 'upset':
         plot_type = 'upset'
@@ -474,6 +473,22 @@ def main():
 
         print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
+        sys.exit(0)
+
+    if options.command == 'upset' and options.type == 'list':
+        #create an RScript
+        options.filenames = True
+        if options.filenames:
+          label_names = get_filenames(options.input)
+        else:
+          label_names = options.labels.split(',')
+        
+        if len(label_names) != len(options.input):
+          print("\nThe number label names doesn't match with the number of input files.\n")
+          sys.exit(1)
+        
+        labels = upset.list_upset(options)
+        upset.create_r_script(labels, label_names, options)
         sys.exit(0)
 
     '''
@@ -528,8 +543,8 @@ def main():
 
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.a, 'r').readlines()
-          b = open(options.b, 'r').readlines()
+          a = open(options.a, 'r').read().splitlines()
+          b = open(options.b, 'r').read().splitlines()
           labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
           if options.command == 'upset':
             #create an RScript
@@ -553,9 +568,9 @@ def main():
             label_names = ['A','B','C']
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.input[0], 'r').readlines()
-          b = open(options.input[1], 'r').readlines()
-          c = open(options.input[2], 'r').readlines()
+          a = open(options.input[0], 'r').read().splitlines()
+          b = open(options.input[1], 'r').read().splitlines()
+          c = open(options.input[2], 'r').read().splitlines()
           labels = list_venn.get_labels([a, b, c], fill=['number'])
           if options.command == 'upset':
             #create an RScript
@@ -580,10 +595,10 @@ def main():
             label_names = ['A','B','C','D']
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.input[0], 'r').readlines()
-          b = open(options.input[1], 'r').readlines()
-          c = open(options.input[2], 'r').readlines()
-          d = open(options.input[3], 'r').readlines()
+          a = open(options.input[0], 'r').read().splitlines()
+          b = open(options.input[1], 'r').read().splitlines()
+          c = open(options.input[2], 'r').read().splitlines()
+          d = open(options.input[3], 'r').read().splitlines()
           labels = list_venn.get_labels([a, b, c, d], fill=['number'])
           if options.command == 'upset':
             #create an RScript
@@ -610,11 +625,11 @@ def main():
             label_names = ['A','B','C','D','E']
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.input[0], 'r').readlines()
-          b = open(options.input[1], 'r').readlines()
-          c = open(options.input[2], 'r').readlines()
-          d = open(options.input[3], 'r').readlines()
-          e = open(options.input[4], 'r').readlines()
+          a = open(options.input[0], 'r').read().splitlines()
+          b = open(options.input[1], 'r').read().splitlines()
+          c = open(options.input[2], 'r').read().splitlines()
+          d = open(options.input[3], 'r').read().splitlines()
+          e = open(options.input[4], 'r').read().splitlines()
 
           labels = list_venn.get_labels([a, b, c, d, e], fill=['number'])
           if options.command == 'upset':
@@ -640,12 +655,12 @@ def main():
             label_names = ['A','B','C','D','E','F']
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.input[0], 'r').readlines()
-          b = open(options.input[1], 'r').readlines()
-          c = open(options.input[2], 'r').readlines()
-          d = open(options.input[3], 'r').readlines()
-          e = open(options.input[4], 'r').readlines()
-          f = open(options.input[5], 'r').readlines()
+          a = open(options.input[0], 'r').read().splitlines()
+          b = open(options.input[1], 'r').read().splitlines()
+          c = open(options.input[2], 'r').read().splitlines()
+          d = open(options.input[3], 'r').read().splitlines()
+          e = open(options.input[4], 'r').read().splitlines()
+          f = open(options.input[5], 'r').read().splitlines()
 
           labels = list_venn.get_labels([a, b, c, d, e, f], fill=['number'])
           if options.command == 'upset':
