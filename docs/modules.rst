@@ -160,7 +160,7 @@ This will save the results in the current working directory with a folder named 
 	  " ","--compute=reldist - calculate the distribution of relative distances. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/reldist.html>`_"
 	  " ","--compute=fisher - calculate Fisher`s statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/fisher.html>`_"
 	  " ","Note: For jaccard and reldist regions should be pre-shorted or set --sort``"
-	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``pie``."
+	  "--htype","{tribar,color,pie,circle,square,ellipse,number,shade}. Heatmap plot type. Default is ``tribar``."
 	  " ", "Read the below note for ``tribar`` option."
 	  "--triangle","Show lower/upper triangle of the matrix as heatmap. Default is ``lower``"
 	  "--diagonal", "Show the diagonal values in the heatmap. Default is ``False``."
