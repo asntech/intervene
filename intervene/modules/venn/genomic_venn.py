@@ -7,7 +7,7 @@ Created on January 10, 2017
 """
 import sys
 import os
-from pybedtools import BedTool
+from pybedtools import BedTool, helpers
 from intervene.modules.venn import list_venn
 from intervene.modules.upset import upset
 
@@ -22,6 +22,9 @@ def venn2(input_files, options,names=['A','B'], plot_type='venn'):
      '01': (b - a).count(), #Only B
      '11': (a + b).count() #Common in A and B
      } 
+
+    #delete all temp files
+    helpers.cleanup()
 
     if plot_type == 'upset':
         upset.create_r_script(labels, names, options)
@@ -39,12 +42,15 @@ def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
 
     
     labels = {'001': (c - a - b).count(), #Only C
-    '010': (b - a - c).count(),
+    '010': (b - a - c).count(), #only B
     '011': (b + c - a).count(),
-    '100': (a - b - c).count(),
+    '100': (a - b - c).count(), #only A
     '101': (a + c - b).count(),
     '110': (a + b - c).count(),
     '111': (a + b + c).count()}
+
+    #delete all temp files
+    helpers.cleanup()
 
     if plot_type == 'upset':
         upset.create_r_script(labels, names, options)
@@ -79,6 +85,9 @@ def venn4(input_files, options, names=['A','B','C','D'],plot_type='venn'):
     '1110': str((a + b + c - d).count()),
     '1111': str((a + b + c + d).count())
     }
+
+    #delete all temp files
+    helpers.cleanup()
     
     if plot_type == 'upset':
         upset.create_r_script(labels, names, options)
@@ -130,6 +139,9 @@ def venn5(input_files, options, names=['A','B','C','D','E'], plot_type='venn'):
     '11110': str((a + b + c + d - e).count()),
     '11111': str((a + b + c + d + e).count())
     }
+
+    #delete all temp files
+    helpers.cleanup()
     
     if plot_type == 'upset':
         #upset.draw_genomic(labels, names, output, fig_type, options)
@@ -221,6 +233,9 @@ def venn6(input_files, options, names=['A','B','C','D','E','F'],plot_type='venn'
     '111110': str((a + b + c + d + e - f).count()),
     '111111': str((a + b + c + d + e + f).count())
     }
+
+    #delete all temp files
+    helpers.cleanup()
 
     if plot_type == 'upset':
         upset.create_r_script(labels, names, options)

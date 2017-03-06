@@ -10,10 +10,10 @@ import os
 import tempfile
 import itertools
 from intervene.modules.pairwise.pairwise import get_name
-from pybedtools import BedTool
+from pybedtools import BedTool, helpers
 
 
-def genomic_sets(input_files):
+def genomic_upset(input_files):
     '''
     Arguments:
         input_files -  List of BED files to to calculate the weights
@@ -28,27 +28,47 @@ def genomic_sets(input_files):
     # Generate a truth table of intersections to calculate 
     truth_table = [x for x in itertools.product("01", repeat=N)][1:]
 
-    
     weights = {}
+
     for t in truth_table:
         ones = [BedTool(input_files[i]) for i in range(N) if t[i] =='1']
         zeros = [BedTool(input_files[i]) for i in range(N) if t[i] =='0']
         
-        #X = (*ones).count()
-        #X.difference_update(*zeros)
+        if len(ones) > 1:
+            x = ones[0]
+            for bed in ones[1:]:
+                x = x.intersect(bed, u=True)
+        elif len(ones) == 1:
+            x = ones[0]
+        else:
+            x = BedTool("", from_string=True)
+            
+        if len(zeros) > 1:
+            y = zeros[0]
+            for bed in zeros[1:]:
+                y = y.intersect(bed, v=True)
+        elif len(zeros) == 1:
+            y = zeros[0]
+        else:
+            y = BedTool("", from_string=True)
         
-        weights[''.join(t)] = len(X)
+        X = (x-y).count() 
+        
+        weights[''.join(t)] = X
+
+    #delete all temp files
+    helpers.cleanup()
     
     return(weights)
 
-def list_upset(options):
+def list_upset(input_files):
     '''
     Arguments:
-        S -  List of sets to make in to a Venn diagram
+        input_files -  List of list files to calculate weights for upset plot
     Takes a list of sets a list of the sizes of non-overlapping intersections between them 
     '''
     S =[]
-    for f in options.input:
+    for f in input_files:
         a = open(f, 'r').read().splitlines()
         S.append(set(a))
 

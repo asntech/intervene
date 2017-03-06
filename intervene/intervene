@@ -100,7 +100,6 @@ def example_filename(fn,sub_dir=None):
         raise ValueError("%s does not exist" % fn)
     return fn
 
-
 def get_test_data(module_name):
   '''
   It returns a list of test data files, if the user uses --test argument
@@ -477,6 +476,8 @@ def main():
 
     if options.command == 'upset' and options.type == 'list':
         #create an RScript
+        print("\nRunning UpSet module to do intersection analysis.\n")
+
         options.filenames = True
         if options.filenames:
           label_names = get_filenames(options.input)
@@ -487,7 +488,10 @@ def main():
           print("\nThe number label names doesn't match with the number of input files.\n")
           sys.exit(1)
         
-        labels = upset.list_upset(options)
+        if options.type == 'list':
+          labels = upset.list_upset(options.input)
+        else:
+          labels = upset.genomic_upset(options.input)
         upset.create_r_script(labels, label_names, options)
         sys.exit(0)
 
