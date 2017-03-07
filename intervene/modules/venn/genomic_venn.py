@@ -42,7 +42,7 @@ def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
 
     
     labels = {'001': (c - a - b).count(), #Only C
-    '010': (b - a - c).count(), #only B
+    '010': (b - a - c).count(), #only
     '011': (b + c - a).count(),
     '100': (a - b - c).count(), #only A
     '101': (a + c - b).count(),
