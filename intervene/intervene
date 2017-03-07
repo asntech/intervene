@@ -418,7 +418,7 @@ def main():
     #       sys.exit(1)
     #     else:
     #       sys.stderr.write('Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple gene or genomic region sets, Submitted, 2017. ')
-    #       sys.exit(1)
+    #       sys.exit(0)
 
     #checke if there are at least two input bed/list files
     reqd_args = ['input']
@@ -474,9 +474,9 @@ def main():
         pairwise.pairwise_intersection(options)
         sys.exit(0)
 
-    if options.command == 'upset' and options.type == 'list':
+    if options.command == 'upset':
         #create an RScript
-        print("\nRunning UpSet module to do intersection analysis.\n")
+        print("\nRunning UpSet module to perform intersection analysis.\n")
 
         options.filenames = True
         if options.filenames:

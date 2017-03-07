@@ -38,10 +38,8 @@ def genomic_upset(input_files):
             x = ones[0]
             for bed in ones[1:]:
                 x = x.intersect(bed, u=True)
-        elif len(ones) == 1:
-            x = ones[0]
         else:
-            x = BedTool("", from_string=True)
+            x = ones[0]
             
         if len(zeros) > 1:
             y = zeros[0]
@@ -52,7 +50,10 @@ def genomic_upset(input_files):
         else:
             y = BedTool("", from_string=True)
         
-        X = (x-y).count() 
+        if len(zeros) == 0:
+            X = (x).count() 
+        else:
+            X = (x-y).count() 
         
         weights[''.join(t)] = X
 
