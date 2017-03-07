@@ -3,6 +3,7 @@
 Intervene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
+For more details please check the documentation at http://intervene.readthedocs.io'
 
 """
 
@@ -17,159 +18,10 @@ from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn, genomic_venn
 from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
-from intervene import example_data
 import intervene
 
-
-def create_dir(dir_path):
-    '''
-    Create a output directory if it's not exists.
-    '''
-
-    if not os.path.exists(dir_path):
-        try:
-            os.makedirs(dir_path)
-        except:
-            sys.exit( "Output directory (%s) could not be created." % dir_path )
-    return dir_path
-
-def venn_order(input_files):
-    """
-    Checks the order of venn plot. 
-
-    @type input_files: list[Iterable] 
-    @rtype int 
-
-    input
-      input_files: a list of files of genomic regions or lists
-
-    return
-      len(input_files): return length of input files
-    """
-
-    return len(input_files)
-
-def get_filenames(input_files):
-    """
-    Checks the venn-type
-
-    @type input_files: list[Iterable] 
-    @rtype file_names: list[Iterable]
-
-    input
-      input_files: a list of files of genomic regions or lists
-
-    return
-      file_names:: return a list of file names
-    """
-    file_names=[]
-    for fname in input_files:
-      file_names.append(os.path.splitext(os.path.basename(fname))[0])
-
-    return file_names
-
-"""
-Provides access to example files
-
-"""
-
-def data_dir():
-    """
-    Returns the data directory that contains example files.
-    """
-    #data_path = os.path.dirname(intervene.__file__)
-    #data_path = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'example_data')
-    #print(data_path)
-    return os.path.join(os.path.dirname(__file__), 'example_data')
-
-
-def example_filename(fn,sub_dir=None):
-    """
-    Return a bed file from the pybedtools examples directory.
-    This code is adapted from https://github.com/daler/pybedtools
-
-    """
-    #print(data_dir())
-    #sys.exit()
-    if sub_dir:
-      fn = os.path.join(data_dir(), sub_dir, fn)
-    else:
-      fn = os.path.join(data_dir(), fn)
-    #print(fn)
-    if not os.path.exists(fn):
-        raise ValueError("%s does not exist" % fn)
-    return fn
-
-def get_test_data(module_name):
-  '''
-  It returns a list of test data files, if the user uses --test argument
-  
-  @type module_name: chr
-  @rtype test_files: list[Iterable]
-
-  input
-      module_name: Name of Intervene module
-
-  return
-      test_files:: return a list of file paths
-
-  '''
-
-  test_files = []
-  
-  if module_name == 'venn':
-    test_files = [example_filename(i,'ENCODE_hESC') for i in  [
-        'H3K27ac.bed',
-        #'H3K4me2.bed',
-        'H3K4me3.bed',
-        'H3K27me3.bed'
-        ]]
-
-  elif module_name == 'upset':
-    test_files = [example_filename(i, 'ENCODE_hESC') for i in  [
-        'H3K27ac.bed',
-        'H3K4me2.bed',
-        #'H3K4me1.bed',
-        'H3K4me3.bed',
-        'H3K27me3.bed'
-        ]]
-
-  elif module_name == 'pairwise':
-    test_files = [example_filename(i, 'dbSUPER_mm9') for i in  [
-        'Bone_Marrow.bed',
-        'Cerebellum.bed',
-        'Cortex.bed',
-        'E14.5_Brain.bed',
-        'E14.5_Heart.bed',
-        'E14.5_Limb.bed',
-        'E14.5_Liver.bed',
-        'Heart.bed',
-        'HFSCs.bed',
-        'Intestine.bed',
-        'Kidney.bed',
-        'Liver.bed',
-        'Lung.bed',
-        'Macrophage.bed',
-        'MEF.bed',
-        'mESC.bed',
-        'Myotubes.bed',
-        'Olfactory_Bulb.bed',
-        'pro-B.bed',
-        'Spleen.bed',
-        'TACs.bed',
-        'Testis.bed',
-        'Th_Cells.bed',
-        'Thymus.bed'
-        ]]
-  else:
-    sys.exit(1)
-
-  return test_files
-
-
+#main function
 def main():
-    #print 'InterVene: a tool for intersection and visualization of multiple genomic region sets'
-    #print 'For more details: https://github.com/asntech/intervene'
     
     desc = """
     Intervene: a tool for intersection and visualization of multiple genomic region and gene sets.
@@ -445,21 +297,20 @@ def main():
 
     #making the out folder if it doesn't exist
     if options.output:
-        output_dir = create_dir(options.output)
+        output_dir = helpers.create_dir(options.output)
     else:
-        options.output = create_dir(os.getcwd()+"/Intervene_results")
+        options.output = helpers.create_dir(os.getcwd()+"/Intervene_results")
 
     #check if user want to user test data to plot and get get test files.
     if options.test:
         print("\nRunning Intervene with test data.\n")
-        options.input = get_test_data(options.command)
+        options.input = helpers.get_test_data(options.command)
         options.filenames = True
         options.htype = "tribar"
         if options.command == 'venn':
           options.figsize = (7, 7)
 
-        #sys.exit(1)
-
+    #================== Run Pairwise module ================#
     if options.command =='pairwise':
         if options.type == 'fisher':
           if not options.genome:
@@ -473,14 +324,15 @@ def main():
         print("\nPerforming a pairwise intersection analysis.\n")
         pairwise.pairwise_intersection(options)
         sys.exit(0)
-
+    
+    #================== Run Upset module ================#
     if options.command == 'upset':
         #create an RScript
         print("\nRunning UpSet module to perform intersection analysis.\n")
 
         options.filenames = True
         if options.filenames:
-          label_names = get_filenames(options.input)
+          label_names = helpers.get_filenames(options.input)
         else:
           label_names = options.labels.split(',')
         
@@ -501,6 +353,8 @@ def main():
         upset.one_vs_rest_intersection(options.input,options.compare,options.output)
         sys.exit(1)
     '''
+    #================== Run Venn module ================#
+    #create output file name
     output_name =  options.output+'/'+str(options.project)+'_'+options.command+'.'+options.figtype
 
     #check file name already exists and ask if user want to overwrite
@@ -515,9 +369,9 @@ def main():
     if options.command == 'venn':
       if options.colors:
         options.colors = options.colors.split(',')
-        options.colors = [helpers.get_colors(options.colors)[i] for i in range(venn_order(options.input))]
+        options.colors = [helpers.get_colors(options.colors)[i] for i in range(helpers.venn_order(options.input))]
       else:
-        options.colors = [helpers.default_colors()[i] for i in range(venn_order(options.input))]
+        options.colors = [helpers.default_colors()[i] for i in range(helpers.venn_order(options.input))]
         
     #Cheeck figure size
     if options.figsize:
@@ -534,12 +388,12 @@ def main():
     
     #print(options.filenames)
     #sys.exit(1)
-    if venn_order(options.input) == 2:
+    if helpers.venn_order(options.input) == 2:
         
         print('\nGenerating a 2-way "%s" diagram.\n' %options.command)
         
         if options.filenames:
-          label_names = get_filenames(options.input)
+          label_names = helpers.get_filenames(options.input)
         elif options.labels:
             label_names = options.labels.split(',')
         else:
@@ -554,18 +408,21 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn2(labels, names=label_names)
+            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
         
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn2(labels, names=label_names)
-     
-    elif venn_order(options.input) == 3:
+          labels = upset.genomic_upset(options.input)
+          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          
+          #fig, ax = genomic_venn.venn2(input_files=options.input,
+          #      options=options, names=label_names, plot_type=plot_type)     
+    elif helpers.venn_order(options.input) == 3:
         
         print('\nGenerating a 3-way "%s" diagram.\n' %options.command)
         
         if options.filenames:
-          label_names = get_filenames(options.input)         
+          label_names = helpers.get_filenames(options.input)         
         elif options.labels:
             label_names = options.labels.split(',')
         else:
@@ -581,18 +438,20 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn3(labels, names=label_names)          
+            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)          
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn3(input_files=options.input,
-                options=options, names=label_names, plot_type=plot_type)
+          labels = upset.genomic_upset(options.input)
+          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          
+          #fig, ax = genomic_venn.venn3(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
 
-    elif venn_order(options.input) == 4:
+    elif helpers.venn_order(options.input) == 4:
         
         print('\nGenerating a 4-way "%s" diagram.\n' %options.command)
         
         if options.filenames:
-          label_names = get_filenames(options.input)
+          label_names = helpers.get_filenames(options.input)
         elif options.labels:
             label_names = options.labels.split(',')
         else:
@@ -609,20 +468,21 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn4(labels, names=label_names)
+            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
             
         #else input considered as bed file
         else:
-             fig, ax = genomic_venn.venn4(input_files=options.input, 
-                options=options, names=label_names, plot_type=plot_type)
+          labels = upset.genomic_upset(options.input)
+          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          #fig, ax = genomic_venn.venn4(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
             
                    
-    elif venn_order(options.input) == 5:
+    elif helpers.venn_order(options.input) == 5:
         
         print('\nGenerating a 5-way "%s" diagram.\n' %options.command)
         
         if options.filenames:
-          label_names = get_filenames(options.input)   
+          label_names = helpers.get_filenames(options.input)   
         elif options.labels:
             label_names = options.labels.split(',') 
         else:
@@ -641,18 +501,19 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn5(labels, names=label_names)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
         #else input considered as genomic regions file
         else:
-            fig, ax = genomic_venn.venn5(input_files=options.input, 
-                options=options, names=label_names, plot_type=plot_type)
+            labels = upset.genomic_upset(options.input)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            #fig, ax = genomic_venn.venn5(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
         
-    elif venn_order(options.input) == 6:
+    elif helpers.venn_order(options.input) == 6:
         
         print('\nGenerating a 6-way "%s" diagram.\n' %options.command)
         
         if options.filenames:
-          label_names = get_filenames(options.input) 
+          label_names = helpers.get_filenames(options.input) 
         elif options.labels:
             label_names = options.labels.split(',')
         else:
@@ -671,11 +532,13 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn6(labels, names=label_names)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
                 
         #else input considered as bed file
         else:
-            fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
+            labels = upset.genomic_upset(options.input)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            #fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
    
     else:
         parser.print_help()

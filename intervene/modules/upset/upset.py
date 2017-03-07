@@ -34,13 +34,13 @@ def genomic_upset(input_files):
         ones = [BedTool(input_files[i]) for i in range(N) if t[i] =='1']
         zeros = [BedTool(input_files[i]) for i in range(N) if t[i] =='0']
         
+        x = ones[0]
         if len(ones) > 1:
-            x = ones[0]
             for bed in ones[1:]:
                 x = x.intersect(bed, u=True)
-        else:
-            x = ones[0]
-            
+        
+        #y = BedTool("", from_string=True)   
+        
         if len(zeros) > 1:
             y = zeros[0]
             for bed in zeros[1:]:
@@ -53,10 +53,10 @@ def genomic_upset(input_files):
         if len(zeros) == 0:
             X = (x).count() 
         else:
-            X = (x-y).count() 
-        
-        weights[''.join(t)] = X
+            X = x.intersect(y, v=True).count()
 
+        weights[''.join(t)] = X
+    #print(weights)
     #delete all temp files
     helpers.cleanup()
     
@@ -132,7 +132,6 @@ def create_r_script(labels, names, options):
         for x in key:
             if i == 0:
                 temp_f.write("'")
-                #shiny += "'"
       
             if x == '1':
                 if first == 1:
