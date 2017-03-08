@@ -20,9 +20,6 @@ def genomic_upset(input_files):
     Takes a list of sets a list of the sizes of non-overlapping intersections between them 
     '''
     
-    #if any([type(s) != set for s in S]):
-    #    raise TypeError("Arguments must be a list of sets")
-
     N = len(input_files)
     
     # Generate a truth table of intersections to calculate 
@@ -34,29 +31,22 @@ def genomic_upset(input_files):
         ones = [BedTool(input_files[i]) for i in range(N) if t[i] =='1']
         zeros = [BedTool(input_files[i]) for i in range(N) if t[i] =='0']
         
+        #report those entries in set A which do ovelap with other sets
         x = ones[0]
         if len(ones) > 1:
             for bed in ones[1:]:
                 x = x.intersect(bed, u=True)
+
+        #report those entries in set A which doesn't ovelap with other sets
+        if len(zeros) > 0:
+            #y = zeros[0]
+            for bed in zeros[0:]:
+                x = x.intersect(bed, v=True)
         
-        #y = BedTool("", from_string=True)   
-        
-        if len(zeros) > 1:
-            y = zeros[0]
-            for bed in zeros[1:]:
-                y = y.intersect(bed, v=True)
-        elif len(zeros) == 1:
-            y = zeros[0]
-        else:
-            y = BedTool("", from_string=True)
-        
-        if len(zeros) == 0:
-            X = (x).count() 
-        else:
-            X = x.intersect(y, v=True).count()
+        X = (x).count() 
 
         weights[''.join(t)] = X
-    #print(weights)
+
     #delete all temp files
     helpers.cleanup()
     
@@ -72,9 +62,6 @@ def list_upset(input_files):
     for f in input_files:
         a = open(f, 'r').read().splitlines()
         S.append(set(a))
-
-    if any([type(s) != set for s in S]):
-        raise TypeError("Arguments must be a list of sets")
 
     N = len(S)
     

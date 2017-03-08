@@ -44,9 +44,10 @@ def main():
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
                   help='Type of input sets. Genomic regions or lists of genes/SNPs. '
                         'Default is "%(default)s"\n\n')
-    venn_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
-                  help='Comma-separated list of names as labels for input files. '
-                       'Default is: --names=A,B,C,D,E,F\n\n')
+    venn_parser.add_argument('--names', dest='labels',
+                  help='Comma-separated list of names as labels for input files.\nIf it is not set file names will be used as labels.\n'
+                       'For example: --names=A,B,C,D,E,F\n\n')
+   
     venn_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s"\n\n')
@@ -94,9 +95,9 @@ def main():
                   help='Type of input sets. Genomic regions or lists of genes/SNPs sets. '
                        'Default is "%(default)s".\n\n') 
    
-    upset_parser.add_argument('--names', dest='labels', default='A,B,C,D,E,F',
-                  help='Comma-separated list of names as labels for input files. '
-                       'Default is: --names=A,B,C,D,E,F\n\n')
+    upset_parser.add_argument('--names', dest='labels',
+                  help='Comma-separated list of names as labels for input files.\nIf it is not set file names will be used as labels.\n'
+                       'For example: --names=A,B,C,D,E,F\n\n')
     
     upset_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
@@ -195,9 +196,9 @@ def main():
                        'Default is "%(default)s".\n\n')
 
     pairwise_parser.add_argument('--names', dest='labels',
-                  help='Comma-separated list of names for input files. \n'
-                       'Default is base name of input files.\n\n')
-    
+                  help='Comma-separated list of names as labels for input files.\nIf it is not set file names will be used as labels.\n'
+                       'For example: --names=A,B,C,D,E,F\n\n')
+
     pairwise_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. \n'
                        'Default is "%(default)s".\n\n')
@@ -314,6 +315,20 @@ def main():
         if options.command == 'venn':
           options.figsize = (7, 7)
 
+    #get the label names
+    if options.filenames:
+          label_names = helpers.get_filenames(options.input) 
+    elif options.labels:
+      label_names = options.labels.split(',')
+    else:
+      label_names = helpers.get_filenames(options.input) 
+            
+    #check if the number of label names are equal to number of input files
+    if len(label_names) != len(options.input):
+      err_message = '\nInput error: The number label names('+str(len(label_names))+') are not equal to the number of input files('+str(len(options.input))+').\n'
+      print(err_message)
+      sys.exit(1)
+
     #================== Run Pairwise module ================#
     if options.command =='pairwise':
         if options.type == 'fisher':
@@ -325,24 +340,19 @@ def main():
         if options.type == 'list':
           options.compute == 'count'
 
-        print("\nPerforming a pairwise intersection analysis.\n")
+        print("\nPerforming a pairwise intersection analysis. Please wait...\n")
         pairwise.pairwise_intersection(options)
         sys.exit(0)
     
     #================== Run Upset module ================#
     if options.command == 'upset':
         #create an RScript
-        print("\nRunning UpSet module to perform intersection analysis.\n")
-
-        options.filenames = True
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input)
-        else:
-          label_names = options.labels.split(',')
+        print("\nRunning UpSet module. Please wait...\n")
         
-        if len(label_names) != len(options.input):
-          print("\nThe number label names doesn't match with the number of input files.\n")
-          sys.exit(1)
+        #if options.compare:
+        #  upset.one_vs_rest_intersection(options.input,options.compare,options.output)
+        # sys.exit(0)
+        #options.filenames = True
         
         if options.type == 'list':
           labels = upset.list_upset(options.input)
@@ -351,12 +361,7 @@ def main():
         upset.create_r_script(labels, label_names, options)
         sys.exit(0)
 
-    '''
-    if options.command =='upset':
-      if options.compare:
-        upset.one_vs_rest_intersection(options.input,options.compare,options.output)
-        sys.exit(1)
-    '''
+    
     #================== Run Venn module ================#
     #create output file name
     output_name =  options.output+'/'+str(options.project)+'_'+options.command+'.'+options.figtype
@@ -394,15 +399,8 @@ def main():
     #sys.exit(1)
     if helpers.venn_order(options.input) == 2:
         
-        print('\nGenerating a 2-way "%s" diagram.\n' %options.command)
+        print('\nGenerating a 2-way "%s" diagram. Please wait...\n' %options.command)
         
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input)
-        elif options.labels:
-            label_names = options.labels.split(',')
-        else:
-            label_names = ['A','B']
-
         #If the input is a gene list
         if options.type == 'list':
           a = open(options.a, 'r').read().splitlines()
@@ -423,14 +421,8 @@ def main():
           #      options=options, names=label_names, plot_type=plot_type)     
     elif helpers.venn_order(options.input) == 3:
         
-        print('\nGenerating a 3-way "%s" diagram.\n' %options.command)
+        print('\nGenerating a 3-way "%s" diagram. Please wait...\n' %options.command)
         
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input)         
-        elif options.labels:
-            label_names = options.labels.split(',')
-        else:
-            label_names = ['A','B','C']
         #If the input is a gene list
         if options.type == 'list':
           a = open(options.input[0], 'r').read().splitlines()
@@ -452,14 +444,8 @@ def main():
 
     elif helpers.venn_order(options.input) == 4:
         
-        print('\nGenerating a 4-way "%s" diagram.\n' %options.command)
+        print('\nGenerating a 4-way "%s" diagram. Please wait...\n' %options.command)
         
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input)
-        elif options.labels:
-            label_names = options.labels.split(',')
-        else:
-            label_names = ['A','B','C','D']
         #If the input is a gene list
         if options.type == 'list':
           a = open(options.input[0], 'r').read().splitlines()
@@ -483,14 +469,8 @@ def main():
                    
     elif helpers.venn_order(options.input) == 5:
         
-        print('\nGenerating a 5-way "%s" diagram.\n' %options.command)
+        print('\nGenerating a 5-way "%s" diagram. Please wait...\n' %options.command)
         
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input)   
-        elif options.labels:
-            label_names = options.labels.split(',') 
-        else:
-            label_names = ['A','B','C','D','E']
         #If the input is a gene list
         if options.type == 'list':
           a = open(options.input[0], 'r').read().splitlines()
@@ -514,14 +494,8 @@ def main():
         
     elif helpers.venn_order(options.input) == 6:
         
-        print('\nGenerating a 6-way "%s" diagram.\n' %options.command)
-        
-        if options.filenames:
-          label_names = helpers.get_filenames(options.input) 
-        elif options.labels:
-            label_names = options.labels.split(',')
-        else:
-            label_names = ['A','B','C','D','E','F']
+        print('\nGenerating a 6-way "%s" diagram. Please wait...\n' %options.command)
+
         #If the input is a gene list
         if options.type == 'list':
           a = open(options.input[0], 'r').read().splitlines()
