@@ -50,6 +50,7 @@ This will save the results in the current working directory with a folder named 
 	 "-o, --output","Output folder path where results will be stored. Default is current working directory."
 	 "--figtype","{pdf,svg,ps,tiff,png} Figure type for the plot. e.g. --figtype svg. Default is ``pdf``"
 	 "--figsize","Figure size as width and height.e.g. --figsize 12 12."
+	 "--fontsize","Font size for the plot labels. Default is ``14``"
 	 "--dpi","Dots-per-inch (DPI) for the output. Default is: ``300``"
 	 "--fill","{number,percentage} Report number or  percentage of overlaps (Only if --type=list). Default is ``number``"
 	 "--test","This will run the program on test data."

@@ -64,7 +64,11 @@ def main():
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
     venn_parser.add_argument('--figsize',  nargs=2, type=int, default=(12,12),
                    help='Figure size as width and height.'
-                       'e.g. --figsize 12 12.\n\n')    
+                       'e.g. --figsize 12 12.\n\n') 
+    venn_parser.add_argument('--fontsize', dest='fontsize', type=int, default=14,
+                   help='Font size for the plot labels.'
+                       'Default is: "%(default)s"\n\n')  
+      
     venn_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"\n\n')  
@@ -408,12 +412,12 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
         
         #else input considered as bed file
         else:
           labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
           
           #fig, ax = genomic_venn.venn2(input_files=options.input,
           #      options=options, names=label_names, plot_type=plot_type)     
@@ -438,11 +442,11 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)          
+            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)          
         #else input considered as bed file
         else:
           labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
           
           #fig, ax = genomic_venn.venn3(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
 
@@ -468,12 +472,12 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
             
         #else input considered as bed file
         else:
           labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
           #fig, ax = genomic_venn.venn4(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
             
                    
@@ -501,11 +505,11 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
         #else input considered as genomic regions file
         else:
             labels = upset.genomic_upset(options.input)
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
             #fig, ax = genomic_venn.venn5(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
         
     elif helpers.venn_order(options.input) == 6:
@@ -532,12 +536,12 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
                 
         #else input considered as bed file
         else:
             labels = upset.genomic_upset(options.input)
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
             #fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
    
     else:

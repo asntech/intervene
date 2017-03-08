@@ -82,7 +82,7 @@ If you have `git` installed, use this:
 
     git clone https://bitbucket.org/CBGR/intervene.git
     cd intervene
-    python setup.py install
+    python setup.py sdist install
 
 
 
