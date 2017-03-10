@@ -13,7 +13,7 @@ In this example, a 3-way Venn diagram of ChIP-seq peaks of histone modifications
     intervene venn -i ~/ENCODE/data/H3K27ac.bed ~/ENCODE/data/H3Kme3.bed ~/ENCODE/data/H3K27me3.bed --filenames
 
 .. figure:: img/venn3way.png
-   :height: 400px
+   :height: 200px
    :alt: 3-way Venn diagram
    :align: center
 
@@ -65,7 +65,7 @@ In this example, we performed a pairwise intersections of super-enhancers in 24 
     intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype pie
 
 .. figure:: img/pairwise_pie.png
-   :height: 600px
+   :height: 500px
    :alt: Pairwise heatmap
    :align: center
 
@@ -76,7 +76,7 @@ By setting the ``--htype`` to ``color`` will produce this plot.
     intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype color
 
 .. figure:: img/pairwise_color.png
-   :height: 600px
+   :height: 500px
    :alt: Pairwise heatmap
    :align: center
 
@@ -87,7 +87,7 @@ By setting the ``--htype`` to ``tribar`` will produce a triangular heatmap and w
     intervene pairwise -i ~/dbSUPER/mm9/*.bed --filenames --compute frac --htype tribar
 
 .. figure:: img/pairwise_tribar.png
-   :height: 600px
+   :height: 500px
    :alt: Pairwise heatmap
    :align: center
 
