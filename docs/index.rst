@@ -4,7 +4,7 @@ Intervene Documentation
 
 Welcome to Intervene - a tool for intersection and visualization of multiple genomic region sets
 
-.. figure:: img/Intervene_plots.png
+.. figure:: img/Intervene_sketch.png
    :alt: 
 
 

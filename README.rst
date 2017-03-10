@@ -27,6 +27,10 @@ Documentation
 
 **A detailed documentation is available in different formats:**  `HTML <http://intervene.readthedocs.org>`_ | `PDF <http://readthedocs.org/projects/intervene/downloads/pdf/latest/>`_ | `ePUB <http://readthedocs.org/projects/intervene/downloads/epub/latest/>`_
 
+.. figure:: http://intervene.readthedocs.io/en/latest/_images/Intervene_sketch.png
+   :width: 800px
+   :align: left
+
 Installation
 ============
 
@@ -106,6 +110,10 @@ Once you have installed Intervene, you can type:
 
 	intervene --help
 
+This show the following help message.
+
+.. code-block:: bash
+
 	usage: intervene <subcommand> [options]
 	    
 	positional arguments <subcommand>:
@@ -120,7 +128,7 @@ Once you have installed Intervene, you can type:
 	  -v, --version         show program's version number and exit
 
 
-to see the help for the three subcommands ``pairwise``, ``venn`` and ``upset`` type::
+to see the help for the three subcommands ``pairwise``, ``venn`` and ``upset`` type:
 
 .. code-block:: bash
 	
