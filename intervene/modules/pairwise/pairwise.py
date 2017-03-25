@@ -356,7 +356,7 @@ def create_r_script(matrix_file, options, max_size=1):
     temp_f.write('intersection_matrix <- as.matrix(read.table("'+matrix_file+'"))\n')
     if options.corr:
         temp_f.write('intersection_matrix <- cor(intersection_matrix, method="'+options.corrtype+'")\n')
-        temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'-'+options.corrtype+'('+options.hlabel+')", tl.col="black", tl.cex=0.8, is.corr = TRUE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
+        temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'-'+options.corrtype+' correlation('+options.hlabel+')", tl.col="black", tl.cex=0.8, is.corr = TRUE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
     else:
         temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'-'+options.hlabel+'", tl.col="black", tl.cex=0.8, is.corr = FALSE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
 

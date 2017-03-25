@@ -40,6 +40,7 @@ Intervene requires the following Python modules and R packages:
 	* BedTools (Latest version): https://github.com/arq5x/bedtools2
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
 	* Pandas (>= 0.16.0): http://pandas.pydata.org/
+	* Seaborn (>= 0.7.1): http://seaborn.pydata.org/
 	* R (>= 3.0): https://www.r-project.org/
 	* R packages including UpSetR, corrplot
 
