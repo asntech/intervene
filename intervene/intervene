@@ -183,12 +183,23 @@ def main():
                        'reldist: calculate the distribution of relative distances.\n'
                        'fisher: calculate Fisher`s statistic. \n'
                        'Note: For jaccard and reldist regions should be pre-shorted or set --sort.\n\n')
+    
+    pairwise_parser.add_argument('--corr', action='store_true', default=False,
+                  help='Compute the correlation. \n'
+                       'Default is "%(default)s".\n\n')
+    
+    pairwise_parser.add_argument('--corrtype', choices=('pearson', 'kendall', 'spearman'),
+        default='pearson', help='Select the type of correlation. \n'
+                       'pearson: computes the Pearson correlation. (Default) \n'
+                       'kendall: computes the Kendall correlation. \n'
+                       'spearman: computes the Spearman correlation. \n'
+                       'Note: This only works if --corr is set.\n\n')
 
-    pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","color", "pie","circle", "square", "ellipse", "number", "shade"), 
+    pairwise_parser.add_argument('--htype', dest="htype",choices=("tribar","dendrogram","color", "pie","circle", "square", "ellipse", "number", "shade"), 
                    default='tribar',help='Heatmap plot type. '
                            'Default is "%(default)s".\n\n')
     pairwise_parser.add_argument('--triangle', dest="triangle",choices=("lower","upper"), 
-                   default='lower',help='Show lower/upper triangle of the matrix as heatmap. '
+                   default='lower',help='Show lower/upper triangle of the matrix as heatmap if --htype=tribar. '
                            'Default is "%(default)s".\n\n')
     
     pairwise_parser.add_argument('--diagonal', action='store_true', default=False,
@@ -311,7 +322,7 @@ def main():
         print("\nRunning Intervene with test data.\n")
         options.input = helpers.get_test_data(options.command)
         options.filenames = True
-        options.htype = "tribar"
+        #options.htype = "tribar"
         if options.command == 'venn':
           options.figsize = (7, 7)
 

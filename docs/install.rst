@@ -10,6 +10,7 @@ Intervene requires the following Python modules and R packages:
 	* BEDTools (Latest version): https://github.com/arq5x/bedtools2
 	* pybedtools (>= 0.7.9): https://daler.github.io/pybedtools/
 	* Pandas (>= 0.16.0): http://pandas.pydata.org/
+	* Seaborn (>= 0.7.1): http://seaborn.pydata.org/
 	* R (>= 3.0): https://www.r-project.org/
 	* R packages including UpSetR, corrplot
 
@@ -84,5 +85,12 @@ If you have `git` installed, use this:
     cd intervene
     python setup.py sdist install
 
+Install development version from `GitHub`
+-----------------------------------------
+If you have `git` installed, use this:
 
+.. code-block:: bash
 
+    git clone https://github.com/asntech/intervene.git
+    cd intervene
+    python setup.py sdist install

@@ -110,7 +110,7 @@ Once you have installed Intervene, you can type:
 
 	intervene --help
 
-This show the following help message.
+This will show the following help message.
 
 .. code-block:: bash
 

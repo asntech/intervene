@@ -3,3 +3,4 @@ numpy
 scipy
 pybedtools
 matplotlib
+seaborn

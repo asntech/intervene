@@ -18,7 +18,7 @@ import pylab as pl
 import scipy.cluster.hierarchy as sch
 import string
 from matplotlib import gridspec
-
+import seaborn as sns
 
 def get_name(fname):
     return op.splitext(op.basename(fname))[0]
@@ -288,6 +288,21 @@ def heatmap_triangle(dataframe, axes, options):
 
     return caxes, D.index
 
+def heatmap_dendrogram(dataframe, outfile, options):
+    '''
+    Create a full clustered heatmap using Seaborn 
+
+    '''
+    if options.corr:
+        sns_plot = sns.clustermap(dataframe, cmap="RdBu", linewidths=.3, method='complete', metric='euclidean')
+    else:
+        sns_plot = sns.clustermap(dataframe, cmap="RdBu", linewidths=.3)
+
+    sns.plt.setp(sns_plot.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+    sns.plt.suptitle(options.hlabel)
+
+    sns_plot.savefig(outfile, bbox_inches='tight', dpi=options.dpi)
+
 
 def create_r_script(matrix_file, options, max_size=1):
     """
@@ -339,7 +354,12 @@ def create_r_script(matrix_file, options, max_size=1):
     #cmd = 'heatmap_intervene.R %s %s %s %s %s %s %s' % (matrix_file,,options.compute, output_name,, , options.dpi)
     #cl.lim= c('+str(min_val)+','+str(max_val)+'), 
     temp_f.write('intersection_matrix <- as.matrix(read.table("'+matrix_file+'"))\n')
-    temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'", tl.col="black", tl.cex=0.8, is.corr = FALSE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
+    if options.corr:
+        temp_f.write('intersection_matrix <- cor(intersection_matrix, method="'+options.corrtype+'")\n')
+        temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'-'+options.corrtype+'('+options.hlabel+')", tl.col="black", tl.cex=0.8, is.corr = TRUE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
+    else:
+        temp_f.write('corrplot(intersection_matrix, method ="'+options.htype+'", title="'+str(options.title)+'-'+options.hlabel+'", tl.col="black", tl.cex=0.8, is.corr = FALSE, '+diag+', addrect=1, mar=c(0,0,2,1), rect.col = "black")\n')
+
     temp_f.write('invisible(dev.off())\n')
 
     cmd = temp_f.name
@@ -415,7 +435,20 @@ def pairwise_intersection(options):
         f.write('\n')
     f.close()
 
-    if options.htype == 'tribar':
+    #Set heatmap label
+    if options.compute == 'count':
+      options.hlabel = 'Number of overlaps'
+    if options.compute == 'frac':
+      options.hlabel = 'Fraction of overlap'
+    if options.compute == 'jaccard':
+      options.hlabel = 'Jaccard statistic'
+    if options.compute == 'reldist':
+      options.hlabel = 'Dist. of relative distance'
+    if options.compute == 'fisher':
+      options.hlabel = "Fisher's p-value"
+
+
+    if options.htype == 'tribar' or options.htype == 'dendrogram':
         rc("font", family="serif")
         ncols = nfiles
         matrix = pd.read_table(matrix_file,index_col=0, delim_whitespace=True)
@@ -423,17 +456,7 @@ def pairwise_intersection(options):
         labels = list(matrix.columns.values)
         labels = bed_names
         series = pd.Series(bed_sizes, index=labels)
-        #Set heatmap label
-        if options.compute == 'count':
-            options.hlabel = 'Number of overlaps'
-        if options.compute == 'frac':
-            options.hlabel = 'Fraction of overlap'
-        if options.compute == 'jaccard':
-            options.hlabel = 'Jaccard statistic'
-        if options.compute == 'reldist':
-            options.hlabel = 'Dist. of relative distance'
-        if options.compute == 'fisher':
-            options.hlabel = "Fisher's p-value"
+        
 
         #options.title = "Pairwise intersection"
         #options.figsize=(8, 6)
@@ -442,7 +465,15 @@ def pairwise_intersection(options):
         #matrix = pd.DataFrame(np.random.random((nrows, ncols)), columns=labels)
         outfile =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.'+options.figtype
 
-        barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
+        #calculate pearson, kendall or spearman correlation
+        if options.corr:
+            options.hlabel = options.corrtype.title()+'('+options.hlabel+')'
+            matrix = matrix.corr(method=options.corrtype)
+
+        if options.htype == 'dendrogram':
+            heatmap_dendrogram(matrix,outfile, options)
+        else:
+            barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
 
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         

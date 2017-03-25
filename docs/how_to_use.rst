@@ -10,6 +10,21 @@ Once you have installed Intervene, you can type:
 
 This will show the main help, which lists the three subcommands/modules: ``venn``, ``upset``, and ``pairwise``.
 
+.. code-block:: bash
+
+	usage: intervene <subcommand> [options]
+	    
+	positional arguments <subcommand>:
+	  {venn,upset,pairwise}
+	                        List of subcommands
+	    venn                Venn diagram of intersection of genomic regions or list sets (upto 6-way).
+	    upset               UpSet diagram of intersection of genomic regions or list sets.
+	    pairwise            Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF> format.
+
+	optional arguments:
+	  -h, --help            show this help message and exit
+	  -v, --version         show program's version number and exit
+
 To view the help for the individual subcommands, please type:
 
 To view ``venn`` module help, type
