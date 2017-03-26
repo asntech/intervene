@@ -114,7 +114,7 @@ def get_test_data(module_name):
   elif module_name == 'upset':
     test_files = [example_filename(i, 'ENCODE_hESC') for i in  [
         'H3K27ac.bed',
-        #'H3K4me2.bed',
+        'H3K4me2.bed',
         #'H3K4me1.bed',
         'H3K4me3.bed',
         'H3K27me3.bed'
