@@ -43,7 +43,7 @@ def main():
 
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
                   help='Type of input sets. Genomic regions or lists of genes/SNPs. '
-                        'Default is "%(default)s"\n\n')
+                        'Default is "%(default)s"\n')
     venn_parser.add_argument('--names', dest='labels',
                   help='Comma-separated list of names as labels for input files.\nIf it is not set file names will be used as labels.\n'
                        'For example: --names=A,B,C,D,E,F\n\n')
@@ -57,6 +57,9 @@ def main():
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
                        'Default is current working directory.\n\n')
+    venn_parser.add_argument('--title', type=str, dest='title',
+                  help='Title of the plot. '
+                       'By default it is not set.\n\n')  
     venn_parser.add_argument('--project', type=str, default="Intervene",
                   help='Project name for the output. '
                        'Default is: "%(default)s"\n\n')  
@@ -533,7 +536,10 @@ def main():
         parser.print_help()
         sys.stderr.write('Please make sure your arguments are correct.\n')
         sys.exit(1)
-
+    #set title
+    if options.title:
+      ax.set_title(options.title)
+      
     fig.savefig(output_name, dpi=options.dpi, bbox_inches='tight')
     plt.close()
     print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
