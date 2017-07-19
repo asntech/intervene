@@ -8,9 +8,11 @@ Introduction
 .. image:: https://badge.fury.io/py/intervene.svg
     :target: https://badge.fury.io/py/intervene
 
-.. image:: https://anaconda.org/bioconda/intervene/badges/version.svg   :target: https://anaconda.org/bioconda/intervene
+.. image:: https://anaconda.org/bioconda/intervene/badges/version.svg
+	:target: https://anaconda.org/bioconda/intervene
 
-.. image:: https://anaconda.org/bioconda/intervene/badges/installer/conda.svg   :target: https://conda.anaconda.org/bioconda
+.. image:: https://anaconda.org/bioconda/intervene/badges/installer/conda.svg
+	:target: https://conda.anaconda.org/bioconda
 
 .. image:: https://img.shields.io/github/issues/asntech/intervene.svg
 	:target: https://github.com/asntech/intervene/issues
