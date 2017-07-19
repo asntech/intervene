@@ -34,6 +34,24 @@ Documentation
 Installation
 ============
 
+Quick installation using Conda
+------------------------------
+
+.. code-block:: bash
+
+	conda install -c bioconda intervene
+
+This will install all the dependencies and you are ready to use Intervene. Make sure you have R installed.
+
+Install using `pip`
+-------------------
+You can install Intervene from PyPi using pip.
+
+Install from PyPi::
+
+	pip install intervene
+
+
 Intervene requires the following Python modules and R packages:
 
 	* Python (=> 2.7 ): https://www.python.org/
@@ -70,17 +88,10 @@ Intervene rquires three R packages, `UpSetR <https://cran.r-project.org/package=
 
     install.packages(c("UpSetR", "corrplot", "Cairo"))
 
-Install Intervene
-=================
-You can install a stable version of Intervene by using ``pip`` from PyPi or a development version by using ``git`` from GitHub.
+Install Intervene from source
+=============================
+You can install a development version by using ``git`` from GitHub or Bitbucket.
 
-Install using `pip`
--------------------
-You can install InterVene either from PyPi using pip or install it from the source. Please make sure you have already installed the above mentioned python libraries required to run InterVene.
-
-Install from PyPi::
-
-	pip install intervene
 
 Install development version from `Bitbucket`
 --------------------------------------------
