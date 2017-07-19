@@ -17,8 +17,7 @@ Install using `pip`
 -------------------
 You can install Intervene from PyPi using pip.
 
-Install from PyPi::
-
+.. code-block:: bash
 	pip install intervene
 
 Prerequisites
