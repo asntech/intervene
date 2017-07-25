@@ -137,13 +137,13 @@ Once you have installed Intervene, you can type:
 
 .. code-block:: bash
 	
-	intervene pairwise -i path/to/BED/files/*.bed --type jaccard --htype tribar
+	intervene pairwise -i path/to/BED/files/*.bed --type genomic --compute jaccard --htype tribar
 
 This will save the results in the current working directory with a folder named ``Intervene_results``. If you wish to save the results in a specific folder, you can type:
 
 .. code-block:: bash
 
-    intervene pairwise -i path/to/BED/files/*.bed --type jaccard --htype tribar --output ~/results/path
+    intervene pairwise -i path/to/BED/files/*.bed --type genomic --compute jaccard --htype tribar --output ~/results/path
 
 **Summary of options**
 
