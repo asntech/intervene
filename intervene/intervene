@@ -345,7 +345,7 @@ def main():
 
     #================== Run Pairwise module ================#
     if options.command =='pairwise':
-        if options.type == 'fisher':
+        if options.compute == 'fisher':
           if not options.genome:
             sys.stderr.write('Fisher test requires genome name. Please set the --genome argument.\nType --help or read documentation for more details - http://intervene.readthedocs.io\n')
             sys.exit(1)
