@@ -57,6 +57,7 @@ Install from PyPi::
 
 	pip install intervene
 
+Note: If you install using pip, make sure to install BEDTools and R packages listed below. 
 
 Intervene requires the following Python modules and R packages:
 
