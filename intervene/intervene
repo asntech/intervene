@@ -417,8 +417,8 @@ def main():
         
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.a, 'r').read().splitlines()
-          b = open(options.b, 'r').read().splitlines()
+          a = open(options.input[0], 'r').read().splitlines()
+          b = open(options.input[1], 'r').read().splitlines()
           labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
           if options.command == 'upset':
             #create an RScript

@@ -30,23 +30,18 @@ def genomic_upset(input_files):
     for t in truth_table:
         ones = [BedTool(input_files[i]) for i in range(N) if t[i] =='1']
         zeros = [BedTool(input_files[i]) for i in range(N) if t[i] =='0']
-        
         #report those entries in set A which do ovelap with other sets
         x = ones[0]
         if len(ones) > 1:
             for bed in ones[1:]:
                 x = x.intersect(bed, u=True)
-
         #report those entries in set A which doesn't ovelap with other sets
         if len(zeros) > 0:
             #y = zeros[0]
             for bed in zeros[0:]:
                 x = x.intersect(bed, v=True)
-        
         X = (x).count() 
-
         weights[''.join(t)] = X
-
     #delete all temp files
     helpers.cleanup()
     
@@ -60,15 +55,15 @@ def list_upset(input_files):
     '''
     S =[]
     for f in input_files:
-        a = open(f, 'r').read().splitlines()
-        S.append(set(a))
+        f_open = open(f, 'r')
+        S.append(set(f_open.read().splitlines()))
+        f_open.close()
 
     N = len(S)
     
     # Generate a truth table of intersections to calculate 
     truth_table = [x for x in itertools.product("01", repeat=N)][1:]
 
-    
     weights = {}
     for t in truth_table:
         ones = [S[i] for i in range(N) if t[i] =='1']
@@ -83,7 +78,7 @@ def list_upset(input_files):
 
 def create_r_script(labels, names, options):
     """
-    It create Rscript for UpSetR plot for the genomic regions.
+    It creates Rscript for UpSetR plot for the genomic regions.
 
     """
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
@@ -195,26 +190,21 @@ def draw_genomic(labels, names, output, fig_type):
         first = 1
         for x in key:
             if i == 0:
-                #print("'")
                 temp_f.write("'")      
             if x == '1':
                 if first == 1:
                     temp_f.write(str(names[i]))
-                    #print(str(names[i]))
                     first = 0
                 else:
                     temp_f.write('&'+str(names[i]))
-                    #print('&'+str(names[i]))
 
             if i == len(key)-1:
                 if last == len(labels):
                     temp_f.write("'="+str(value))
                 else:
                     temp_f.write("'="+str(value)+',')
-                #print("'="+str(value)+',')
             i += 1
         last +=1
-        #print("'="+str(value)+',')
         #temp_f.write("'="+str(value)+',')
     temp_f.write(")\n")
     #print temp_f.read()
@@ -248,8 +238,7 @@ def one_vs_rest_intersection(beds, peaks, output, **kwoptions):
         #region_int = []
         peak_id = str(i.chrom)+"_"+str(i.start)+"_"+str(i.end)
         f.write(peak_id)
-        #f.write(peak_id + '\t' + i.chrom + '\t' + str(i.start) + '\t' + str(i.end))
-
+        
         for bed in beds:
             b = BedTool(bed)
             int_count = BedTool(str(i), from_string=True).intersect(b).count()
