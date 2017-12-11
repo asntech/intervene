@@ -46,18 +46,19 @@ def enrichment_score(a, b, genome_fn, iterations=1000, processes=1):
     results = a.randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
     return (results['actual'] + 1) / (results['median randomized'] + 1)
 
-def create_matrix(beds, func, verbose=False, sort_bed=False, **kwoptions):
+def create_matrix(beds, bed_names, func, verbose=False, sort_bed=False, **kwoptions):
     nfiles = len(beds)
     total = nfiles ** 2
     i = 0
     bed_sizes = []
-    bed_names = []
 
     matrix = collections.defaultdict(dict)
+    ia = 0 #counter to get file name
     for fa in beds:
         a = BedTool(fa)
         if sort_bed:
             a = a.sort()
+        ib = 0 #counter to get file name
         for fb in beds:
             i += 1
             b = BedTool(fb)
@@ -68,40 +69,40 @@ def create_matrix(beds, func, verbose=False, sort_bed=False, **kwoptions):
                         '%(i)s of %(total)s: %(fa)s + %(fb)s\n' % locals())
                 sys.stderr.flush()
 
-            matrix[get_name(fa)][get_name(fb)] = func(a, b, **kwoptions)
-
-        bed_names.append(get_name(fa))
+            matrix[bed_names[ia]][bed_names[ib]] = func(a, b, **kwoptions)
+            ib += 1
+        ia += 1
         bed_sizes.append(len(a))
-    return matrix, bed_names, bed_sizes
+    return matrix, bed_sizes
 
-def create_list_matrix(lists, verbose=False):
+def create_list_matrix(lists, list_names, verbose=False):
     nfiles = len(lists)
     total = nfiles ** 2
     i = 0
     list_sizes = []
-    list_names = []
-
+  
     matrix = collections.defaultdict(dict)
+    ia = 0 #counter to get file name
     for la in lists:
         with open(la) as f:
             a = f.read().splitlines()
-        f.close()
         a = set(a)
+        ib = 0 #counter to get file name
         for lb in lists:
             i += 1
             with open(lb) as f:
                 b = f.read().splitlines()
-            f.close()
             if verbose:
                 sys.stderr.write(
                         '%(i)s of %(total)s: %(fa)s + %(fb)s\n' % locals())
                 sys.stderr.flush()
 
-            matrix[get_name(la)][get_name(lb)] = len(a.intersection(b))
+            matrix[list_names[ia]][list_names[ib]] = len(a.intersection(b))
+            ib += 1
+        ia += 1
 
-        list_names.append(get_name(la))
         list_sizes.append(len(a))
-    return matrix, list_names, list_sizes
+    return matrix, list_sizes
 
 def barplot(series, matrix, outfile, options, max_size=1):
     """Create a bar plot and place the lower triangle of a heatmap directly
@@ -374,7 +375,7 @@ def create_r_script(matrix_file, options, max_size=1):
         print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
         
-def pairwise_intersection(options):
+def pairwise_intersection(label_names, options):
 
     '''
     if options.enrichment:
@@ -405,10 +406,10 @@ def pairwise_intersection(options):
             FUNC = actual_intersection
             kwoptions = {}
 
-        matrix, bed_names, bed_sizes = create_matrix(beds=options.input, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
+        matrix, bed_sizes = create_matrix(beds=options.input, bed_names=label_names, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
     else:
-        matrix, bed_names, bed_sizes = create_list_matrix(lists=options.input, verbose=False)
-
+        matrix, bed_sizes = create_list_matrix(lists=options.input, list_names=label_names, verbose=False)
+    
     nfiles = len(options.input)
 
     script_file =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'.R'
@@ -454,7 +455,7 @@ def pairwise_intersection(options):
         matrix = pd.read_table(matrix_file,index_col=0, delim_whitespace=True)
 
         labels = list(matrix.columns.values)
-        labels = bed_names
+        labels = label_names
         series = pd.Series(bed_sizes, index=labels)
         
 

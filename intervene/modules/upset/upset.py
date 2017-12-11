@@ -55,9 +55,8 @@ def list_upset(input_files):
     '''
     S =[]
     for f in input_files:
-        f_open = open(f, 'r')
-        S.append(set(f_open.read().splitlines()))
-        f_open.close()
+        with open(f) as f_open:
+            S.append(set(f_open.read().splitlines()))
 
     N = len(S)
     

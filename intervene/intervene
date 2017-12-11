@@ -167,7 +167,7 @@ def main():
 
     #pairwise module argument parser
     pairwise_parser = subparsers.add_parser('pairwise', usage='intervene pairwise [options]', formatter_class=RawTextHelpFormatter,
-        description='Pairwise intersection and heatmap of N genomic region sets in (BED/GTF/GFF) format.',
+        description='Pairwise intersection and heatmap of N genomic region sets in (BED/GTF/GFF) format or list/name sets.',
         help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF> format.')
     
     pairwise_parser.add_argument('-i', dest='input', nargs="*",
@@ -355,7 +355,7 @@ def main():
           options.compute == 'count'
 
         print("\nPerforming a pairwise intersection analysis. Please wait...\n")
-        pairwise.pairwise_intersection(options)
+        pairwise.pairwise_intersection(label_names, options)
         sys.exit(0)
     
     #================== Run Upset module ================#
