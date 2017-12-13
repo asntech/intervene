@@ -36,18 +36,20 @@ def venn2(input_files, options,names=['A','B'], plot_type='venn'):
 
 def venn3(input_files, options, names=['A','B','C'], plot_type='venn'):
 
-    a = BedTool(input_files[0])
-    b = BedTool(input_files[1])
-    c = BedTool(input_files[2])
+    # a = BedTool(input_files[0])
+    # b = BedTool(input_files[1])
+    # c = BedTool(input_files[2])
 
     
-    labels = {'001': (c - a - b).count(), #Only C
-    '010': (b - a - c).count(), #only
-    '011': (b + c - a).count(),
-    '100': (a - b - c).count(), #only A
-    '101': (a + c - b).count(),
-    '110': (a + b - c).count(),
-    '111': (a + b + c).count()}
+    # labels = {'001': (c - a - b).count(), #Only C
+    # '010': (b - a - c).count(), #only
+    # '011': (b + c - a).count(),
+    # '100': (a - b - c).count(), #only A
+    # '101': (a + c - b).count(),
+    # '110': (a + b - c).count(),
+    # '111': (a + b + c).count()}
+
+    labels = upset.genomic_upset(options.input)
 
     #delete all temp files
     helpers.cleanup()
