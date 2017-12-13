@@ -273,23 +273,45 @@ def main():
   
     pairwise_parser.add_argument('--test', action='store_true', help='This will run the program on test data.\n\n')
     
-    
     parser.add_argument('-v','--version', dest='version', action='version', version='%(prog)s version '+intervene.__version__)
+    parser.add_argument('-c','--cite', dest='cite', action='store_true', help='show citation information and exit\n')
    
     options = parser.parse_args()
+
+    if options.cite:
+      cite = """
+      If you find Intervene tool useful for your research please cite as:
+
+      A. Khan and A. Mathelier. 2017. Intervene: a tool for intersection and visualization of multiple gene or genomic region sets. BMC Bioinformatics 18:287. doi:10.1186/s12859-017-1708-7
+
+      Or use the below BIB:
+
+      @Article{Khan2017,
+        author="Khan, Aziz
+        and Mathelier, Anthony",
+        title="Intervene: a tool for intersection and visualization of multiple gene or genomic region sets",
+        journal="BMC Bioinformatics",
+        year="2017",
+        month="May",
+        day="31",
+        volume="18",
+        number="1",
+        pages="287",
+        abstract="A common task for scientists relies on comparing lists of genes or genomic regions derived from high-throughput sequencing experiments. While several tools exist to intersect and visualize sets of genes, similar tools dedicated to the visualization of genomic region sets are currently limited.",
+        issn="1471-2105",
+        doi="10.1186/s12859-017-1708-7",
+        url="https://doi.org/10.1186/s12859-017-1708-7"
+      }
+
+      """
+
+      sys.stderr.write(cite)
+      sys.exit(0)
 
     if not options.command:
         parser.print_help()
         sys.stderr.write('Missing required arguments. ')
         sys.exit(1)
-
-    # if options.cite:
-    #     if options.cite == 'bib':
-    #       sys.stderr.write('Missing required arguments. ')
-    #       sys.exit(1)
-    #     else:
-    #       sys.stderr.write('Khan A. and Mathelier A., Intervene: a tool for intersection and visualization of multiple gene or genomic region sets, Submitted, 2017. ')
-    #       sys.exit(0)
 
     #checke if there are at least two input bed/list files
     reqd_args = ['input']
