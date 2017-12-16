@@ -19,28 +19,30 @@ import scipy.cluster.hierarchy as sch
 import string
 from matplotlib import gridspec
 import seaborn as sns
+from intervene import helpers
+
 
 def get_name(fname):
     return op.splitext(op.basename(fname))[0]
 
-def actual_intersection(a, b):
-    return len(a.intersect(b, u=True))
+def actual_intersection(a, b, **kwoptions):
+    return len(a.intersect(b, u=True, **kwoptions))
 
-def jaccard_of_a(a, b):
-    return a.jaccard(b,u=True)['jaccard']
+def jaccard_of_a(a, b, **kwoptions):
+    return a.jaccard(b,u=True, **kwoptions)['jaccard']
 
 #Calculate the fisher 
-def fisher_of_a(a, b, genome):
-    return a.fisher(b,genome=genome).two_tail
+def fisher_of_a(a, b, **kwoptions):
+    return a.fisher(b, **kwoptions).two_tail
 
 #Calculate the reldist 
-def reldist_of_a(a, b):
+def reldist_of_a(a, b, **kwoptions):
     #return mean(a.reldist(b)['reldist'])
     return float(sum(a.reldist(b)['reldist'])) / max(len(a.reldist(b)['reldist']), 1)
 
-def frac_of_a(a, b):
+def frac_of_a(a, b, **kwoptions):
     len_a = float(len(a))
-    return len(a.intersect(b, u=True)) / len_a
+    return len(a.intersect(b, u=True, **kwoptions)) / len_a
 
 def enrichment_score(a, b, genome_fn, iterations=1000, processes=1):
     results = a.randomstats(b, new=True, genome_fn=genome_fn, iterations=iterations, processes=processes)
@@ -388,23 +390,24 @@ def pairwise_intersection(label_names, options):
     if options.type == 'genomic':
         if options.compute == "frac":
             FUNC = frac_of_a
-            kwoptions = {}
+            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
 
         elif options.compute == 'jaccard':
             FUNC = jaccard_of_a
-            kwoptions = {}
+            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
 
         elif options.compute == 'fisher':
             FUNC = fisher_of_a
-            kwoptions = dict(genome=options.genome)
+            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions.update({'genome':options.genome})
 
         elif options.compute == 'reldist':
             FUNC = reldist_of_a
-            kwoptions = {}
+            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
 
         else:
             FUNC = actual_intersection
-            kwoptions = {}
+            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
 
         matrix, bed_sizes = create_matrix(beds=options.input, bed_names=label_names, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
     else:

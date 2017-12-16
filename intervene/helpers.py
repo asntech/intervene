@@ -35,6 +35,28 @@ def venn_order(input_files):
 
     return len(input_files)
 
+def map_bedtools_options(bedtools_options):
+    '''
+    Create a dict of bedtools intersect options
+    '''
+    
+    kwargs = {}
+    
+    try:
+        for args in bedtools_options.split(','):
+            args = args.split('=')
+            if len(args) > 1:
+                if args[1] in ['true','True']:
+                    kwargs[args[0]]= True
+                else:
+                    kwargs[args[0]]= args[1]
+            else:
+                kwargs[args[0]]= True
+    except:
+        pass  
+    
+    return kwargs
+
 def get_filenames(input_files):
     """
     Checks the venn-type
@@ -179,6 +201,23 @@ def default_colors():
     default_colors = [
         [i[0] / 255.0, i[1] / 255.0, i[2] / 255.0, i[3]]
         for i in default_colors
+    ]
+
+    return default_colors
+
+def default_border_colors():
+    """
+    Get a list of RGBA colors 
+    """
+
+    default_colors = [
+        # r, g, b, a
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
+        [0, 0, 0, 1],
     ]
 
     return default_colors

@@ -37,13 +37,14 @@ def main():
         description='Create Venn diagram upto 6-way after intersection of genomic regions in (BED/GTF/GFF) format or list sets.', 
         help='Venn diagram of intersection of genomic regions or list sets (upto 6-way).')
     
-    venn_parser.add_argument('-i', dest='input', nargs="*",
+    venn_parser.add_argument('-i', '--input', dest='input', nargs="*",
         help='Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs.\n'
         'For files in a directory use *.<extension>. e.g. *.bed\n\n')
 
     venn_parser.add_argument('--type', dest='type', default='genomic', choices=('genomic','list'),
                   help='Type of input sets. Genomic regions or lists of genes/SNPs. '
                         'Default is "%(default)s"\n')
+
     venn_parser.add_argument('--names', dest='labels',
                   help='Comma-separated list of names as labels for input files.\nIf it is not set file names will be used as labels.\n'
                        'For example: --names=A,B,C,D,E,F\n\n')
@@ -51,18 +52,35 @@ def main():
     venn_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s"\n\n')
-    venn_parser.add_argument('--colors', dest='colors',
-                  help='Comma-separated list of matplotlib-valid colors. '
-                       'E.g., --colors=r,b,k\n\n')
+    
+    venn_parser.add_argument('--bedtools-options', dest='bedtools_options',
+                  help='List any of the arguments available for bedtool’s intersect command.\nType bedtools intersect --help to view all the options.\n'
+                       'For example: --bedtools-options f=0.8,r,etc\n\n')
+
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
                        'Default is current working directory.\n\n')
+    
+    venn_parser.add_argument('--save-overlaps', dest='saveoverlaps',  action='store_true', default=False,
+                    help='Save overlapping regions/names for all the combinations as bed/txt. '
+                       'Default is "%(default)s".\n\n')
+
     venn_parser.add_argument('--title', type=str, dest='title',
                   help='Title of the plot. '
-                       'By default it is not set.\n\n')  
+                       'By default it is not set.\n\n') 
+
     venn_parser.add_argument('--project', type=str, default="Intervene",
                   help='Project name for the output. '
-                       'Default is: "%(default)s"\n\n')  
+                       'Default is: "%(default)s"\n\n')
+
+    venn_parser.add_argument('--colors', dest='colors',
+                  help='Comma-separated list of matplotlib-valid colors for fill. '
+                       'E.g., --colors=r,b,k\n\n')
+
+    venn_parser.add_argument('--bordercolors', dest='bordercolors',
+                  help='A matplotlib-valid color for venn borders. '
+                       'E.g., --bordercolor=red\n\n')
+
     venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
@@ -86,7 +104,7 @@ def main():
         description='Create UpSet diagram after intersection of genomic regions in (BED/GTF/GFF) or list sets.', 
         help='UpSet diagram of intersection of genomic regions or list sets.')
     
-    upset_parser.add_argument('-i', dest='input', nargs="*",
+    upset_parser.add_argument('-i', '--input', dest='input', nargs="*",
         help='Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs.\n '
         'For files in a directory use *.<extension>. e.g. *.bed\n\n')
     '''
@@ -105,10 +123,19 @@ def main():
     upset_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s".\n\n')
+
+    upset_parser.add_argument('--bedtools-options', dest='bedtools_options',
+                  help='List any of the arguments available for bedtool’s intersect command.\nType bedtools intersect --help to view all the options.\n'
+                       'For example: --bedtools-options f=0.8,r,etc\n\n')
    
     upset_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
                        'Default is current working directory.\n\n')
+
+    upset_parser.add_argument('--save-overlaps', dest='saveoverlaps', action='store_true', default=False,
+                    help='Save overlapping regions/names for all the combinations as bed/txt.'
+                       'Default is "%(default)s".\n\n')
+
     upset_parser.add_argument('--project', type=str, default="Intervene",
                   help='Project name for the output. '
                        'Default is: "%(default)s"\n\n')  
@@ -170,7 +197,7 @@ def main():
         description='Pairwise intersection and heatmap of N genomic region sets in (BED/GTF/GFF) format or list/name sets.',
         help='Pairwise intersection and heatmap of N genomic region sets in <BED/GTF/GFF> format.')
     
-    pairwise_parser.add_argument('-i', dest='input', nargs="*",
+    pairwise_parser.add_argument('-i', '--input', dest='input', nargs="*",
         help='Input genomic regions in (BED/GTF/GFF) format. \n'
         'For files in a directory use *.<extension>. e.g. *.bed\n')
     
@@ -186,6 +213,10 @@ def main():
                        'reldist: calculate the distribution of relative distances.\n'
                        'fisher: calculate Fisher`s statistic. \n'
                        'Note: For jaccard and reldist regions should be pre-shorted or set --sort.\n\n')
+
+    pairwise_parser.add_argument('--bedtools-options', dest='bedtools_options',
+                  help='List any of the arguments available for bedtool’s subcommands: interset, jaccard, fisher, reldist.\nType bedtools <subcommand> --help to view all the options.\n'
+                       'For example: --bedtools-options f=0.8,r,etc\n\n')
     
     pairwise_parser.add_argument('--corr', action='store_true', default=False,
                   help='Compute the correlation. \n'
@@ -234,11 +265,12 @@ def main():
                     help='Number of processors to perform for enrichement '
                     'scores')
     '''
-    pairwise_parser.add_argument('--genome', help='Required argument if --type=fisher.\n'
+    pairwise_parser.add_argument('--genome', help='Required argument if --compute=fisher.\n'
                     'Needs to be a string assembly name like "mm10" or "hg38"\n\n')
     pairwise_parser.add_argument('-o', '--output', dest='output', 
                     help='Output folder path where results will be stored. \n'
                        'Default is current working directory.\n\n')
+    
     pairwise_parser.add_argument('--project', type=str, default="Intervene",
                   help='Project name for the output. '
                        'Default is: "%(default)s"\n\n')  
@@ -391,9 +423,9 @@ def main():
         #options.filenames = True
         
         if options.type == 'list':
-          labels = upset.list_upset(options.input)
+          labels = upset.list_upset(options, label_names)
         else:
-          labels = upset.genomic_upset(options.input)
+          labels = upset.genomic_upset(options, label_names)
         upset.create_r_script(labels, label_names, options)
         sys.exit(0)
 
@@ -402,13 +434,14 @@ def main():
     #create output file name
     output_name =  options.output+'/'+str(options.project)+'_'+options.command+'.'+options.figtype
 
-    #check file name already exists and ask if user want to overwrite
-    if os.path.exists(output_name):
-      print("The file name "+str(output_name)+" already exist.\n")
-      answer = str(raw_input("Do you want to overwrite? [yes/no]: "))
-      if answer != 'yes':
-        print("You can run Intervene by setting a different --output path.\nThanks for using Intervene!")
-        sys.exit(1)
+    # #check file name already exists and ask if user want to overwrite
+    # if os.path.exists(output_name):
+    #   from six.moves import input
+    #   print("The file name "+str(output_name)+" already exist.\n")
+    #   answer = str(input("Do you want to overwrite? [yes/no]: "))
+    #   if answer not in ['yes', 'y', 'Y']:
+    #     print("You can run Intervene by setting a different --output path.\nThanks for using Intervene!")
+    #     sys.exit(1)
     
     #Cheeck colors for Venn
     if options.command == 'venn':
@@ -417,6 +450,12 @@ def main():
         options.colors = [helpers.get_colors(options.colors)[i] for i in range(helpers.venn_order(options.input))]
       else:
         options.colors = [helpers.default_colors()[i] for i in range(helpers.venn_order(options.input))]
+
+      if options.bordercolors:
+        options.bordercolors = options.bordercolors.split(',')
+        options.bordercolors = [helpers.get_colors(options.bordercolors)[i] for i in range(helpers.venn_order(options.input))]
+      else:
+        options.bordercolors = [helpers.default_border_colors()[i] for i in range(helpers.venn_order(options.input))]
         
     #Cheeck figure size
     if options.figsize:
@@ -446,12 +485,12 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
         
         #else input considered as bed file
         else:
-          labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+          labels = upset.genomic_upset(options, label_names)
+          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
           
           #fig, ax = genomic_venn.venn2(input_files=options.input,
           #      options=options, names=label_names, plot_type=plot_type)     
@@ -470,11 +509,11 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)          
+            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)          
         #else input considered as bed file
         else:
-          labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+          labels = upset.genomic_upset(options, label_names)
+          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
           
           #fig, ax = genomic_venn.venn3(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
 
@@ -494,12 +533,12 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
             
         #else input considered as bed file
         else:
-          labels = upset.genomic_upset(options.input)
-          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+          labels = upset.genomic_upset(options, label_names)
+          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
           #fig, ax = genomic_venn.venn4(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
             
                    
@@ -521,11 +560,11 @@ def main():
             upset.create_r_script(labels, label_names, options)
 
           else:
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
         #else input considered as genomic regions file
         else:
-            labels = upset.genomic_upset(options.input)
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            labels = upset.genomic_upset(options, label_names)
+            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
             #fig, ax = genomic_venn.venn5(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
         
     elif helpers.venn_order(options.input) == 6:
@@ -546,12 +585,12 @@ def main():
             #create an RScript
             upset.create_r_script(labels, label_names, options)
           else:
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
                 
         #else input considered as bed file
         else:
-            labels = upset.genomic_upset(options.input)
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors,  figsize=options.figsize, fontsize=options.fontsize)
+            labels = upset.genomic_upset(options, label_names)
+            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
             #fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
    
     else:
@@ -564,7 +603,7 @@ def main():
       
     fig.savefig(output_name, dpi=options.dpi, bbox_inches='tight')
     plt.close()
-    print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+    print('\nDone! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
 
 if __name__ == '__main__':
     try:

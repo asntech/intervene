@@ -11,15 +11,23 @@ import tempfile
 import itertools
 from intervene.modules.pairwise.pairwise import get_name
 from pybedtools import BedTool, helpers
+from intervene import helpers as hlp
 
 
-def genomic_upset(input_files):
+def genomic_upset(options, label_names):
     '''
     Arguments:
         input_files -  List of BED files to to calculate the weights
+        output - output path
+        label_names - names of input files
     Takes a list of sets a list of the sizes of non-overlapping intersections between them 
     '''
-    
+
+    input_files = options.input
+    output = options.output
+
+    kwargs = hlp.map_bedtools_options(options.bedtools_options)
+
     N = len(input_files)
     
     # Generate a truth table of intersections to calculate 
@@ -34,45 +42,71 @@ def genomic_upset(input_files):
         x = ones[0]
         if len(ones) > 1:
             for bed in ones[1:]:
-                x = x.intersect(bed, u=True)
+                x = x.intersect(bed, u=True, **kwargs)
         #report those entries in set A which doesn't ovelap with other sets
         if len(zeros) > 0:
             #y = zeros[0]
             for bed in zeros[0:]:
-                x = x.intersect(bed, v=True)
-        X = (x).count() 
+                x = x.intersect(bed, v=True, **kwargs)
+        X = (x).count()
         weights[''.join(t)] = X
-    #delete all temp files
-    helpers.cleanup()
-    
+        
+        #save the intersected results
+        if options.saveoverlaps:
+            file_name = ''
+            name_itr = 0
+            for name in t:
+                if name == '1':
+                    file_name += '_'+label_names[name_itr]
+                name_itr +=1
+            file_name = ''.join(t)+file_name
+            hlp.create_dir(output+'/sets')
+            x.moveto(output+'/sets/'+file_name+'.bed')
+        
+        #delete all temp files
+        helpers.cleanup()
+
     return(weights)
 
-def list_upset(input_files):
+def list_upset(options, label_names):
     '''
     Arguments:
         input_files -  List of list files to calculate weights for upset plot
+        output - output path
+        label_names - names of input files
     Takes a list of sets a list of the sizes of non-overlapping intersections between them 
     '''
+    input_files = options.input
+    output = options.output
     S =[]
     for f in input_files:
         with open(f) as f_open:
             S.append(set(f_open.read().splitlines()))
-
     N = len(S)
-    
     # Generate a truth table of intersections to calculate 
     truth_table = [x for x in itertools.product("01", repeat=N)][1:]
-
     weights = {}
     for t in truth_table:
         ones = [S[i] for i in range(N) if t[i] =='1']
         zeros = [S[i] for i in range(N) if t[i] =='0']
-        
         X = set.intersection(*ones)
         X.difference_update(*zeros)
-        
         weights[''.join(t)] = len(X)
-    
+
+        #save the intersected results
+        if options.saveoverlaps:
+            file_name = ''
+            name_itr = 0
+            for name in t:
+                if name == '1':
+                    file_name += '_'+label_names[name_itr]
+                name_itr +=1
+            file_name = ''.join(t)+file_name
+            hlp.create_dir(output+'/sets')
+            inter_file = open(output+'/sets/'+file_name+'.txt', 'w')
+            inter_file.writelines('\n'.join(list(X)))
+            inter_file.close()
+
     return(weights)
 
 def create_r_script(labels, names, options):
@@ -211,8 +245,7 @@ def draw_genomic(labels, names, output, fig_type):
     temp_f.close()
     cmd = 'upset_plot_intervene.R %s %s %s %s %s ' % ('genomic',len(key),temp_f.name, output, fig_type)
     os.system(cmd)
-    sys.exit(1)
-
+    sys.exit(0)
 
 def one_vs_rest_intersection(beds, peaks, output, **kwoptions):
     '''

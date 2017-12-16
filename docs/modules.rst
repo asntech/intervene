@@ -3,6 +3,7 @@ Intervene modules
 =================
 Intervene provides three types of plots to visualize intersections of genomic regions and list sets. These are pairwise heatmap of N genomic region sets, classic Venn diagrams of genomic regions and list sets of up to 6-way and UpSet plots.
 
+.. note:: By default the intersection genomic regions is computed using default parameters of `BedTools`. Intervene version > v0.6.0 now allows users to provide all the arguments available in BedTools' commands  by using **--bedtools-options**.
 
 Venn diagram module 
 ===================
@@ -42,12 +43,15 @@ This will save the results in the current working directory with a folder named 
    :widths: 10, 80
 
      "-h, --help","To show the help message and exit"
-	 "-i","Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs. For files in a directory use *.<extension>. e.g. *.bed"
+	 "-i, --input","Input genomic regions in (BED/GTF/GFF) format or lists of genes/SNPs IDs. For files in a directory use *.<extension>. e.g. *.bed"
 	 "--type","{genomic,list}. Type of input sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
 	 "--names","Comma-separated list of names as labels for input files. If it is not set file names will be used as labels. For example: --names=A,B,C,D,E,F"
-	 "--filenames","Use file names as labels instead. Default is ``False``"             
-	 "--colors","Comma-separated list of matplotlib-valid colors. E.g., --colors=r,b,k"
+	 "--filenames","Use file names as labels instead. Default is ``False``"
+	 "--bedtools-options","List any of the arguments available for bedtool’s intersect command. Type bedtools intersect --help to view all the options. For example: --bedtools-options f=0.8,r,etc"
+	 "--colors","Comma-separated list of matplotlib-valid colors for fill. E.g., --colors=r,b,k"
+	 "--bordercolors","Comma-separated list of matplotlib-valid colors for borders. E.g., --bordercolors=r,b,k"
 	 "-o, --output","Output folder path where results will be stored. Default is current working directory."
+	 "--save-overlaps","Save overlapping regions/names for all the combinations as bed/txt files. Default is ``False``"
 	 "--figtype","{pdf,svg,ps,tiff,png} Figure type for the plot. e.g. --figtype svg. Default is ``pdf``"
 	 "--figsize","Figure size as width and height.e.g. --figsize 12 12."
 	 "--fontsize","Font size for the plot labels. Default is ``14``"
@@ -98,7 +102,9 @@ This will save the results in the current working directory with a folder named 
 	 "--type","Type of input sets. Genomic regions or lists of genes sets {genomic,list}. Default is ``genomic``"  
  	 "--names","Comma-separated list of names as labels for input files. If it is not set file names will be used as labels. For example: --names=A,B,C,D,E,F"
  	 "--filenames","Use file names as labels instead. Default is ``True``"
+ 	 "--bedtools-options","List any of the arguments available for bedtool’s intersect command. Type bedtools intersect --help to view all the options. For example: --bedtools-options f=0.8,r,etc"
 	 "-o, --output","Output folder path where plots will store. Default is current working directory."
+	 "--save-overlaps","Save overlapping regions/names for all the combinations as bed/txt files. Default is ``False``"
 	 "--order", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
 	 "--ninter", "Number of top intersections to plot. Default is ``30``"
 	 "--showzero", "Show empty overlap combinations. Default is ``False``"
@@ -113,7 +119,7 @@ This will save the results in the current working directory with a folder named 
 	 "--scriptonly", "Set to generate Rscript only, if R/UpSetR package is not installed. Default is ``False``"
 	 "--showshiny", "Print the combinations of intersections to input to Shiny App. Default is ``False``"
 
-  
+
 Pairwise intersection module
 ============================
 Once you have installed Intervene, you can type: 
@@ -152,7 +158,7 @@ This will save the results in the current working directory with a folder named 
    :widths: 10, 80
 
 	  "-h, --help","show this help message and exit"
-	  "-i","Input genomic regions in (BED/GTF/GFF) format. For files in a directory use *.<extension>. e.g. *.bed"
+	  "-i, --input","Input genomic regions in (BED/GTF/GFF) format. For files in a directory use *.<extension>. e.g. *.bed"
 	  "--type","{genomic,list}. Type of input sets. Genomic regions or lists of genes/SNPs. Default is ``genomic``"
 	  "--compute","Compute count/fraction of overlaps or statistical relationships. {``count``, ``frac``, ``jaccard``, ``fisher``, ``reldist``}"
 	  " ","--compute=count - calculates the number of overlaps."
@@ -161,6 +167,7 @@ This will save the results in the current working directory with a folder named 
 	  " ","--compute=reldist - calculate the distribution of relative distances. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/reldist.html>`_"
 	  " ","--compute=fisher - calculate Fisher`s statistic. `Read more details here <http://bedtools.readthedocs.io/en/latest/content/tools/fisher.html>`_"
 	  " ","Note: For jaccard and reldist regions should be pre-shorted or set --sort``"
+	  "--bedtools-options","List any of the arguments available for bedtool’s subcommands: interset, jaccard, fisher, reldist. Type `bedtools <subcommand> --help` to view all the options. For example: --bedtools-options f=0.8,r,etc"
 	  "--corr","Compute the correlation. By default set to False"
 	  "--corrtype","Select the type of correlation from ``pearson``, ``kendall`` or ``spearman``."
 	  " ","--corrtype=pearson: computes the Pearson correlation. (Default)"

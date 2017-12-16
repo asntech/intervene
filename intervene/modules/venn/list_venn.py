@@ -28,19 +28,28 @@ def get_colors(color_list):
 
     return colors_list
 
-def draw_ellipse(fig, ax, x, y, w, h, a, fillcolor):
+def get_border_colors(color_list):
+
+    colors_list = [
+        [i[0] / 255.0, i[1] / 255.0, i[2] / 255.0, i[3]]
+        for i in color_list
+    ]
+
+    return colors_list
+
+def draw_ellipse(fig, ax, x, y, w, h, a, fillcolor, bordercolor):
     e = patches.Ellipse(
         xy=(x, y),
         width=w,
         ls='solid',
         lw=1.0,
-        ec='black',
+        ec=bordercolor,
         height=h,
         angle=a,
         color=fillcolor)
     ax.add_patch(e)
 
-def draw_triangle(fig, ax, x1, y1, x2, y2, x3, y3, fillcolor):
+def draw_triangle(fig, ax, x1, y1, x2, y2, x3, y3, fillcolor, bordercolor):
     xy = [
         (x1, y1),
         (x2, y2),
@@ -50,7 +59,7 @@ def draw_triangle(fig, ax, x1, y1, x2, y2, x3, y3, fillcolor):
         xy=xy,
         ls='solid',
         lw=1.0,
-        #ec='black',
+        ec=bordercolor,
         closed=True,
         color=fillcolor)
     ax.add_patch(polygon)
@@ -122,6 +131,7 @@ def get_labels(data, fill=["number"]):
         set_collections[key] = value
 
     labels = {k: "" for k in set_collections}
+
     if "logic" in fill:
         for k in set_collections:
             labels[k] = k + ": "
@@ -155,6 +165,7 @@ def venn2(labels, names=['A', 'B'], **options):
     """
     #colors = get_colors(default_colors)[i] for i in range(2)]
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(2)])
+    bordercolors = options.get('bordercolors', [get_border_colors(default_colors)[i] for i in range(2)])
     figsize = options.get('figsize', (6, 5))
     fontsize = options.get("fontsize", 14)
     dpi = options.get('dpi', 300)
@@ -166,8 +177,8 @@ def venn2(labels, names=['A', 'B'], **options):
     ax.set_xlim(left=0.0, right=1.0)
     
     # body
-    draw_ellipse(fig, ax, 0.375, 0.3, 0.5, 0.5, 0.0, colors[0])
-    draw_ellipse(fig, ax, 0.625, 0.3, 0.5, 0.5, 0.0, colors[1])
+    draw_ellipse(fig, ax, 0.375, 0.3, 0.5, 0.5, 0.0, colors[0], bordercolors[0])
+    draw_ellipse(fig, ax, 0.625, 0.3, 0.5, 0.5, 0.0, colors[1], bordercolors[1])
     draw_text(fig, ax, 0.74, 0.30, labels.get('01', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.26, 0.30, labels.get('10', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.50, 0.30, labels.get('11', ''), fontsize=fontsize)
@@ -200,6 +211,7 @@ def venn3(labels, names=['A', 'B', 'C'], **options):
     """
 
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(3)])
+    bordercolors = options.get('bordercolors', [get_border_colors(default_colors)[i] for i in range(3)])
     figsize = options.get('figsize', (9, 9))
     fontsize = options.get("fontsize", 14)    
     dpi = options.get('dpi', 300)
@@ -211,9 +223,9 @@ def venn3(labels, names=['A', 'B', 'C'], **options):
     ax.set_xlim(left=0.0, right=1.0)
     
     # body
-    draw_ellipse(fig, ax, 0.333, 0.633, 0.5, 0.5, 0.0, colors[0])
-    draw_ellipse(fig, ax, 0.666, 0.633, 0.5, 0.5, 0.0, colors[1])
-    draw_ellipse(fig, ax, 0.500, 0.310, 0.5, 0.5, 0.0, colors[2])
+    draw_ellipse(fig, ax, 0.333, 0.633, 0.5, 0.5, 0.0, colors[0], bordercolors[0])
+    draw_ellipse(fig, ax, 0.666, 0.633, 0.5, 0.5, 0.0, colors[1], bordercolors[1])
+    draw_ellipse(fig, ax, 0.500, 0.310, 0.5, 0.5, 0.0, colors[2], bordercolors[2])
     draw_text(fig, ax, 0.50, 0.27, labels.get('001', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.73, 0.65, labels.get('010', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.61, 0.46, labels.get('011', ''), fontsize=fontsize)
@@ -250,6 +262,7 @@ def venn4(labels, names=['A', 'B', 'C', 'D'], **options):
       pyplot Figure and AxesSubplot object
     """
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(4)])
+    bordercolors = options.get('bordercolors', [get_border_colors(default_colors)[i] for i in range(4)])
     figsize = options.get('figsize', (14, 14))
     fontsize = options.get("fontsize", 14)    
     dpi = options.get('dpi', 300)
@@ -261,10 +274,10 @@ def venn4(labels, names=['A', 'B', 'C', 'D'], **options):
     ax.set_xlim(left=0.0, right=1.0)
     
     # body   
-    draw_ellipse(fig, ax, 0.350, 0.400, 0.72, 0.45, 140.0, colors[0])
-    draw_ellipse(fig, ax, 0.450, 0.500, 0.72, 0.45, 140.0, colors[1])
-    draw_ellipse(fig, ax, 0.544, 0.500, 0.72, 0.45, 40.0, colors[2])
-    draw_ellipse(fig, ax, 0.644, 0.400, 0.72, 0.45, 40.0, colors[3])
+    draw_ellipse(fig, ax, 0.350, 0.400, 0.72, 0.45, 140.0, colors[0], bordercolors[0])
+    draw_ellipse(fig, ax, 0.450, 0.500, 0.72, 0.45, 140.0, colors[1], bordercolors[1])
+    draw_ellipse(fig, ax, 0.544, 0.500, 0.72, 0.45, 40.0, colors[2], bordercolors[2])
+    draw_ellipse(fig, ax, 0.644, 0.400, 0.72, 0.45, 40.0, colors[3], bordercolors[3])
     draw_text(fig, ax, 0.85, 0.42, labels.get('0001', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.68, 0.72, labels.get('0010', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.77, 0.59, labels.get('0011', ''), fontsize=fontsize)
@@ -310,6 +323,7 @@ def venn5(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
       pyplot Figure and AxesSubplot object
     """
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(5)])
+    bordercolors = options.get('bordercolors', [get_border_colors(default_colors)[i] for i in range(5)])
     figsize = options.get('figsize', (15, 15))
     dpi = options.get('dpi', 300)
     fontsize = options.get("fontsize", 14)    
@@ -321,11 +335,11 @@ def venn5(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
     ax.set_xlim(left=0.0, right=1.0)
     
     # body   
-    draw_ellipse(fig, ax, 0.428, 0.449, 0.87, 0.50, 155.0, colors[0])
-    draw_ellipse(fig, ax, 0.469, 0.543, 0.87, 0.50, 82.0, colors[1])
-    draw_ellipse(fig, ax, 0.558, 0.523, 0.87, 0.50, 10.0, colors[2])
-    draw_ellipse(fig, ax, 0.578, 0.432, 0.87, 0.50, 118.0, colors[3])
-    draw_ellipse(fig, ax, 0.489, 0.383, 0.87, 0.50, 46.0, colors[4])
+    draw_ellipse(fig, ax, 0.428, 0.449, 0.87, 0.50, 155.0, colors[0], bordercolors[0])
+    draw_ellipse(fig, ax, 0.469, 0.543, 0.87, 0.50, 82.0, colors[1], bordercolors[1])
+    draw_ellipse(fig, ax, 0.558, 0.523, 0.87, 0.50, 10.0, colors[2], bordercolors[2])
+    draw_ellipse(fig, ax, 0.578, 0.432, 0.87, 0.50, 118.0, colors[3], bordercolors[3])
+    draw_ellipse(fig, ax, 0.489, 0.383, 0.87, 0.50, 46.0, colors[4], bordercolors[4])
     draw_text(fig, ax, 0.27, 0.11, labels.get('00001', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.72, 0.11, labels.get('00010', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.55, 0.13, labels.get('00011', ''), fontsize=fontsize)
@@ -388,6 +402,7 @@ def venn6(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
       pyplot Figure and AxesSubplot object
     """
     colors = options.get('colors', [get_colors(default_colors)[i] for i in range(6)])
+    bordercolors = options.get('bordercolors', [get_border_colors(default_colors)[i] for i in range(6)])
     figsize = options.get('figsize', (20, 20))
     dpi = options.get('dpi', 300)
     fontsize = options.get("fontsize", 14)    
@@ -399,12 +414,12 @@ def venn6(labels, names=['A', 'B', 'C', 'D', 'E'], **options):
     ax.set_xlim(left=0.173, right=0.788)
     
     # body   
-    draw_triangle(fig, ax, 0.637, 0.921, 0.649, 0.274, 0.188, 0.667, colors[0])
-    draw_triangle(fig, ax, 0.981, 0.769, 0.335, 0.191, 0.393, 0.671, colors[1])
-    draw_triangle(fig, ax, 0.941, 0.397, 0.292, 0.475, 0.456, 0.747, colors[2])
-    draw_triangle(fig, ax, 0.662, 0.119, 0.316, 0.548, 0.662, 0.700, colors[3])
-    draw_triangle(fig, ax, 0.309, 0.081, 0.374, 0.718, 0.681, 0.488, colors[4])
-    draw_triangle(fig, ax, 0.016, 0.626, 0.726, 0.687, 0.522, 0.327, colors[5])
+    draw_triangle(fig, ax, 0.637, 0.921, 0.649, 0.274, 0.188, 0.667, colors[0], bordercolors[0])
+    draw_triangle(fig, ax, 0.981, 0.769, 0.335, 0.191, 0.393, 0.671, colors[1], bordercolors[1])
+    draw_triangle(fig, ax, 0.941, 0.397, 0.292, 0.475, 0.456, 0.747, colors[2], bordercolors[2])
+    draw_triangle(fig, ax, 0.662, 0.119, 0.316, 0.548, 0.662, 0.700, colors[3], bordercolors[3])
+    draw_triangle(fig, ax, 0.309, 0.081, 0.374, 0.718, 0.681, 0.488, colors[4], bordercolors[4])
+    draw_triangle(fig, ax, 0.016, 0.626, 0.726, 0.687, 0.522, 0.327, colors[5], bordercolors[5])
     draw_text(fig, ax, 0.212, 0.562, labels.get('000001', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.430, 0.249, labels.get('000010', ''), fontsize=fontsize)
     draw_text(fig, ax, 0.356, 0.444, labels.get('000011', ''), fontsize=fontsize)

@@ -22,8 +22,6 @@ CLASSIFIERS = [
     'Operating System :: OS Independent',
     'Programming Language :: Python',
     'Programming Language :: Python :: 2.7',
-    'Programming Language :: Python :: 3',
-    'Programming Language :: Python :: 3.3',
     'Programming Language :: Python :: 3.4',
     'Programming Language :: Python :: 3.5',
     'Programming Language :: Python :: 3.6',
@@ -46,7 +44,6 @@ install_requires = [
 
 def readme(fname):
     return open(os.path.join(os.path.dirname(__file__), fname)).read()
-
 
 setup(
     name="intervene",
@@ -77,6 +74,4 @@ setup(
     include_package_data=True,
     install_requires = install_requires,
     classifiers=CLASSIFIERS,
-
-
 )
