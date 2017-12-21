@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+# -*- coding: utf-8 -*-
 """
 Intervene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
@@ -52,10 +53,10 @@ def main():
     venn_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
                        'Default is "%(default)s"\n\n')
-    
+
     venn_parser.add_argument('--bedtools-options', dest='bedtools_options',
-                  help='List any of the arguments available for bedtool’s intersect command.\nType bedtools intersect --help to view all the options.\n'
-                       'For example: --bedtools-options f=0.8,r,etc\n\n')
+      help='List any of the arguments available for bedtools intersect command.\nType bedtools intersect --help to view all the options.\n'
+      'For example: --bedtools-options f=0.8,r,etc\n\n')
 
     venn_parser.add_argument('-o', '--output', dest='output', 
                   help='Output folder path where results will be stored. '
@@ -125,7 +126,7 @@ def main():
                        'Default is "%(default)s".\n\n')
 
     upset_parser.add_argument('--bedtools-options', dest='bedtools_options',
-                  help='List any of the arguments available for bedtool’s intersect command.\nType bedtools intersect --help to view all the options.\n'
+                  help='List any of the arguments available for bedtools intersect command.\nType bedtools intersect --help to view all the options.\n'
                        'For example: --bedtools-options f=0.8,r,etc\n\n')
    
     upset_parser.add_argument('-o', '--output', dest='output', 
@@ -215,7 +216,7 @@ def main():
                        'Note: For jaccard and reldist regions should be pre-shorted or set --sort.\n\n')
 
     pairwise_parser.add_argument('--bedtools-options', dest='bedtools_options',
-                  help='List any of the arguments available for bedtool’s subcommands: interset, jaccard, fisher, reldist.\nType bedtools <subcommand> --help to view all the options.\n'
+                  help='List any of the arguments available for bedtools subcommands: interset, jaccard, fisher, reldist.\nType bedtools <subcommand> --help to view all the options.\n'
                        'For example: --bedtools-options f=0.8,r,etc\n\n')
     
     pairwise_parser.add_argument('--corr', action='store_true', default=False,
