@@ -9,11 +9,17 @@ Intervene
 .. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
     :target: https://travis-ci.org/asntech/intervene
 
-.. image:: https://badge.fury.io/py/intervene.svg
-    :target: https://badge.fury.io/py/intervene
+.. image:: https://img.shields.io/pypi/pyversions/intervene.svg
+    :target: https://www.python.org
+
+.. image:: https://img.shields.io/pypi/v/intervene.svg
+    :target: https://pypi.python.org/pypi/intervene
 
 .. image:: https://anaconda.org/bioconda/intervene/badges/version.svg
 	:target: https://anaconda.org/bioconda/intervene
+
+.. image:: https://anaconda.org/bioconda/intervene/badges/downloads.svg
+    :target: https://bioconda.github.io/recipes/intervene/README.html
 
 .. image:: https://anaconda.org/bioconda/intervene/badges/installer/conda.svg
 	:target: https://conda.anaconda.org/bioconda
@@ -21,10 +27,6 @@ Intervene
 .. image:: https://img.shields.io/github/issues/asntech/intervene.svg
 	:target: https://github.com/asntech/intervene/issues
 
-.. image:: https://readthedocs.org/projects/intervene/badge/?version=latest
-   :target: https://readthedocs.org/projects/intervene/?badge=latest
-   :alt: sphinx documentation for latest release
-   
 .. image:: https://img.shields.io/twitter/url/https/github.com/asntech/intervene.svg?style=social
 	:target: https://twitter.com/intent/tweet?text=Intervene%20-%20a%20tool%20for%20intersection%20and%20visualization%20of%20multiple%20genomic%20region%20and%20gene%20sets%20https://github.com/asntech/intervene&url=%5Bobject%20Object%5D
 
@@ -47,7 +49,7 @@ Quick installation using Conda
 
 	conda install -c bioconda intervene
 
-This will install all the dependencies and you are ready to use Intervene. Make sure you have R installed.
+This will install all the dependencies and you are ready to use Intervene.
 
 Install using `pip`
 -------------------
@@ -80,10 +82,6 @@ A quick installation, if you have conda installed.
     conda install -c bioconda bedtools
 
 Please read the instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is on your path and you are able to call bedtools from any directory.
-
-Install required Python modules
--------------------------------
-Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install Intervene is by using ``pip``. If you're setting up Python for the first time, we recommend to install it using Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
 
 
 Install required R packages

@@ -1,24 +1,35 @@
 ============
 Installation
 ============
+Intervene is available on `PyPi <https://pypi.python.org/pypi/intervene>`_, through `Bioconda <https://bioconda.github.io/recipes/intervene/README.html>`_, and source code available on `GitHub <https://github.com/asntech/intervene>`_ and `Bitbucket <https://bitbucket.org/CBGR/intervene>`_. Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install the required Python modules is by installing Intervene using ``pip``. 
+
+If you're setting up Python for the first time, we recommend to install it using the `Conda or Miniconda Python distribution <https://conda.io/docs/user-guide/install/index.html>`_. This comes with several helpful scientific and data processing libraries, and available for platforms including Windows, Mac OSX and Linux.
+
+You can use one of the following ways to install Intervene.
 
 Quick installation
 ==================
 
-Install uisng bioconda
-----------------------
+Install uisng Conda
+--------------------
+We highly recommend to install Intervene using Conda, this will take care of the dependencies. If you already have Conda or Miniconda installed, go ahead and use the below command.
+
 .. code-block:: bash
 
 	conda install -c bioconda intervene
 
-This will install all the dependencies and you are ready to use Intervene. Make sure you have R installed.
+.. note:: This will install all the dependencies and you are ready to use **Intervene**.
 
 Install using `pip`
 -------------------
 You can install Intervene from PyPi using pip.
 
 .. code-block:: bash
+
 	pip install intervene
+
+.. note:: If you install using pip, make sure to install BEDTools and R packages listed below. 
+
 
 Prerequisites
 =============
@@ -34,43 +45,8 @@ Intervene requires the following Python modules and R packages:
 
 Install BEDTools
 -----------------
-Intervene is using pybedtools, which is a Python wrapper for the BEDTools. BEDTools should be installed before using Intervene. It is recomended to have the latest version of the tool. Please read the installation instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is accessible through your PATH variable.
+Intervene is using `pybedtools <https://daler.github.io/pybedtools/main.html>`_, which is a Python wrapper for the BEDTools. BEDTools should be installed before using Intervene. It is recomended to have the latest version of the tool. Please read the installation instructions at https://github.com/arq5x/bedtools2 to install BEDTools, and make sure it is accessible through your PATH variable.
 
-Install required Python modules
--------------------------------
-Intervene takes care of the installation of all the required Python modules. If you already have a working installation of Python, the easiest way to install the required Python modules is by installing Intervene using ``pip``. If you're setting up Python for the first time, we recommend to install it using the Anaconda Python distribution http://continuum.io/downloads. These come with several helpful scientific and data processing libraries. These are available for platforms including Windows, Mac OSX and Linux.
-
-If you want to install the required Python modules manually, you can use the following commands.
-
-**Install pybedtools**
-
-Install it from PyPi
-
-.. code-block:: bash
-
-	pip install pybedtools
-
-or using conda
-
-.. code-block:: bash
-
-	conda install -c bioconda pybedtools
-
-Read more details about ''pybedtools'' installation: https://daler.github.io/pybedtools/main.html
-
-**Install Pandas**
-
-Install it from PyPi
-
-.. code-block:: bash
-
-	pip install pandas
-
-Or install with conda
-
-.. code-block:: bash
-
-	conda install pandas
 
 Install required R packages
 ---------------------------
