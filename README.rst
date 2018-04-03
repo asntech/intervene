@@ -188,7 +188,9 @@ By default your results will stored in the current working directory with a fold
 
 Interactive Shiny App
 =====================
-Intervene Shiny App is freely available at https://asntech.shinyapps.io/intervene
+Intervene Shiny App is freely available at https://asntech.shinyapps.io/intervene or https://intervene.shinyapps.io/intervene
+
+The source code for the Shiny app is available at https://github.com/asntech/intervene-shiny
 
 Support
 ========
