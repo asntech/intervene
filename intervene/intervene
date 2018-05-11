@@ -21,6 +21,11 @@ from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
 import intervene
 
+import matplotlib
+#TrueType fonts for PostScript and PDF files
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
+
 #main function
 def main():
     
@@ -65,6 +70,10 @@ def main():
     venn_parser.add_argument('--save-overlaps', dest='saveoverlaps',  action='store_true', default=False,
                     help='Save overlapping regions/names for all the combinations as bed/txt. '
                        'Default is "%(default)s".\n\n')
+
+    venn_parser.add_argument('--overlap-thresh', dest='overlapthresh', type=int, default=1,
+                  help='Minimum threshold to save the overlapping regions/names as bed/txt. '
+                       'Default is: "%(default)s"\n\n')
 
     venn_parser.add_argument('--title', type=str, dest='title',
                   help='Title of the plot. '
@@ -136,6 +145,10 @@ def main():
     upset_parser.add_argument('--save-overlaps', dest='saveoverlaps', action='store_true', default=False,
                     help='Save overlapping regions/names for all the combinations as bed/txt.'
                        'Default is "%(default)s".\n\n')
+
+    upset_parser.add_argument('--overlap-thresh', dest='overlapthresh', type=int, default=1,
+                  help='Minimum threshold to save the overlapping regions/names as bed/txt. '
+                       'Default is: "%(default)s"\n\n')
 
     upset_parser.add_argument('--project', type=str, default="Intervene",
                   help='Project name for the output. '

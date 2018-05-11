@@ -8,6 +8,11 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 from matplotlib import colors
 import math
+import matplotlib
+
+#TrueType fonts for PostScript and PDF files
+matplotlib.rcParams['pdf.fonttype'] = 42
+matplotlib.rcParams['ps.fonttype'] = 42
 
 default_colors = [
     # r, g, b, a

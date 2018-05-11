@@ -52,6 +52,7 @@ This will save the results in the current working directory with a folder named 
 	 "--bordercolors","Comma-separated list of matplotlib-valid colors for borders. E.g., --bordercolors=r,b,k"
 	 "-o, --output","Output folder path where results will be stored. Default is current working directory."
 	 "--save-overlaps","Save overlapping regions/names for all the combinations as bed/txt files. Default is ``False``"
+	 "--overlap-thresh", "Minimum threshold to save the overlapping regions/names as bed/txt. Default is ``1``"
 	 "--figtype","{pdf,svg,ps,tiff,png} Figure type for the plot. e.g. --figtype svg. Default is ``pdf``"
 	 "--figsize","Figure size as width and height.e.g. --figsize 12 12."
 	 "--fontsize","Font size for the plot labels. Default is ``14``"
@@ -105,6 +106,7 @@ This will save the results in the current working directory with a folder named 
  	 "--bedtools-options","List any of the arguments available for bedtool’s intersect command. Type bedtools intersect --help to view all the options. For example: --bedtools-options f=0.8,r,etc"
 	 "-o, --output","Output folder path where plots will store. Default is current working directory."
 	 "--save-overlaps","Save overlapping regions/names for all the combinations as bed/txt files. Default is ``False``"
+	 "--overlap-thresh", "Minimum threshold to save the overlapping regions/names as bed/txt. Default is ``1``"
 	 "--order", "The order of intersections of sets {freq,degree}. e.g. --order degree. Default is ``freq`` "
 	 "--ninter", "Number of top intersections to plot. Default is ``30``"
 	 "--showzero", "Show empty overlap combinations. Default is ``False``"
@@ -118,7 +120,6 @@ This will save the results in the current working directory with a folder named 
 	 "--dpi", "Dots-per-inch (DPI) for the output. Default is ``300``"
 	 "--scriptonly", "Set to generate Rscript only, if R/UpSetR package is not installed. Default is ``False``"
 	 "--showshiny", "Print the combinations of intersections to input to Shiny App. Default is ``False``"
-
 
 Pairwise intersection module
 ============================

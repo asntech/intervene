@@ -53,15 +53,16 @@ def genomic_upset(options, label_names):
         
         #save the intersected results
         if options.saveoverlaps:
-            file_name = ''
-            name_itr = 0
-            for name in t:
-                if name == '1':
-                    file_name += '_'+label_names[name_itr]
-                name_itr +=1
-            file_name = ''.join(t)+file_name
-            hlp.create_dir(output+'/sets')
-            x.moveto(output+'/sets/'+file_name+'.bed')
+            if X >= options.overlapthresh:
+                file_name = ''
+                name_itr = 0
+                for name in t:
+                    if name == '1':
+                        file_name += '_'+label_names[name_itr]
+                    name_itr +=1
+                file_name = ''.join(t)+file_name
+                hlp.create_dir(output+'/sets')
+                x.moveto(output+'/sets/'+file_name+'.bed')
         
         #delete all temp files
         helpers.cleanup()
@@ -95,17 +96,18 @@ def list_upset(options, label_names):
 
         #save the intersected results
         if options.saveoverlaps:
-            file_name = ''
-            name_itr = 0
-            for name in t:
-                if name == '1':
-                    file_name += '_'+label_names[name_itr]
-                name_itr +=1
-            file_name = ''.join(t)+file_name
-            hlp.create_dir(output+'/sets')
-            inter_file = open(output+'/sets/'+file_name+'.txt', 'w')
-            inter_file.writelines('\n'.join(list(X)))
-            inter_file.close()
+            if len(X) >= options.overlapthresh:
+                file_name = ''
+                name_itr = 0
+                for name in t:
+                    if name == '1':
+                        file_name += '_'+label_names[name_itr]
+                    name_itr +=1
+                file_name = ''.join(t)+file_name
+                hlp.create_dir(output+'/sets')
+                inter_file = open(output+'/sets/'+file_name+'.txt', 'w')
+                inter_file.writelines('\n'.join(list(X)))
+                inter_file.close()
 
     return(weights)
 
