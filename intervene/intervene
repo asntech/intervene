@@ -16,7 +16,7 @@ import matplotlib.pyplot as plt
 #import pybedtools
 from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
-from intervene.modules.venn import list_venn, genomic_venn
+from intervene.modules.venn import list_venn
 from intervene import helpers
 from argparse import ArgumentParser, RawTextHelpFormatter
 import intervene
@@ -494,12 +494,9 @@ def main():
         if options.type == 'list':
           a = open(options.input[0], 'r').read().splitlines()
           b = open(options.input[1], 'r').read().splitlines()
-          labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
-          if options.command == 'upset':
-            #create an RScript
-            upset.create_r_script(labels, label_names, options)
-          else:
-            fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+          #labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
+          labels = upset.list_upset(options, label_names)
+          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
         
         #else input considered as bed file
         else:
@@ -517,18 +514,13 @@ def main():
           a = open(options.input[0], 'r').read().splitlines()
           b = open(options.input[1], 'r').read().splitlines()
           c = open(options.input[2], 'r').read().splitlines()
-          labels = list_venn.get_labels([a, b, c], fill=['number'])
-          if options.command == 'upset':
-            #create an RScript
-            upset.create_r_script(labels, label_names, options)
-
-          else:
-            fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)          
+          #labels = list_venn.get_labels([a, b, c], fill=['number'])
+          labels = upset.list_upset(options, label_names)
+          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)          
         #else input considered as bed file
         else:
           labels = upset.genomic_upset(options, label_names)
           fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-          
           #fig, ax = genomic_venn.venn3(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
 
     elif helpers.venn_order(options.input) == 4:
@@ -541,13 +533,9 @@ def main():
           b = open(options.input[1], 'r').read().splitlines()
           c = open(options.input[2], 'r').read().splitlines()
           d = open(options.input[3], 'r').read().splitlines()
-          labels = list_venn.get_labels([a, b, c, d], fill=['number'])
-          if options.command == 'upset':
-            #create an RScript
-            upset.create_r_script(labels, label_names, options)
-
-          else:
-            fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+          #labels = list_venn.get_labels([a, b, c, d], fill=['number'])
+          labels = upset.list_upset(options, label_names)
+          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
             
         #else input considered as bed file
         else:
@@ -568,13 +556,10 @@ def main():
           d = open(options.input[3], 'r').read().splitlines()
           e = open(options.input[4], 'r').read().splitlines()
 
-          labels = list_venn.get_labels([a, b, c, d, e], fill=['number'])
-          if options.command == 'upset':
-            #create an RScript
-            upset.create_r_script(labels, label_names, options)
-
-          else:
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+          #labels = list_venn.get_labels([a, b, c, d, e], fill=['number'])
+          labels = upset.list_upset(options, label_names)
+          fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+        
         #else input considered as genomic regions file
         else:
             labels = upset.genomic_upset(options, label_names)
@@ -594,12 +579,9 @@ def main():
           e = open(options.input[4], 'r').read().splitlines()
           f = open(options.input[5], 'r').read().splitlines()
 
-          labels = list_venn.get_labels([a, b, c, d, e, f], fill=['number'])
-          if options.command == 'upset':
-            #create an RScript
-            upset.create_r_script(labels, label_names, options)
-          else:
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+          #labels = list_venn.get_labels([a, b, c, d, e, f], fill=['number'])
+          labels = upset.list_upset(options, label_names)
+          fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
                 
         #else input considered as bed file
         else:
