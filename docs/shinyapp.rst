@@ -78,4 +78,7 @@ Intervene uses the Corrplot and plotly R packages to plot heatmap
 
 Availability
 ============
-The Intervene Shiny App is freely available at https://asntech.shinyapps.io/intervene
+The Intervene Shiny App is freely available at:
+
+> https://intervene.shinyapps.io/intervene/
+> https://asntech.shinyapps.io/intervene
