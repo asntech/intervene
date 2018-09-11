@@ -17,9 +17,12 @@ import pandas as pd
 import pylab as pl
 import scipy.cluster.hierarchy as sch
 import string
+import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import seaborn as sns
 from intervene import helpers
+
+sns.set()
 
 
 def get_name(fname):
@@ -301,8 +304,8 @@ def heatmap_dendrogram(dataframe, outfile, options):
     else:
         sns_plot = sns.clustermap(dataframe, cmap="RdBu", linewidths=.3)
 
-    sns.plt.setp(sns_plot.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
-    sns.plt.suptitle(options.hlabel)
+    plt.setp(sns_plot.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+    plt.suptitle(options.hlabel)
 
     sns_plot.savefig(outfile, bbox_inches='tight', dpi=options.dpi)
 
