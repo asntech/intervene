@@ -9,6 +9,7 @@ import os
 import sys
 import collections
 import time
+import subprocess
 import os.path as op
 from pybedtools import BedTool, chromsizes_to_file, chromsizes
 from matplotlib import colors, rc
@@ -372,8 +373,7 @@ def create_r_script(matrix_file, options, max_size=1):
     temp_f.close()
 
     if options.scriptonly == False:
-        os.system('chmod +x '+cmd)
-        os.system(cmd)
+        subprocess.call(['Rscript', cmd])
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
     else:
