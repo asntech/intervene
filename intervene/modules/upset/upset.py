@@ -195,7 +195,7 @@ def create_r_script(labels, names, options):
     else:
         options.showzero = "'on'"
 
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections='+str(options.showzero)+', order.by = "'+options.order+'", number.angles = 0, mainbar.y.label ="'+options.mblabel+'", sets.x.label ="'+options.sxlabel+'")\n')
+    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections='+str(options.showzero)+', order.by = "'+options.order+'", number.angles = 0)\n')
     temp_f.write('invisible(dev.off())\n')
 
     #print temp_f.read()
