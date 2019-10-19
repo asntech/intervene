@@ -9,7 +9,6 @@ import os
 import sys
 import collections
 import time
-import subprocess
 import os.path as op
 from pybedtools import BedTool, chromsizes_to_file, chromsizes
 from matplotlib import colors, rc
@@ -18,12 +17,9 @@ import pandas as pd
 import pylab as pl
 import scipy.cluster.hierarchy as sch
 import string
-import matplotlib.pyplot as plt
 from matplotlib import gridspec
 import seaborn as sns
 from intervene import helpers
-
-sns.set()
 
 
 def get_name(fname):
@@ -305,8 +301,8 @@ def heatmap_dendrogram(dataframe, outfile, options):
     else:
         sns_plot = sns.clustermap(dataframe, cmap="RdBu", linewidths=.3)
 
-    plt.setp(sns_plot.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
-    plt.suptitle(options.hlabel)
+    sns.plt.setp(sns_plot.ax_heatmap.yaxis.get_majorticklabels(), rotation=0)
+    sns.plt.suptitle(options.hlabel)
 
     sns_plot.savefig(outfile, bbox_inches='tight', dpi=options.dpi)
 
@@ -373,7 +369,8 @@ def create_r_script(matrix_file, options, max_size=1):
     temp_f.close()
 
     if options.scriptonly == False:
-        subprocess.call(['Rscript', cmd])
+        os.system('chmod +x '+cmd)
+        os.system(cmd)
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
     else:
