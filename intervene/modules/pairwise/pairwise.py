@@ -147,7 +147,8 @@ def barplot(series, matrix, outfile, options, max_size=1):
     ax.set_axisbelow(True)
 
     # Order the bars by the clustering.
-    series = series.ix[order]
+    #series = series.ix[order]
+    series = series.loc[order] #pandas v1.0
 
     namelen = 15
     # Shorten lengthy names.
@@ -211,7 +212,9 @@ def heatmap_triangle(dataframe, axes, options):
     Z = sch.linkage(D, method='average')
     R = sch.dendrogram(Z, no_plot=True)
     cluster_order = R['leaves']
-    D = D.ix[cluster_order, cluster_order]
+
+    #D = D.ix[cluster_order, cluster_order]
+    D = D.iloc[cluster_order, cluster_order] #pandas v1.0
 
     # Get the lower triangle of the matrix. 
     #C = np.tril(D)
