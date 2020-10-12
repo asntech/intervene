@@ -51,7 +51,7 @@ master_doc = 'index'
 
 # General information about the project.
 project = u'Intervene'
-copyright = u'2017, Aziz Khan'
+copyright = u'2020, Aziz Khan'
 author = u'Aziz Khan'
 
 #import intervene
@@ -61,7 +61,7 @@ author = u'Aziz Khan'
 #
 # The short X.Y version.
 #version = intervene.__version__
-version = '0.6.4'
+version = '0.6.5'
 # The full version, including alpha/beta/rc tags.
 release = 'v0.6.4'
 
