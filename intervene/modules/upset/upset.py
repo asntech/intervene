@@ -130,7 +130,7 @@ def create_r_script(labels, names, options):
         temp_f.write('library("Cairo")\n')
     
     if options.figtype == 'pdf' or options.figtype == 'svg':
-        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+', onefile=FALSE)'+'\n')
+        temp_f.write(options.figtype+'("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+', onefile=FALSE, useDingbats=FALSE)'+'\n')
     
     elif options.figtype == 'ps':
         temp_f.write('cairo_ps("'+output_name+'", width='+str(options.figsize[0])+', height='+str(options.figsize[1])+')'+'\n')
