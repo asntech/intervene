@@ -177,14 +177,7 @@ def main():
     upset_parser.add_argument('--sbcolor', type=str, default='#317eab', 
                   help='Color of set size bar plot. '
                        'Default is: "%(default)s".\n\n')
-
-    upset_parser.add_argument('--mblabel', type=str, default='No. of Intersections', 
-                  help='The y-axis label of the intersection size bars. '
-                       'Default is: "%(default)s".\n\n')
-    upset_parser.add_argument('--sxlabel', type=str, default='Set size', 
-                  help='The x-axis label of the set size bars. '
-                       'Default is: "%(default)s".\n\n')
-           
+          
     upset_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
