@@ -1,7 +1,7 @@
 # coding: utf-8
 
 """
-InterVene: a tool for intersection and visualization of multiple genomic region sets
+Intervene: a tool for intersection and visualization of multiple genomic region sets
 Created on January 10, 2017
 @author: <Aziz Khan>aziz.khan@ncmm.uio.no
 """
@@ -22,6 +22,7 @@ import seaborn as sns
 from intervene import helpers
 
 
+#parts of the code is adopted from pybedtools
 def get_name(fname):
     return op.splitext(op.basename(fname))[0]
 
@@ -423,7 +424,9 @@ def pairwise_intersection(label_names, options):
     #if options.verbose:
     #    sys.stderr.write('Time to construct %s x %s matrix: %.1fs' \
     #            % (nfiles, nfiles, (t1 - t0)) + '\n')
-    keys = sorted(matrix.keys())
+    ## Keyes were sorted until version 0.6.4
+    #keys = sorted(matrix.keys()) 
+    keys = matrix.keys()
     
     matrix_file =  options.output+'/'+str(options.project)+'_'+options.command+'_'+options.compute+'_matrix.txt'
 
