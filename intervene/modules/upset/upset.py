@@ -7,6 +7,7 @@ Created on January 10, 2017
 """
 import sys
 import os
+import subprocess
 import tempfile
 import itertools
 from intervene.modules.pairwise.pairwise import get_name
@@ -205,8 +206,7 @@ def create_r_script(labels, names, options):
     temp_f.close()
 
     if options.scriptonly == False:
-        os.system('chmod +x '+cmd)
-        os.system(cmd)
+        subprocess.call(["Rscript", cmd])
         print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
     else:
