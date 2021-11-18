@@ -194,7 +194,7 @@ The source code for the Shiny app is available at https://github.com/asntech/int
 
 Support
 ========
-If you have questions, or found any bug in the program, please write to us at ``aziz.khan[at]ncmm.uio.no``
+If you have questions, or found any bug in the program, please write to us at ``azez.khan[at]gmail.com``
 
 Cite Us
 =========
