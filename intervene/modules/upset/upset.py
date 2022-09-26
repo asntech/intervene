@@ -11,8 +11,8 @@ import tempfile
 import itertools
 from intervene.modules.pairwise.pairwise import get_name
 from pybedtools import BedTool, helpers
-from intervene import helpers as hlp
-
+from intervene import utils
+from rpy2.robjects.packages import importr
 
 def genomic_upset(options, label_names):
     '''
@@ -26,7 +26,7 @@ def genomic_upset(options, label_names):
     input_files = options.input
     output = options.output
 
-    kwargs = hlp.map_bedtools_options(options.bedtools_options)
+    kwargs = utils.map_bedtools_options(options.bedtools_options)
 
     N = len(input_files)
     
@@ -61,7 +61,7 @@ def genomic_upset(options, label_names):
                         file_name += '_'+label_names[name_itr]
                     name_itr +=1
                 file_name = ''.join(t)+file_name
-                hlp.create_dir(output+'/sets')
+                utils.create_dir(output+'/sets')
                 x.moveto(output+'/sets/'+file_name+'.bed')
         
         #delete all temp files
@@ -104,18 +104,26 @@ def list_upset(options, label_names):
                         file_name += '_'+label_names[name_itr]
                     name_itr +=1
                 file_name = ''.join(t)+file_name
-                hlp.create_dir(output+'/sets')
+                utils.create_dir(output+'/sets')
                 inter_file = open(output+'/sets/'+file_name+'.txt', 'w')
                 inter_file.writelines('\n'.join(list(X)))
                 inter_file.close()
 
     return(weights)
 
-def create_r_script(labels, names, options):
+def create_r_script(weights, names, options):
     """
     It creates Rscript for UpSetR plot for the genomic regions.
 
     """
+
+    if options.scriptonly == False:
+        try:
+            UpSetR = importr('UpSetR')
+        except RRuntimeError:
+            print("Unable to load UpSetR in R, make sure it's properly installed or set scriptonly")
+            sys.exit(1)
+
     #temp_f = tempfile.NamedTemporaryFile(delete=False)
     #temp_f = open(tempfile.mktemp(), "w")
     script_file =  options.output+'/'+str(options.project)+'_'+options.command+'.R'
@@ -125,6 +133,7 @@ def create_r_script(labels, names, options):
     temp_f.write('#!/usr/bin/env Rscript'+"\n")
     temp_f.write('if (suppressMessages(!require("UpSetR"))) suppressMessages(install.packages("UpSetR", repos="http://cran.us.r-project.org"))\n')
     temp_f.write('library("UpSetR")\n')
+    
     if options.figtype == 'ps':
         temp_f.write('if (suppressMessages(!require("Cairo"))) suppressMessages(install.packages("Cairo", repos="http://cran.us.r-project.org"))\n')
         temp_f.write('library("Cairo")\n')
@@ -143,7 +152,7 @@ def create_r_script(labels, names, options):
 
     shiny = ""
 
-    for key, value in labels.items(): #iteritems in python 2.7
+    for key, value in weights.items(): #iteritems in python 2.7
         i = 0
         first = 1
         for x in key:
@@ -160,7 +169,7 @@ def create_r_script(labels, names, options):
                     shiny += '&'+str(names[i])
 
             if i == len(key)-1:
-                if last == len(labels):
+                if last == len(weights):
                     temp_f.write("'="+str(value))
                     shiny += "="+str(value)
 
@@ -171,13 +180,29 @@ def create_r_script(labels, names, options):
         last +=1
     temp_f.write(")\n")
 
+    upset_kwargs = {
+        'nsets':str(len(key)),
+        'nintersects':str(options.ninter),
+        'show.numbers':"'"+str(options.showsize)+"'",
+        'main.bar.color':"'"+options.mbcolor+"'",
+        'sets.bar.color':"'"+options.sbcolor+"'",
+        'empty.intersections':str(options.showzero).upper(),
+        'order.by':"'"+options.order+"'",
+        'number.angles':0,
+        'keep.order':str(options.keep_order).upper(),
+        'mainbar.y.label':"'"+options.mblabel+"'",
+        'sets.x.label':"'"+options.sxlabel+"'"
+    }
+    
+    upset_kw = ", ".join([k + " = " + str(v) for k,v in upset_kwargs.items()]) 
+
     #options.shiny = True
     #If shiny output
     if options.showshiny == False:
 
         shiny_import =  options.output+'/'+str(options.project)+'_'+options.command+'_combinations.txt'
         shiny_file = open(shiny_import, 'w')
-        shiny_file.write("You can go to Intervene Shiny App https://asntech.shinyapps.io/Intervene-app/ and copy/paste the following intersection data to get more interactive figures.\n\n")
+        shiny_file.write("You can go to Intervene Shiny App https://asntech.shinyapps.io/intervene/ and copy/paste the following intersection data to get more interactive figures.\n\n")
         shiny_file.write(shiny)
         shiny_file.close()
     
@@ -195,7 +220,10 @@ def create_r_script(labels, names, options):
     else:
         options.showzero = "'on'"
 
-    temp_f.write('upset(fromExpression(expressionInput), nsets='+str(len(key))+', nintersects='+str(options.ninter)+', show.numbers="'+str(options.showsize)+'", main.bar.color="'+options.mbcolor+'", sets.bar.color="'+options.sbcolor+'", empty.intersections='+str(options.showzero)+', order.by = "'+options.order+'", number.angles = 0, mainbar.y.label ="'+options.mblabel+'", sets.x.label ="'+options.sxlabel+'")\n')
+    #upset_kwargs - Dict of args passed directly to upset()
+    
+
+    temp_f.write('upset(fromExpression(expressionInput),' + upset_kw + ')\n')
     temp_f.write('invisible(dev.off())\n')
 
     #print temp_f.read()
@@ -207,11 +235,15 @@ def create_r_script(labels, names, options):
     if options.scriptonly == False:
         os.system('chmod +x '+cmd)
         os.system(cmd)
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nSuccessfully completed! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
     else:
-        print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nSuccessfully completed! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
+
+    return script_file
+
+
 
         
 def draw_genomic(labels, names, output, fig_type):

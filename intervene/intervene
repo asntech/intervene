@@ -17,9 +17,12 @@ import matplotlib.pyplot as plt
 from intervene.modules.pairwise import pairwise
 from intervene.modules.upset import upset
 from intervene.modules.venn import list_venn
-from intervene import helpers
+from intervene.modules.venn import venn
+
+from intervene import utils
 from argparse import ArgumentParser, RawTextHelpFormatter
 import intervene
+from intervene.modules.venn import vennerable
 
 import matplotlib
 #TrueType fonts for PostScript and PDF files
@@ -33,7 +36,7 @@ def main():
     Intervene: a tool for intersection and visualization of multiple genomic region and gene sets.
     For more details check documentation: http://intervene.readthedocs.io
     """
-    #print desc
+    #print(desc)
     
     parser = ArgumentParser(usage='intervene <subcommand> [options]', description=desc, formatter_class=RawTextHelpFormatter)
     subparsers = parser.add_subparsers(dest='command',help='List of subcommands')
@@ -57,6 +60,13 @@ def main():
    
     venn_parser.add_argument('--filenames', action='store_true', default=False,
                   help='Use file names as labels instead. '
+                       'Default is "%(default)s"\n\n')
+    venn_parser.add_argument('--style', dest='style', default='Classical', choices=('Classical','ChowRuskey','Edwards','Squares','Battle'),
+                  help='Venn plot style. Classical, ChowRuskey etc. '
+                        'Default is "%(default)s"\n')
+
+    venn_parser.add_argument('--weighted', action='store_true', default=True,
+                  help='Generate weighted venn plots. '
                        'Default is "%(default)s"\n\n')
 
     venn_parser.add_argument('--bedtools-options', dest='bedtools_options',
@@ -84,8 +94,8 @@ def main():
                        'Default is: "%(default)s"\n\n')
 
     venn_parser.add_argument('--colors', dest='colors',
-                  help='Comma-separated list of matplotlib-valid colors for fill. '
-                       'E.g., --colors=r,b,k\n\n')
+                  help='Comma-separated list of colors for fill. '
+                       'E.g., --colors=blue,green,orange\n\n')
 
     venn_parser.add_argument('--bordercolors', dest='bordercolors',
                   help='A matplotlib-valid color for venn borders. '
@@ -94,9 +104,10 @@ def main():
     venn_parser.add_argument('--figtype', dest="figtype",choices=('pdf','svg','ps','tiff','png'), 
                    default='pdf',help='Figure type for the plot. '
                        'e.g. --figtype svg. Default is "%(default)s"\n\n')    
-    venn_parser.add_argument('--figsize',  nargs=2, type=int, default=(12,12),
+    
+    venn_parser.add_argument('--figsize',  nargs=2, type=int, default=(8,8),
                    help='Figure size as width and height.'
-                       'e.g. --figsize 12 12.\n\n') 
+                       'e.g. --figsize 8 8.\n\n') 
     venn_parser.add_argument('--fontsize', dest='fontsize', type=int, default=14,
                    help='Font size for the plot labels.'
                        'Default is: "%(default)s"\n\n')  
@@ -104,9 +115,12 @@ def main():
     venn_parser.add_argument('--dpi', type=int, default=300,
                   help='Dots-per-inch (DPI) for the output. '
                        'Default is: "%(default)s"\n\n')  
-    venn_parser.add_argument('--fill', choices=('number','percentage'),default='number',
+    venn_parser.add_argument('--fill', choices=('number','percentage'), default='number',
                   help='Report number or  percentage of overlaps (Only if --type=list). '
                        'Default is "%(default)s"\n\n')
+    venn_parser.add_argument('--scriptonly', action='store_true', default=False,
+                    help='Set to generate Rscript only, if R/Vennerable package is not installed. '
+                       'Default is "%(default)s".\n\n')
     venn_parser.add_argument('--test', action='store_true', help='This will run the program on test data.\n\n')
 
     #upset module argument parser
@@ -164,6 +178,10 @@ def main():
 
     upset_parser.add_argument('--showzero', action='store_true', default=False,
                     help='Show empty intersection combinations. '
+                       'Default is "%(default)s".\n\n')
+
+    upset_parser.add_argument('--keep-order', dest="keep_order", action='store_true', default=False,
+                    help='Keep sets in the order entered using the sets parameter. By default it orders the sets by their sizes.'
                        'Default is "%(default)s".\n\n')
 
     upset_parser.add_argument('--showsize', action='store_false', default=True,
@@ -300,7 +318,7 @@ def main():
     pairwise_parser.add_argument('--title', type=str, default="Pairwise intersection",
                    help='Heatmap main title. '
                        'Default is "%(default)s".\n\n')
-    
+
     pairwise_parser.add_argument('--space', type=float, default=1.3,
                    help='White space between barplt and heatmap, if --htype=tribar. '
                        'Default is "%(default)s".\n\n')
@@ -325,7 +343,7 @@ def main():
     options = parser.parse_args()
 
     if options.cite:
-      cite = """
+      cite = '''
       If you find Intervene tool useful for your research please cite as:
 
       A. Khan and A. Mathelier. 2017. Intervene: a tool for intersection and visualization of multiple gene or genomic region sets. BMC Bioinformatics 18:287. doi:10.1186/s12859-017-1708-7
@@ -348,9 +366,7 @@ def main():
         doi="10.1186/s12859-017-1708-7",
         url="https://doi.org/10.1186/s12859-017-1708-7"
       }
-
-      """
-
+      '''
       sys.stderr.write(cite)
       sys.exit(0)
 
@@ -384,14 +400,14 @@ def main():
 
     #making the out folder if it doesn't exist
     if options.output:
-        output_dir = helpers.create_dir(options.output)
+        output_dir = utils.create_dir(options.output)
     else:
-        options.output = helpers.create_dir(os.getcwd()+"/Intervene_results")
+        options.output = utils.create_dir(os.getcwd()+"/Intervene_results")
 
     #check if user want to user test data to plot and get get test files.
     if options.test:
         print("\nRunning Intervene with test data.\n")
-        options.input = helpers.get_test_data(options.command)
+        options.input = utils.get_test_data(options.command)
         options.filenames = True
         #options.htype = "tribar"
         if options.command == 'venn':
@@ -399,17 +415,20 @@ def main():
 
     #get the label names
     if options.filenames:
-          label_names = helpers.get_filenames(options.input) 
+          label_names = utils.get_filenames(options.input) 
     elif options.labels:
       label_names = options.labels.split(',')
     else:
-      label_names = helpers.get_filenames(options.input) 
+      label_names = utils.get_filenames(options.input) 
             
     #check if the number of label names are equal to number of input files
     if len(label_names) != len(options.input):
       err_message = '\nInput error: The number label names('+str(len(label_names))+') are not equal to the number of input files('+str(len(options.input))+').\n'
       print(err_message)
       sys.exit(1)
+
+
+    print(vars(options))
 
     #================== Run Pairwise module ================#
     if options.command =='pairwise':
@@ -437,10 +456,10 @@ def main():
         #options.filenames = True
         
         if options.type == 'list':
-          labels = upset.list_upset(options, label_names)
+          weights = upset.list_upset(options, label_names)
         else:
-          labels = upset.genomic_upset(options, label_names)
-        upset.create_r_script(labels, label_names, options)
+          weights = upset.genomic_upset(options, label_names)
+        upset.create_r_script(weights, label_names, options)
         sys.exit(0)
 
     
@@ -461,15 +480,15 @@ def main():
     if options.command == 'venn':
       if options.colors:
         options.colors = options.colors.split(',')
-        options.colors = [helpers.get_colors(options.colors)[i] for i in range(helpers.venn_order(options.input))]
+        options.colors = [utils.get_colors(options.colors)[i] for i in range(utils.venn_order(options.input))]
       else:
-        options.colors = [helpers.default_colors()[i] for i in range(helpers.venn_order(options.input))]
+        options.colors = [utils.default_colors()[i] for i in range(utils.venn_order(options.input))]
 
       if options.bordercolors:
         options.bordercolors = options.bordercolors.split(',')
-        options.bordercolors = [helpers.get_colors(options.bordercolors)[i] for i in range(helpers.venn_order(options.input))]
+        options.bordercolors = [utils.get_colors(options.bordercolors)[i] for i in range(utils.venn_order(options.input))]
       else:
-        options.bordercolors = [helpers.default_border_colors()[i] for i in range(helpers.venn_order(options.input))]
+        options.bordercolors = [utils.default_border_colors()[i] for i in range(utils.venn_order(options.input))]
         
     #Cheeck figure size
     if options.figsize:
@@ -486,108 +505,26 @@ def main():
     
     #print(options.filenames)
     #sys.exit(1)
-    if helpers.venn_order(options.input) == 2:
+    venn_size = utils.venn_order(options.input)
+    if venn_size > 2 or venn_size < 7:
         
-        print('\nGenerating a 2-way "%s" diagram. Please wait...\n' %options.command)
+        print('\nGenerating a "%s"-way Venn diagram. Please wait...\n' %venn_size)
         
         #If the input is a gene list
         if options.type == 'list':
-          a = open(options.input[0], 'r').read().splitlines()
-          b = open(options.input[1], 'r').read().splitlines()
-          #labels = list_venn.get_labels([a, b], fill=[str(options.fill)])
           labels = upset.list_upset(options, label_names)
-          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
+          #fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
         
         #else input considered as bed file
         else:
+          #labels = upset.genomic_upset(options, label_names)
+          #fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
           labels = upset.genomic_upset(options, label_names)
-          fig, ax = list_venn.venn2(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-          
+        venn.create_r_script(labels, label_names, options)
+        sys.exit(0)
+
           #fig, ax = genomic_venn.venn2(input_files=options.input,
           #      options=options, names=label_names, plot_type=plot_type)     
-    elif helpers.venn_order(options.input) == 3:
-        
-        print('\nGenerating a 3-way "%s" diagram. Please wait...\n' %options.command)
-        
-        #If the input is a gene list
-        if options.type == 'list':
-          a = open(options.input[0], 'r').read().splitlines()
-          b = open(options.input[1], 'r').read().splitlines()
-          c = open(options.input[2], 'r').read().splitlines()
-          #labels = list_venn.get_labels([a, b, c], fill=['number'])
-          labels = upset.list_upset(options, label_names)
-          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)          
-        #else input considered as bed file
-        else:
-          labels = upset.genomic_upset(options, label_names)
-          fig, ax = list_venn.venn3(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-          #fig, ax = genomic_venn.venn3(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
-
-    elif helpers.venn_order(options.input) == 4:
-        
-        print('\nGenerating a 4-way "%s" diagram. Please wait...\n' %options.command)
-        
-        #If the input is a gene list
-        if options.type == 'list':
-          a = open(options.input[0], 'r').read().splitlines()
-          b = open(options.input[1], 'r').read().splitlines()
-          c = open(options.input[2], 'r').read().splitlines()
-          d = open(options.input[3], 'r').read().splitlines()
-          #labels = list_venn.get_labels([a, b, c, d], fill=['number'])
-          labels = upset.list_upset(options, label_names)
-          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-            
-        #else input considered as bed file
-        else:
-          labels = upset.genomic_upset(options, label_names)
-          fig, ax = list_venn.venn4(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-          #fig, ax = genomic_venn.venn4(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
-            
-                   
-    elif helpers.venn_order(options.input) == 5:
-        
-        print('\nGenerating a 5-way "%s" diagram. Please wait...\n' %options.command)
-        
-        #If the input is a gene list
-        if options.type == 'list':
-          a = open(options.input[0], 'r').read().splitlines()
-          b = open(options.input[1], 'r').read().splitlines()
-          c = open(options.input[2], 'r').read().splitlines()
-          d = open(options.input[3], 'r').read().splitlines()
-          e = open(options.input[4], 'r').read().splitlines()
-
-          #labels = list_venn.get_labels([a, b, c, d, e], fill=['number'])
-          labels = upset.list_upset(options, label_names)
-          fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-        
-        #else input considered as genomic regions file
-        else:
-            labels = upset.genomic_upset(options, label_names)
-            fig, ax = list_venn.venn5(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-            #fig, ax = genomic_venn.venn5(input_files=options.input, options=options, names=label_names, plot_type=plot_type)
-        
-    elif helpers.venn_order(options.input) == 6:
-        
-        print('\nGenerating a 6-way "%s" diagram. Please wait...\n' %options.command)
-
-        #If the input is a gene list
-        if options.type == 'list':
-          a = open(options.input[0], 'r').read().splitlines()
-          b = open(options.input[1], 'r').read().splitlines()
-          c = open(options.input[2], 'r').read().splitlines()
-          d = open(options.input[3], 'r').read().splitlines()
-          e = open(options.input[4], 'r').read().splitlines()
-          f = open(options.input[5], 'r').read().splitlines()
-
-          #labels = list_venn.get_labels([a, b, c, d, e, f], fill=['number'])
-          labels = upset.list_upset(options, label_names)
-          fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-                
-        #else input considered as bed file
-        else:
-            labels = upset.genomic_upset(options, label_names)
-            fig, ax = list_venn.venn6(labels, names=label_names, dpi=options.dpi, colors=options.colors, bordercolors=options.bordercolors,  figsize=options.figsize, fontsize=options.fontsize)
-            #fig, ax = genomic_venn.venn6(input_files=options.input,options=options, names=label_names, plot_type=plot_type)
    
     else:
         parser.print_help()
@@ -599,7 +536,7 @@ def main():
       
     fig.savefig(output_name, dpi=options.dpi, bbox_inches='tight')
     plt.close()
-    print('\nDone! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+    print('\nSuccessfully completed! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
 
 if __name__ == '__main__':
     try:

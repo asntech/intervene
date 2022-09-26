@@ -6,6 +6,7 @@ import sys
 import os
 import intervene
 from matplotlib import colors
+from pybedtools import BedTool, helpers
 
 def create_dir(dir_path):
     '''
@@ -34,6 +35,55 @@ def venn_order(input_files):
     """
 
     return len(input_files)
+
+def get_venn_plot_type(style, size):
+    '''
+    Return the approperiate Venn plot type
+    '''
+    if style == 'Classical':
+        if size < 4:
+            venn_type="'circles'"
+        else:
+            venn_type="'ellipses'"
+    elif style == 'ChowRuskey' and size < 3:
+      venn_type="'circles'"
+    else:
+        venn_type="'"+style+"'"
+
+    return venn_type
+
+
+def get_upset_expression_input(weights, names):
+    '''
+    Given weights and set names - return string expressionInput
+    '''
+
+    last = 1
+    expressionInput="c("
+    for key, value in weights.items(): #iteritems in python 2.7
+        i = 0
+        first = 1
+        for x in key:
+            if i == 0:
+                expressionInput+='"'
+            if x == '1':
+                if first == 1:
+                    expressionInput+=str(names[i])
+                    first = 0
+                else:
+                    expressionInput+="&"+str(names[i])
+
+            if i == len(key)-1:
+                if last == len(weights):
+                    expressionInput+='"='+str(value)
+                else:
+                    expressionInput+='"='+str(value)+','
+            i += 1
+        last +=1
+    expressionInput+=")"
+
+    return expressionInput
+
 
 def map_bedtools_options(bedtools_options):
     '''
@@ -236,3 +286,4 @@ def get_colors(color_list):
         i+=1
 
     return rgba_colors
+

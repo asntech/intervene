@@ -19,7 +19,7 @@ import scipy.cluster.hierarchy as sch
 import string
 from matplotlib import gridspec
 import seaborn as sns
-from intervene import helpers
+from intervene import utils
 
 
 #parts of the code is adopted from pybedtools
@@ -375,10 +375,10 @@ def create_r_script(matrix_file, options, max_size=1):
     if options.scriptonly == False:
         os.system('chmod +x '+cmd)
         os.system(cmd)
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nSuccessfully completed! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
     else:
-        print('\nYou are done! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nSuccessfully completed! Please check your UpSet plot script and Shiny App input @ '+options.output+'. \nThank you for using Intervene!\n')
         sys.exit(0)
         
 def pairwise_intersection(label_names, options):
@@ -394,24 +394,24 @@ def pairwise_intersection(label_names, options):
     if options.type == 'genomic':
         if options.compute == "frac":
             FUNC = frac_of_a
-            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions = utils.map_bedtools_options(options.bedtools_options)
 
         elif options.compute == 'jaccard':
             FUNC = jaccard_of_a
-            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions = utils.map_bedtools_options(options.bedtools_options)
 
         elif options.compute == 'fisher':
             FUNC = fisher_of_a
-            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions = utils.map_bedtools_options(options.bedtools_options)
             kwoptions.update({'genome':options.genome})
 
         elif options.compute == 'reldist':
             FUNC = reldist_of_a
-            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions = utils.map_bedtools_options(options.bedtools_options)
 
         else:
             FUNC = actual_intersection
-            kwoptions = helpers.map_bedtools_options(options.bedtools_options)
+            kwoptions = utils.map_bedtools_options(options.bedtools_options)
 
         matrix, bed_sizes = create_matrix(beds=options.input, bed_names=label_names, func=FUNC, verbose=False, sort_bed=options.sort, **kwoptions)
     else:
@@ -485,7 +485,7 @@ def pairwise_intersection(label_names, options):
         else:
             barplot(series, matrix, outfile, options, max_size=max(bed_sizes))
 
-        print('\nYou are done! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
+        print('\nSuccessfully completed! Please check your results @ '+options.output+'. \nThank you for using Intervene!\n')
         
     else:
         #print("Please check the matrix file "+matrix_file)
