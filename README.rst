@@ -6,8 +6,7 @@ Intervene
 
 	a tool for intersection and visualization of multiple gene or genomic region sets
 
-.. image:: https://travis-ci.org/asntech/intervene.svg?branch=master
-    :target: https://travis-ci.org/asntech/intervene
+
 
 .. image:: https://img.shields.io/pypi/pyversions/intervene.svg
     :target: https://www.python.org
@@ -18,11 +17,11 @@ Intervene
 .. image:: https://anaconda.org/bioconda/intervene/badges/version.svg
 	:target: https://anaconda.org/bioconda/intervene
 
+.. image:: https://static.pepy.tech/badge/intervene
+	:target: https://static.pepy.tech/badge/intervene
+
 .. image:: https://anaconda.org/bioconda/intervene/badges/downloads.svg
     :target: https://bioconda.github.io/recipes/intervene/README.html
-
-.. image:: https://anaconda.org/bioconda/intervene/badges/installer/conda.svg
-	:target: https://conda.anaconda.org/bioconda
 
 .. image:: https://img.shields.io/github/issues/asntech/intervene.svg
 	:target: https://github.com/asntech/intervene/issues
