@@ -18,7 +18,7 @@ Intervene
 	:target: https://anaconda.org/bioconda/intervene
 
 .. image:: https://static.pepy.tech/badge/intervene
-	:target: https://static.pepy.tech/badge/intervene
+	:target: https://pypi.org/project/intervene/
 
 .. image:: https://anaconda.org/bioconda/intervene/badges/downloads.svg
     :target: https://bioconda.github.io/recipes/intervene/README.html
